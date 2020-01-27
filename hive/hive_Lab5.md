@@ -145,10 +145,14 @@ Creating table and load data with complex types
   -rwxr-xr-x   1 root hdfs    8239771 2019-12-30 20:34 /user/twitter/full_text_ts_complex/000003_0
   ```
 
-  select first three rows
+  select first two rows
 
   ```sql
-  select * from twitter.full_text_ts_complex_tmp limit 3;
+  hive (twitter)> select * from twitter.full_text_ts_complex_tmp limit 2;
+  OK
+  USER_79321756   2010-03-03 04:15:26     47.528137       -122.197914     RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout 47.528139,-122.197916   lat:47.528139,lon:-122.197916        2ff4faca,119
+  USER_79321756   2010-03-03 04:55:32     47.528137       -122.197914     @USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*        47.528139,-122.197916   lat:47.528139,lon:-122.197916   2ff4faca,96
+  Time taken: 0.832 seconds, Fetched: 2 row(s)
   ```
 
   - **NOTE**: we can drop the tmp hive table because all we need is the HDFS file '/user/twitter/full_text_ts_complex'
@@ -187,11 +191,7 @@ Creating table and load data with complex types
   LOCATION '/user/twitter/full_text_ts_complex';
   ```
 
-- display first three rows
-
-  ```sql
-  select * from twitter.full_text_ts_complex limit 3;
-  ```
+- display first two rows
 
   ```shell
   > select * from twitter.full_text_ts_complex limit 3;
@@ -225,12 +225,19 @@ limit 10;
   - extract element from struct using 'dot' notation
 
 ```sql
-select location_array[0] as lat, 
-       location_map['lon'] as lon, 
-       tweet_struct.mention as mention,
-       tweet_struct.size as tweet_length
-from twitter.full_text_ts_complex
-limit 5;
+hive (twitter)> select location_array[0] as lat,
+              >        location_map['lon'] as lon,
+              >        tweet_struct.mention as mention,
+              >        tweet_struct.size as tweet_length
+              > from twitter.full_text_ts_complex
+              > limit 5;
+OK
+47.528137       -122.197916     2ff4faca        119
+47.528137       -122.197916     2ff4faca        96
+47.528137       -122.197916     ab059bdc        144
+47.528137       -122.197916     77a4822d        89
+47.528137       -122.197916             82
+Time taken: 0.989 seconds, Fetched: 5 row(s)
 ```
 
 - Work with collection functions
