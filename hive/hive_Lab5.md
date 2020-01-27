@@ -238,10 +238,17 @@ limit 5;
   - get number of elements in arrays/maps
 
 ```sql
-select size(location_array), sort_array(location_array),
-       size(location_map), map_keys(location_map), map_values(location_map)
-from twitter.full_text_ts_complex
-limit 5;
+hive (twitter)> select size(location_array), sort_array(location_array),
+              >        size(location_map), map_keys(location_map), map_values(location_map)
+              > from twitter.full_text_ts_complex
+              > limit 5;
+OK
+2       [-122.197914,47.528137] 2       ["lat","lon"]   ["47.528139","-122.197916"]
+2       [-122.197914,47.528137] 2       ["lat","lon"]   ["47.528139","-122.197916"]
+2       [-122.197914,47.528137] 2       ["lat","lon"]   ["47.528139","-122.197916"]
+2       [-122.197914,47.528137] 2       ["lat","lon"]   ["47.528139","-122.197916"]
+2       [-122.197914,47.528137] 2       ["lat","lon"]   ["47.528139","-122.197916"]
+Time taken: 2.027 seconds, Fetched: 5 row(s)
 ```
 
 [Top](#top)
