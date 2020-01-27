@@ -18,7 +18,7 @@
 - [Collections Funtions](#collections)
   - array, map, struct
 - [Advanced String Functions](#advstr)
-  - sentences, ngrams, context_ngrams
+  - sentences, ngrams, [context_ngrams](#context_ngrams), str_to_map
 - [UDAF](#udaf)
 - [UDTF](#udtf)
 - [Nested Queries](#nestedq)
@@ -274,7 +274,7 @@ OK
 Time taken: 1.281 seconds, Fetched: 2 row(s)
 ```
 
-- **ngrams** function
+- **ngrams** function 
   - Returns the top-k N-grams from a set of tokenized sentences,
   - find popular bigrams 
 
@@ -380,7 +380,7 @@ Time taken: 70.641 seconds, Fetched: 10 row(s)
 
 ```
 
-- **context_ngrams** function
+- **context_ngrams** function <a name='context_ngrams'></a>
   -- *** find popular tri-grams after 'I need' bi-grams ***
 
 ```sql
@@ -416,6 +416,8 @@ OK
 Time taken: 58.385 seconds, Fetched: 10 row(s)
 
 ```
+
+[Top](#top)
 
 - **str_to_map**
   - map a string to map complex type
