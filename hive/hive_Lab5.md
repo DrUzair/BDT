@@ -257,46 +257,157 @@ Advanced String Functions <a name='advstr'></a>
 -----------------------------------------------
 
 - **sentences** function
+  - Tokenizes a string of natural language text into words and sentences, where each sentence is broken at the appropriate sentence boundary and returned as an array of words. The 'lang' and 'locale' are optional arguments. For example, sentences('Hello there! How are you?') returns ( ("Hello", "there"), ("How", "are", "you") ).
 
 ```sql
-select sentences(tweet)
-from twitter.full_text_ts
-limit 10;
+hive (twitter)> select sentences(tweet), tweet from full_text_ts limit 2;
+OK
+[["RT","USER","2ff4faca","IF","SHE","DO","IT","1","MORE","TIME","IMA","KNOCK","HER","DAMN","KOOFIE","OFF","ON","MY","MOMMA","gt","gt","haha"],["cutthatout"]]   RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout
+[["USER","77a4822d","USER","2ff4faca","okay","lol"],["Saying","ok","to","both","of","yall","about","to","different","things"],[]]       @USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*
+Time taken: 1.281 seconds, Fetched: 2 row(s)
 ```
 
 - **ngrams** function
+  - Returns the top-k N-grams from a set of tokenized sentences,
   - find popular bigrams 
 
 ```sql
-select ngrams(sentences(tweet), 2, 10)
-from twitter.full_text_ts
-limit 50;
+hive (twitter)> select ngrams(sentences(tweet), 2, 10)
+              > from twitter.full_text_ts limit 1;
+Query ID = root_20200127150004_2442c16e-e27c-4458-aa20-f108dc7eeedf
+Total jobs = 1
+Launching Job 1 out of 1
+Tez session was closed. Reopening...
+Session re-established.
+
+
+Status: Running (Executing on YARN cluster with App id application_1580133666416_0002)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      4          4        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 02/02  [==========================>>] 100%  ELAPSED TIME: 168.09 s
+--------------------------------------------------------------------------------
+OK
+[{"ngram":["RT","USER"],"estfrequency":48782.0},{"ngram":["in","the"],"estfrequency":7327.0},{"ngram":["I","was"],"estfrequency":4760.0},{"ngram":["lt","lt"],"estfrequency":4668.0},{"ngram":["on","the"],"estfrequency":4405.0},{"ngram":["to","the"],"estfrequency":4127.0},{"ngram":["to","be"],"estfrequency":3982.0},{"ngram":["I","don't"],"estfrequency":3944.0},{"ngram":["to","get"],"estfrequency":3501.0},{"ngram":["I","need"],"estfrequency":3214.0}]
+Time taken: 217.747 seconds, Fetched: 1 row(s)
+
 ```
 
 - **ngrams** function with **explode()**
+  - Explodes a map to multiple rows. Returns a row-set with a two columns (*key,value)* , one row for each key-value pair from the input map. 
 
 ```sql
-select explode(ngrams(sentences(tweet), 2, 10))
-from twitter.full_text_ts
-limit 50;
+hive (twitter)> select explode(ngrams(sentences(tweet), 2, 10))
+              > from twitter.full_text_ts
+              > limit 50;
+Query ID = root_20200127151500_4df40261-e64a-49b6-8cda-8dc85dd16fba
+Total jobs = 1
+Launching Job 1 out of 1
+Tez session was closed. Reopening...
+Session re-established.
+
+
+Status: Running (Executing on YARN cluster with App id application_1580133666416_0003)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      4          4        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 02/02  [==========================>>] 100%  ELAPSED TIME: 103.68 s
+--------------------------------------------------------------------------------
+OK
+{"ngram":["RT","USER"],"estfrequency":48782.0}
+{"ngram":["in","the"],"estfrequency":7327.0}
+{"ngram":["I","was"],"estfrequency":4760.0}
+{"ngram":["lt","lt"],"estfrequency":4668.0}
+{"ngram":["on","the"],"estfrequency":4405.0}
+{"ngram":["to","the"],"estfrequency":4127.0}
+{"ngram":["to","be"],"estfrequency":3982.0}
+{"ngram":["I","don't"],"estfrequency":3944.0}
+{"ngram":["to","get"],"estfrequency":3501.0}
+{"ngram":["I","need"],"estfrequency":3214.0}
+Time taken: 126.239 seconds, Fetched: 10 row(s)
 ```
 
 - **context_ngrams** function
+  - Returns the top-k contextual N-grams from a set of tokenized sentences, given a string of "context". 
   - find popular word after 'I need' bi-grams 
 
 ```sql
-select explode(context_ngrams(sentences(tweet), array('I', 'need', null), 10))
-from twitter.full_text_ts
-limit 50;
+hive (twitter)> select explode(context_ngrams(sentences(tweet), array('I', 'need', null), 10))
+              > from twitter.full_text_ts
+              > limit 50;
+Query ID = root_20200127152020_95b613b5-7029-4642-9126-3e41fa539c6e
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1580133666416_0003)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      4          4        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 02/02  [==========================>>] 100%  ELAPSED TIME: 66.24 s
+--------------------------------------------------------------------------------
+OK
+{"ngram":["to"],"estfrequency":125.0}
+{"ngram":["a"],"estfrequency":87.0}
+{"ngram":["some"],"estfrequency":19.0}
+{"ngram":["my"],"estfrequency":10.0}
+{"ngram":["2"],"estfrequency":9.0}
+{"ngram":["it"],"estfrequency":9.0}
+{"ngram":["more"],"estfrequency":7.0}
+{"ngram":["that"],"estfrequency":7.0}
+{"ngram":["you"],"estfrequency":7.0}
+{"ngram":["something"],"estfrequency":6.0}
+Time taken: 70.641 seconds, Fetched: 10 row(s)
+
 ```
 
 - **context_ngrams** function
   -- *** find popular tri-grams after 'I need' bi-grams ***
 
 ```sql
-select explode(context_ngrams(sentences(tweet), array('I', 'need', null, null, null), 10))
-from twitter.full_text_ts
-limit 50;
+hive (twitter)> select explode(context_ngrams(sentences(tweet), array('I', 'need', null, null, null), 10))
+              > from twitter.full_text_ts
+              > limit 50;
+Query ID = root_20200127152633_bd64f5c0-75b8-46ae-a5ad-36adc2207f51
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1580133666416_0003)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      4          4        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 02/02  [==========================>>] 100%  ELAPSED TIME: 56.10 s
+--------------------------------------------------------------------------------
+OK
+{"ngram":["my","hair","done"],"estfrequency":3.0}
+{"ngram":["to","take","a"],"estfrequency":3.0}
+{"ngram":["a","new","job"],"estfrequency":2.0}
+{"ngram":["a","new","phone"],"estfrequency":2.0}
+{"ngram":["is","a","red"],"estfrequency":2.0}
+{"ngram":["it","in","my"],"estfrequency":2.0}
+{"ngram":["to","get","a"],"estfrequency":2.0}
+{"ngram":["to","get","it"],"estfrequency":2.0}
+{"ngram":["to","wash","my"],"estfrequency":2.0}
+{"ngram":["to","work","on"],"estfrequency":2.0}
+Time taken: 58.385 seconds, Fetched: 10 row(s)
+
 ```
 
 - **str_to_map**
