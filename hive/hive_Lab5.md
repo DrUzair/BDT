@@ -20,8 +20,10 @@
 - [Advanced String Functions](#advstr)
   - sentences, ngrams, [context_ngrams](#context_ngrams), str_to_map
 - [UDAF](#udaf)
+  - [MIN](#min_udaf), [PERCENTILE_APPROX](#percentile_udaf), [HISTOGRAM_NUMERIC](#histo_udaf)
 - [UDTF](#udtf)
 - [Nested Queries](#nestedq)
+- [Partitioning and Bucketing](#pnb)
 - [Sqoop](#sqoop)
 
 ## Dataset <a name="data"></a> 
@@ -433,7 +435,7 @@ limit 10;
 Aggregation Functions (UDAF) <a name='udaf'></a>
 -----------------------------------------------
 
-- **MIN** function
+- **MIN** function <a name='min_udaf'></a>
   - *** Find twitter user who reside on the west most point of U.S. ***
     - You can visualize it using the map tool at: http://www.darrinward.com/lat-long/?id=461435
 
@@ -442,8 +444,6 @@ select distinct lat, lon
 from twitter.full_text_ts_complex x
 where cast(x.lon as float) IN (select min(cast(y.lon as float)) as lon from twitter.full_text_ts y);
 ```
-
-
 
 - SAVE the output of the above query in a directory on HDFS
 
@@ -457,7 +457,9 @@ FROM twitter.full_text_ts_complex x
 WHERE cast(x.lon as float) IN (select min(cast(y.lon as float)) as lon from twitter.full_text_ts y);
 ```
 
-- **PERCENTILE_APPROX** function (works with DOUBLE type)
+[Top](#top)
+
+- **PERCENTILE_APPROX** function (works with DOUBLE type) <a name='percentile_udaf'></a>
   - *** Find twitter users from north west part of U.S. ***
     - You can visualize it using the map tool: http://www.darrinward.com/lat-long/?id=461435
 
@@ -476,9 +478,9 @@ where cast(lat as double) >= 41.79976907219686 AND
 limit 10;
 ```
 
+[Top](#top)
 
-
-- **HISTOGRAM_NUMERIC**
+- **HISTOGRAM_NUMERIC** <a name='histo_udaf'></a>
   - *** Bucket U.S. into 10x10 grids using histogram_numeric ***
     - get 10 variable-sized bins for latitude and longitude first
     - get 10 variable-sized bins for latitude and longitude first
@@ -499,6 +501,8 @@ select t.hist_lat.x from (select explode(histogram_numeric(lat, 10)) as hist_lat
 
 select t.hist_lon.x from (select explode(histogram_numeric(lon, 10)) as hist_lon from twitter.full_text_ts_complex) t;
 ```
+
+[Top](#top)
 
 - write a nested query the cross-joins the 10x10 lat/lon points 
 
@@ -546,7 +550,7 @@ select * from twitter.full_text_ts_complex_1 limit 10;
 
 
 
-- collect_set function (UDAF)
+- **collect_set** function (UDAF)
   - collect_set() is a UDAF aggregation function.. we run the query at this step from the previous step, 
   - we get all the mentions in the tweets but if a user has multiple mentions in the same tweet, they are in different rows. 
 
@@ -582,6 +586,252 @@ order by t.num_mentions desc
 limit 10;
 ```
 
+- write a nested query the cross-joins the 10x10 lat/lon points 
+
+```sql
+select t1.lat, t2.lon
+from 
+    (select t.hist_lat.x as lat 
+        from (select explode(histogram_numeric(lat, 10)) as hist_lat 
+                from twitter.full_text_ts_complex
+                where lat>=24.9493 AND lat<=49.5904 AND lon>=-125.0011 and lon<=-66.9326) t
+    ) t1
+JOIN
+    (select t.hist_lon.x as lon 
+        from (select explode(histogram_numeric(lon, 10)) as hist_lon 
+                from twitter.full_text_ts_complex
+                where lat>=24.9493 AND lat<=49.5904 AND lon>=-125.0011 and lon<=-66.9326) t
+    ) t2;
+```
+
+[Top](#top)
+
+# Partitioning and Bucketing <a name='pnb'></a>
+
+------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------------------
+
+- the MovieLens dataset
+  - The movielens dataset is a collection of movie ratings data and has been widely used in the industry and academia for experimenting with recommendation algorithms and we see many publications using this dataset to benchmark the performance of their algorithms.
+  - For access to full-sized movielens data, go to http://grouplens.org/datasets/movielens/
+
+- Loading User Ratings Data into Hive - u.data
+
+1. Upload movielens.tgz file to linux sandbox /root/lab
+2. Extract the data from the MovieLens dataset
+
+```shell
+$ cd /root/lab
+$ tar -zxvf movielens.tgz
+$ ll
+```
+
+3. Examine the files
+
+```shell
+$ cd ml-data
+$ more u.data
+[root@sandbox ml-data]# more u.data
+196     242     3       881250949
+186     302     3       891717742
+22      377     1       878887116
+244     51      2       880606923
+166     346     1       886397596
+298     474     4       884182806
+115     265     2       881171488
+253     465     5       891628467
+305     451     3       886324817
+6       86      3       883603013
+...
+```
+
+- Table description "u.data"
+
+field_1     userid
+field_2     movieid
+field_3     rating 
+
+field_4     unixtime
+
+- Create a database called ml and table called user_ratings (tab-delimited)'
+
+  ```sql
+  hive> CREATE DATABASE ml;
+  hive> CREATE TABLE ml.userratings
+       (userid INT, movieid INT, rating INT,
+        unixtime BIGINT) ROW FORMAT DELIMITED
+        FIELDS TERMINATED BY '\t'
+        STORED AS TEXTFILE;
+  ```
+
+- Move the u.data file into HDFS
+
+  ```shell
+  $ hadoop fs -put /root/lab/ml-data/u.data /user/lab/u.data
+  ```
+
+  
+
+  
+
+- Load the u.data into hive table
+
+  ```sql
+  hive> LOAD DATA INPATH '/user/lab/u.data'
+        INTO TABLE ml.userratings;
+  ```
+
+  
+
+- Verify that data was loaded
+
+  ```sql
+  hive> SELECT * FROM ml.userratings LIMIT 10;
+  ```
+
+## loading movies data into hive
+
+- Move the movies data u.item into hadoop
+
+```shell
+$ hadoop fs -put /root/lab/ml-data/u.item /user/lab/u.item
+```
+
+- Examine the file
+
+```shell
+$ hadoop fs -cat /user/lab/u.item | head -n 5
+```
+
+- Create a table called movies 
+  -- Read the README file for u.item column description
+
+```sql
+hive> CREATE TABLE ml.movies
+         (movieid INT, 
+          movie_title STRING, 
+          release_date STRING,
+          v_release_date STRING,
+          imdb_url STRING,
+          cat_unknown INT,
+          cat_action INT, 
+          cat_adventure INT,
+          cat_animation INT,
+          cat_children INT,
+          cat_comedy INT,
+          cat_crime INT,
+          cat_documentary INT, 
+          cat_drama INT, 
+          cat_fantasy INT,
+          cat_fill_noir INT,
+          cat_horror INT,
+          cat_musical INT,
+          cat_mystery INT,
+          cat_romance INT,
+          cat_scifi INT,
+          cat_thriller INT,
+          cat_war INT,
+          cat_western INT) 
+      ROW FORMAT DELIMITED
+      FIELDS TERMINATED BY '|'
+      STORED AS TEXTFILE;
+```
+
+- Load the u.item into hive table ml.Movies
+
+  
+
+  
+
+  ```sql
+  hive> LOAD DATA INPATH '/user/lab/u.item'
+        INTO TABLE ml.Movies;
+  ```
+
+- verify
+
+  ```sql
+  hive> SELECT * from ml.Movies limit 20;
+  ```
+
+- examine the data in hdfs
+
+  ```shell
+  $ hadoop fs -ls /apps/hive/warehouse
+  $ hadoop fs -ls /apps/hive/warehouse/ml.db/userratings
+  $ hadoop fs -ls /apps/hive/warehouse/ml.db/movies
+  ```
+
+-------------------------------------------
+
+-- Partitioning and bucketing data in hive
+-------------------------------------------
+
+-- 1. load action.txt, comedy.txt, thriller.txt into hdfs
+-- You need to download these files from course shell and then upload to the sandbox first. Then copy to HDFS:
+
+$ hadoop fs -put /home/lab/action.txt /user/lab/action
+$ hadoop fs -put /home/lab/comedy.txt /user/lab/comedy
+$ hadoop fs -put /home/lab/thriller.txt /user/lab/thriller
+
+
+
+-- 2. create a table called movies_partition with 4 columns (movieid, movie_title, release_date, imdb_url) that is partitioned on genre
+
+
+hive> CREATE TABLE ml.movies_part 
+      (movieid int, 
+      movie_name string, 
+      release_date string, 
+      imdb_url string)
+PARTITIONED BY (genre string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+
+-- 3. load each file into a partition
+
+hive> LOAD DATA INPATH '/user/lab/action'
+      INTO TABLE ml.movies_part
+      PARTITION(genre='action');
+hive> LOAD DATA INPATH '/user/lab/comedy'
+      INTO TABLE ml.movies_part
+      PARTITION(genre='comedy');
+hive> LOAD DATA INPATH '/user/lab/thriller'
+      INTO TABLE ml.movies_part
+      PARTITION(genre='thriller');
+
+-- 4. describe the structure of the table and list the partitions (hint: describe and show partitions command)
+hive> DESCRIBE ml.movies_part;
+hive> SHOW PARTITIONS ml.movies_part;
+
+-- 5. look at the hive warehouse to see the 3 subdirectories
+
+hive> dfs -ls /apps/hive/warehouse/ml.db/movies_part
+
+-- 6. create a table called rating_buckets with the same column definitions as user_ratings, but with 8 buckets, clustered on movieid
+hive> CREATE TABLE ml.rating_buckets 
+         (userid int, 
+          movieid int, 
+          rating int, 
+          unixtime int)
+      CLUSTERED BY (movieid) INTO 8 BUCKETS;
+
+-- 7. use insert overwrite table to load the rows in user_ratings into rating_buckets. Dont' forget to set mapred.reduce.tasks to 8
+
+hive> SET mapred.reduce.tasks = 8;
+hive> INSERT OVERWRITE TABLE ml.rating_buckets 
+      SELECT *
+      FROM ml.userratings CLUSTER BY movieid;
+
+
+-- 8. view the 8 files that were created. 
+$ hadoop fs -ls /user/hive/warehouse/rating_buckets
+
+-- 9. count the rows in bucket 3 using tablesample
+hive> SELECT count(1) FROM ml.rating_buckets
+      TABLESAMPLE (BUCKET 3 OUT OF 8);[
+
 [Top](#top)
 
 # Sqoop <a name='sqoop'></a>
@@ -589,18 +839,47 @@ limit 10;
 ## Moving data between relational database and hadoop
 
 - create a full_text_mysql table in mysql under twitter database and then sqoop the mysql table to hive 
-
-- From your linux prompt, launch mysql
+- From your linux prompt, launch mysql by typing mysql -u root -p in the terminal
+  - for the sandbox, the password for mysql root is 'hadoop'
 
 ```shell
-[root@sandbox etc]# mysql
+[root@sandbox /]# mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 52
+Server version: 5.6.34 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
 ```
 
-- In mysql prompt...
+- In mysql prompt... 
+  - show databases;
+  - create database twitter;
 
 ```shell
 mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| hive               |
+| mysql              |
+| performance_schema |
+| ranger             |
++--------------------+
+5 rows in set (0.82 sec)
+
 mysql> create database twitter;
+Query OK, 1 row affected (0.08 sec)
+
 ```
 
 - create mysql table
@@ -620,7 +899,7 @@ mysql> quit;
 - From linux prompt, use sqoop to transfer full_table from mysql to hive
 
 ```shell
-[root@sandbox etc]#  sqoop import -m 1 --connect jdbc:mysql://0.0.0.0:3306/twitter --username=root --password= --table full_text_mysql --driver com.mysql.jdbc.Driver --columns "id, ts, location" --map-column-hive id=string,ts=string,location=string --hive-import --fields-terminated-by '\t'  --hive-table twitter.full_text_mysql  --warehouse-dir /user/twitter/full_text_mysql
+[root@sandbox etc]#  sqoop import -m 1 --connect jdbc:mysql://0.0.0.0:3306/twitter --username=root --password=hadoop --table full_text_mysql --driver com.mysql.jdbc.Driver --columns "id, ts, location" --map-column-hive id=string,ts=string,location=string --hive-import --fields-terminated-by '\t'  --hive-table twitter.full_text_mysql  --warehouse-dir /user/twitter/full_text_mysql
 ```
 
 [Top](#top)
