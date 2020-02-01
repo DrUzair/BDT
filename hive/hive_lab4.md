@@ -20,13 +20,13 @@
 - [Working with Hive Database files](#db)
 - List, Connect, Location, Creation, Drop
 - [Working with Hive Tables](#tbl)
-- [List](#tbl_list), [Location](#tbl_loc), [Creation](#tbl_create), [Drop](#tbl_drop), [Select data](#select)
+   - [List](#tbl_list), [Location](#tbl_loc), [Creation](#tbl_create), [Drop](#tbl_drop), [Select data](#select)
 - [Hive Functions](#funcs)
-- [Time and Dates](#dt_funcs) 
-  - [Stings and Regex](#str_funcs)
-  - [Conditionals; Case-When-Then](#cnds)
-  - [WHERE Clause](#where)
-  - [GROUP By Clause](#groupby)
+   - [Time and Dates](#dt_funcs) 
+   - [Stings and Regex](#str_funcs)
+   - [Conditionals; Case-When-Then](#cnds)
+   - [WHERE Clause](#where)
+   - [GROUP By Clause](#groupby)
 - [ORDER By Clause](#oderby)
   - [DISTINCT](#distinct)
   - [JOIN Tables](#join)
@@ -126,6 +126,8 @@ DROP database IF EXISTS demo CASCADE;
 ```
 
 [Top](#top)
+
+### Working with Hive Tables <a name="tbl"></a> 
 
 ### List Tables in currently in use Database <a name="tbl_list"></a> 
 
