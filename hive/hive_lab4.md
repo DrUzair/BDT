@@ -381,7 +381,10 @@ How do we capture all the mentions in a tweet?
   Longest tweets..
 
 ```sql
-select id, regexp_replace(tweet, "@USER_\\w{8}", "") as trimmed_tweet, length(regexp_replace(tweet, "@USER_\\w{8}", " ")) as len from twitter.full_text_ts limit 5;
+select id, regexp_replace(tweet, "@USER_\\w{8}", "") as trimmed_tweet, 
+length(regexp_replace(tweet, "@USER_\\w{8}", " ")) as len 
+from twitter.full_text_ts 
+limit 5;
 ```
 
 - Finding top 10 users who tweet long tweets
