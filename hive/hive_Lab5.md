@@ -25,6 +25,7 @@
 - [UDAF](#udaf)
   - [MIN](#min_udaf), [PERCENTILE_APPROX](#percentile_udaf), [HISTOGRAM_NUMERIC](#histo_udaf)
 - [UDTF](#udtf)
+  - [explode and lateral view](#udtf_explode_lv)
 - [Nested Queries](#nestedq)
 - [Partitioning and Bucketing](#pnb)
   - [The Dataset](#ml_data)
@@ -551,34 +552,7 @@ JOIN
                 where lat>=24.9493 AND lat<=49.5904 AND lon>=-125.0011 and lon<=-66.9326) t
     ) t2;
 ```
-
-
-
 [Top](#top)
-
------------------------------------------------
-
-Table-generating Functions (UDTF) <a name='udtf'></a>
------------------------------------------------
-
-- explode() function and lateral_view
-  - explode() function is often used with lateral_view
-    - we extracted twitter mentions from tweets in earlier exercises. 
-    - You've probably noticed that it's not optimal solution because the query we wrote didn't handle multiple mentions. 
-    - It only extract the very first mention. A better approach is to tokenize the tweet first and then explode the tokens into rows and extract mentions from each token
-
-```sql
-drop table twitter.full_text_ts_complex_1;
-create table twitter.full_text_ts_complex_1 as
-select id, ts, location_map, tweet, regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2) as mention
-from twitter.full_text_ts_complex
-lateral view explode(split(tweet, '\\s')) tmp as tweet_element
-where trim(regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2)) != "" ;
-
-select * from twitter.full_text_ts_complex_1 limit 10;
-```
-
-
 
 - **collect_set** function (UDAF)
   - collect_set() is a UDAF aggregation function.. we run the query at this step from the previous step, 
@@ -598,13 +572,30 @@ select * from twitter.full_text_ts_complex_2
 where size(mentions) > 5
 limit 10;
 ```
-
 [Top](#top)
 
------------------------------------------------
+## Table-generating Functions (UDTF) <a name='udtf'></a>
 
-Nested Queries <a name='nestedq'></a>
------------------------------------------------
+### explode() function and lateral_view <a name='udtf_explode_lv'></a>
+  - explode() function is often used with lateral_view
+    - we extracted twitter mentions from tweets in earlier exercises. 
+    - You've probably noticed that it's not optimal solution because the query we wrote didn't handle multiple mentions. 
+    - It only extract the very first mention. A better approach is to tokenize the tweet first and then explode the tokens into rows and extract mentions from each token
+
+```sql
+drop table twitter.full_text_ts_complex_1;
+create table twitter.full_text_ts_complex_1 as
+select id, ts, location_map, tweet, regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2) as mention
+from twitter.full_text_ts_complex
+lateral view explode(split(tweet, '\\s')) tmp as tweet_element
+where trim(regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2)) != "" ;
+
+select * from twitter.full_text_ts_complex_1 limit 10;
+```
+[Top](#top)
+
+
+## Nested Queries <a name='nestedq'></a>
 
 - *** tweets that have a lot of mentions ***
 
