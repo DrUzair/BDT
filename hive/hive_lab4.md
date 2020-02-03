@@ -140,10 +140,11 @@ Time taken: 0.509 seconds, Fetched: 4 row(s)
 
 [Top](#top)
 
-### Location of hive Tables <a name='tbl_loc'></a>
-
-'dfs -ls' command in hive CLI lists contents of HDFS directory. For twitter database, a directory "twitter.db" should be listed because **hive databases** are just **HDFS directories** and each **hive table** is an **HDFS file**
-
+### Location of hive Managed Tables <a name='tbl_loc'></a>
+- All managed tables are located at **/apps/hive/warehouse** on hdfs.
+- 'dfs -ls' command in hive CLI lists contents of HDFS directory. For twitter database, a directory "twitter.db" should be listed because **hive databases** are just **HDFS directories** and each **hive table** is an **HDFS file**
+- First columns lists read, write permissions
+- Second column lists the owner of the database
 ```shell
 hive (default)> dfs -ls /apps/hive/warehouse;
 Found 11 items
