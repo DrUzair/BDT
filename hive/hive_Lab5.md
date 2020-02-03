@@ -164,7 +164,7 @@ Creating table and load data with complex types
   hive> drop table twitter.full_text_ts_complex_tmp;
   ```
 
-  - Since it is an external table, dropping should not delete the data file; Verify the directory is still there... 
+  - Verify the directory is still there... 
 
   ```shell
   hive> dfs -ls /user/lab/full_text_ts_complex;
