@@ -53,7 +53,7 @@ hive >
 Ctrl-c or
 
 ```shell
-quit;
+hive> quit;
 ```
 
 ### List Databases <a name="db"></a> 
@@ -79,7 +79,7 @@ CREATE database twitter;
 By default, default database is in use. 
 
 ```shell
-use twitter;
+hive> use twitter;
 ```
 
 All queries will run on the databse in use.
@@ -87,7 +87,7 @@ All queries will run on the databse in use.
 **Note** to make currently in use databse to appear on console; 
 
 ```shell
-set hive.cli.print.current.db=true;
+hive> set hive.cli.print.current.db=true;
 ```
 
 or hive-site.xml
@@ -102,7 +102,7 @@ or hive-site.xml
 ### Drop a Database file
 
 ```sql
-DROP database IF EXISTS demo;
+hive> DROP database IF EXISTS demo;
 ```
 
 - Dropping a database that doesn't exit will result
@@ -122,7 +122,7 @@ FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTa
 - Use responsibly
 
 ```shell
-DROP database IF EXISTS demo CASCADE;
+hive> DROP database IF EXISTS demo CASCADE;
 ```
 
 [Top](#top)
