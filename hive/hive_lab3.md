@@ -238,6 +238,50 @@ Detailed Table Information      Table(tableName:customer_details, dbName:xademo,
 Time taken: 1.295 seconds, Fetched: 9 row(s)
 
 ```
+- formatted description
+```shell
+hive> DESCRIBE FORMATTED xademo.customer_details;
+OK
+# col_name              data_type               comment
+
+phone_number            string
+plan                    string
+rec_date                string
+status                  string
+balance                 string
+imei                    string
+region                  string
+
+# Detailed Table Information
+Database:               xademo
+Owner:                  hive
+CreateTime:             Tue Oct 25 08:02:08 UTC 2016
+LastAccessTime:         UNKNOWN
+Protect Mode:           None
+Retention:              0
+Location:               hdfs://sandbox.hortonworks.com:8020/apps/hive/warehouse/xademo.db/customer_details                               
+Table Type:             MANAGED_TABLE
+Table Parameters:
+        numFiles                1
+        numRows                 0
+        rawDataSize             0
+        totalSize               1532
+        transient_lastDdlTime   1477382533
+
+# Storage Information
+SerDe Library:          org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+InputFormat:            org.apache.hadoop.mapred.TextInputFormat
+OutputFormat:           org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputForm                                                                                                                                                             at
+Compressed:             No
+Num Buckets:            -1
+Bucket Columns:         []
+Sort Columns:           []
+Storage Desc Params:
+        field.delim             |
+        serialization.format    |
+Time taken: 1.109 seconds, Fetched: 37 row(s)
+
+```
 
 [Top](#top)
 
