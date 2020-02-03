@@ -183,7 +183,7 @@ hadoop fs -put /path/to/twitter_data/full_text.txt /path/to/hdfs/dir
 ## hive Table Creation <a name='tbl_create'></a>
 
 ```shell
-create table twitter.test (                                                   
+create table twitter.full_text (                                                   
           id string, 
           ts string, 
           lat_lon string,
@@ -204,7 +204,7 @@ select * from twitter.full_text;
 ### Table Schema Description
 
 ```shell
-hive (twitter)> describe extended test;
+hive (twitter)> describe extended full_text;
 OK
 id                      string
 ts                      string
