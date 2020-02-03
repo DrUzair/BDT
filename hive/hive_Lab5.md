@@ -209,14 +209,27 @@ Creating table and load data with complex types
 - display first two rows
 
   ```shell
-  > select * from twitter.full_text_ts_complex limit 2;
+  hive (twitter)> select * from twitter.full_text_ts_complex limit 2;
   OK
   USER_79321756   2010-03-03 04:15:26     47.528137       -122.197914     RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout [47.528137,-122.197914] {"lat":"47.528139","lon":"-122.197916"}  {"mention":"2ff4faca","size":119}
   USER_79321756   2010-03-03 04:55:32     47.528137       -122.197914     @USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*        [47.528137,-122.197914] {"lat":"47.528139","lon":"-122.197916"}  {"mention":"2ff4faca","size":96}
   Time taken: 0.23 seconds, Fetched: 3 row(s)
   hive> Shutting down tez session.
   ```
-
+- Check schema of newly created table; notice anything different ?
+```shell
+hive (twitter)> describe full_text_ts_complex;
+OK
+id                      string
+ts                      timestamp
+lat                     float
+lon                     float
+tweet                   string
+location_array          array<float>
+location_map            map<string,string>
+tweet_struct            struct<mention:string,size:int>
+Time taken: 0.786 seconds, Fetched: 8 row(s)
+```
 
 [Top](#top)
 
