@@ -10,24 +10,20 @@
 - Hive also provides a default database with a name default.
 
 ## Topics <a name="top"></a> 
-
+- [Hive Version](#version)
 - [Hive CLI](#cli)
 - [Working with Hive Databases](#db)
-
   - List, Connect, Location, Creation, Drop
 - [Working with Hive Tables](#tbls)
-
   - [List](#tbl_lst), [Location](#tbl_loc), [Creation](#tbl_create), [Schema](#tbl_schema), [Drop](#tbl_drop)
 - [Hive QL](#hql)
-
   - [SELECT Clause](#select)
-
   - [WHERE Clause](#where)
   - [ORDER By Clause](#oderby)
   - [DISTINCT](#distinct)
   - [GROUP By Clause](#groupby)
 
-## Hive Version
+## Hive Version <a name="cli"></a> 
 ```shell
 [root@sandbox ~]# /usr/bin/hive --version
 Hive 1.2.1000.2.5.0.0-1245
