@@ -608,10 +608,7 @@ JOIN
 
 # Partitioning and Bucketing <a name='pnb'></a>
 
-------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------
-
+## The Dataset <a name='pnb_data'></a>
 - the MovieLens dataset
   - The movielens dataset is a collection of movie ratings data and has been widely used in the industry and academia for experimenting with recommendation algorithms and we see many publications using this dataset to benchmark the performance of their algorithms.
   - For access to full-sized movielens data, go to http://grouplens.org/datasets/movielens/
@@ -670,11 +667,6 @@ field_4     unixtime
   ```shell
   $ hadoop fs -put /root/lab/ml-data/u.data /user/lab/u.data
   ```
-
-  
-
-  
-
 - Load the u.data into hive table
 
   ```sql
@@ -739,11 +731,6 @@ hive> CREATE TABLE ml.movies
 ```
 
 - Load the u.item into hive table ml.Movies
-
-  
-
-  
-
   ```sql
   hive> LOAD DATA INPATH '/user/lab/u.item'
         INTO TABLE ml.Movies;
@@ -763,13 +750,11 @@ hive> CREATE TABLE ml.movies
   $ hadoop fs -ls /apps/hive/warehouse/ml.db/movies
   ```
 
--------------------------------------------
+## Partitioning and bucketing data in hive
 
--- Partitioning and bucketing data in hive
--------------------------------------------
 
--- 1. load action.txt, comedy.txt, thriller.txt into hdfs
--- You need to download these files from course shell and then upload to the sandbox first. Then copy to HDFS:
+1. load action.txt, comedy.txt, thriller.txt into hdfs
+You need to download these files from course shell and then upload to the sandbox first. Then copy to HDFS:
 
 $ hadoop fs -put /home/lab/action.txt /user/lab/action
 $ hadoop fs -put /home/lab/comedy.txt /user/lab/comedy
@@ -777,7 +762,7 @@ $ hadoop fs -put /home/lab/thriller.txt /user/lab/thriller
 
 
 
--- 2. create a table called movies_partition with 4 columns (movieid, movie_title, release_date, imdb_url) that is partitioned on genre
+2. create a table called movies_partition with 4 columns (movieid, movie_title, release_date, imdb_url) that is partitioned on genre
 
 
 hive> CREATE TABLE ml.movies_part 
@@ -789,7 +774,7 @@ PARTITIONED BY (genre string)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
 
 
--- 3. load each file into a partition
+3. load each file into a partition
 
 hive> LOAD DATA INPATH '/user/lab/action'
       INTO TABLE ml.movies_part
@@ -801,15 +786,14 @@ hive> LOAD DATA INPATH '/user/lab/thriller'
       INTO TABLE ml.movies_part
       PARTITION(genre='thriller');
 
--- 4. describe the structure of the table and list the partitions (hint: describe and show partitions command)
+4. describe the structure of the table and list the partitions (hint: describe and show partitions command)
 hive> DESCRIBE ml.movies_part;
 hive> SHOW PARTITIONS ml.movies_part;
 
--- 5. look at the hive warehouse to see the 3 subdirectories
+5. look at the hive warehouse to see the 3 subdirectories
 
 hive> dfs -ls /apps/hive/warehouse/ml.db/movies_part
-
--- 6. create a table called rating_buckets with the same column definitions as user_ratings, but with 8 buckets, clustered on movieid
+6. create a table called rating_buckets with the same column definitions as user_ratings, but with 8 buckets, clustered on movieid
 hive> CREATE TABLE ml.rating_buckets 
          (userid int, 
           movieid int, 
@@ -817,7 +801,7 @@ hive> CREATE TABLE ml.rating_buckets
           unixtime int)
       CLUSTERED BY (movieid) INTO 8 BUCKETS;
 
--- 7. use insert overwrite table to load the rows in user_ratings into rating_buckets. Dont' forget to set mapred.reduce.tasks to 8
+7. use insert overwrite table to load the rows in user_ratings into rating_buckets. Dont' forget to set mapred.reduce.tasks to 8
 
 hive> SET mapred.reduce.tasks = 8;
 hive> INSERT OVERWRITE TABLE ml.rating_buckets 
@@ -825,13 +809,17 @@ hive> INSERT OVERWRITE TABLE ml.rating_buckets
       FROM ml.userratings CLUSTER BY movieid;
 
 
--- 8. view the 8 files that were created. 
+8. view the 8 files that were created. 
 $ hadoop fs -ls /user/hive/warehouse/rating_buckets
 
--- 9. count the rows in bucket 3 using tablesample
+9. count the rows in bucket 3 using tablesample
 hive> SELECT count(1) FROM ml.rating_buckets
       TABLESAMPLE (BUCKET 3 OUT OF 8);[
 
+10. Inspect table description
+```shell
+hive> DESCRIBE FORMATTED ml.rating_buckets;
+```
 [Top](#top)
 
 # Sqoop <a name='sqoop'></a>
