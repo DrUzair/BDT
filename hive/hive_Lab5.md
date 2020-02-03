@@ -213,7 +213,7 @@ Creating table and load data with complex types
   OK
   USER_79321756   2010-03-03 04:15:26     47.528137       -122.197914     RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout [47.528137,-122.197914] {"lat":"47.528139","lon":"-122.197916"}  {"mention":"2ff4faca","size":119}
   USER_79321756   2010-03-03 04:55:32     47.528137       -122.197914     @USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*        [47.528137,-122.197914] {"lat":"47.528139","lon":"-122.197916"}  {"mention":"2ff4faca","size":96}
-  Time taken: 0.23 seconds, Fetched: 3 row(s)
+  Time taken: 0.23 seconds, Fetched: 2 row(s)
   hive> Shutting down tez session.
   ```
 - Check schema of newly created table; notice anything different ?
