@@ -3,7 +3,7 @@
   - Note: you can skip this if you already have twitter.full_text_ts table created from previous lab
   - In case you don't have the geo-tagged tweet data in hadoop, you need reload it 
   - To avoid confusion, please always include database name 'twitter.' as part of your hive table name. 
-    - or set current db property to true
+    - set current db property to true so that hive prompt shows currently in-use database
     ```shell
     hive> set hive.cli.print.current.db=true;
     ```
