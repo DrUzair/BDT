@@ -21,7 +21,7 @@
   - [Extract values](#extract_val)
   - [Sort_array, Keys, Values](#more_collect_funcs)
 - [Advanced String Functions](#advstr)
-  - sentences, ngrams, [context_ngrams](#context_ngrams), str_to_map
+  - [sentences](#sentences), [ngrams](#ngrams), [explode](#explode), [context_ngrams](#context_ngrams), [str_to_map](#str_to_map)
 - [UDAF](#udaf)
   - [MIN](#min_udaf), [PERCENTILE_APPROX](#percentile_udaf), [HISTOGRAM_NUMERIC](#histo_udaf)
 - [UDTF](#udtf)
@@ -251,7 +251,7 @@ USER_79321756   2010-03-03 04:15:26     47.528139       -122.197916     ["47.528
 USER_79321756   2010-03-03 04:55:32     47.528139       -122.197916     ["47.528139","-122.197916"]     {"lat":"47.528139","lon":"-122.197916"} {"lat":"47.528139","lon":"-122.197916"}
 Time taken: 1.253 seconds, Fetched: 2 row(s)
 ````
-
+[Top](#top)
 ### Extract Array/Map Elements <a name='extract_val'></a>
   - extract element from arrays/maps using indexing
   - extract element from struct using 'dot' notation
@@ -271,7 +271,7 @@ OK
 47.528137       -122.197916             82
 Time taken: 0.989 seconds, Fetched: 5 row(s)
 ```
-
+[Top](#top)
 ### Work with collection functions <a name='more_collect_funcs'></a>
   - extract all keys/values from maps
   - get number of elements in arrays/maps
@@ -292,10 +292,9 @@ Time taken: 2.027 seconds, Fetched: 5 row(s)
 
 [Top](#top)
 
-Advanced String Functions <a name='advstr'></a>
------------------------------------------------
+## Advanced String Functions <a name='advstr'></a>
 
-- **sentences** function
+### **sentences** function <a name='sentences'></a>
   - Tokenizes a string of natural language text into words and sentences, where each sentence is broken at the appropriate sentence boundary and returned as an array of words. The 'lang' and 'locale' are optional arguments. For example, sentences('Hello there! How are you?') returns ( ("Hello", "there"), ("How", "are", "you") ).
 
 ```sql
@@ -305,8 +304,8 @@ OK
 [["USER","77a4822d","USER","2ff4faca","okay","lol"],["Saying","ok","to","both","of","yall","about","to","different","things"],[]]       @USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*
 Time taken: 1.281 seconds, Fetched: 2 row(s)
 ```
-
-- **ngrams** function 
+[Top](#top)
+### **ngrams** function <a name='ngrams'></a>
   - Returns the top-k N-grams from a set of tokenized sentences,
   - find popular bigrams 
 
@@ -335,8 +334,8 @@ OK
 Time taken: 217.747 seconds, Fetched: 1 row(s)
 
 ```
-
-- **ngrams** function with **explode()**
+[Top](#top)
+### **ngrams** function with **explode()** explode <a name='explode'></a>
   - Explodes a map to multiple rows. Returns a row-set with a two columns (*key,value)* , one row for each key-value pair from the input map. 
 
 ```sql
@@ -373,8 +372,8 @@ OK
 {"ngram":["I","need"],"estfrequency":3214.0}
 Time taken: 126.239 seconds, Fetched: 10 row(s)
 ```
-
-- **context_ngrams** function
+[Top](#top)
+### **context_ngrams** function <a name='context_ngrams'></a>
   - Returns the top-k contextual N-grams from a set of tokenized sentences, given a string of "context". 
   - find popular word after 'I need' bi-grams 
 
@@ -411,8 +410,8 @@ OK
 Time taken: 70.641 seconds, Fetched: 10 row(s)
 
 ```
-
-- **context_ngrams** function <a name='context_ngrams'></a>
+[Top](#top)
+- **context_ngrams** function 
   -- *** find popular tri-grams after 'I need' bi-grams ***
 
 ```sql
@@ -448,7 +447,6 @@ OK
 Time taken: 58.385 seconds, Fetched: 10 row(s)
 
 ```
-
 [Top](#top)
 
 - **str_to_map**
