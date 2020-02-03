@@ -159,15 +159,17 @@ Creating table and load data with complex types
   ```
 
   - **NOTE**: we can drop the tmp hive table because all we need is the HDFS file '/user/lab/full_text_ts_complex'
-
   ```sql
   hive> drop table twitter.full_text_ts_complex_tmp;
   ```
-
-  - Verify the directory is still there... 
-
+  - Since the full_text_ts_complex_tmp, deleting it won't remove the actual files from hdrs. Verify the directory is still there... 
   ```shell
-  hive> dfs -ls /user/lab/full_text_ts_complex;
+  hive (twitter)> dfs -ls /user/lab/full_text_ts_complex;
+  Found 4 items
+  -rwxr-xr-x   1 root hdfs   20340506 2020-02-03 15:46 /user/lab/full_text_ts_complex/000000_0
+  -rwxr-xr-x   1 root hdfs   20317378 2020-02-03 15:46 /user/lab/full_text_ts_complex/000001_0
+  -rwxr-xr-x   1 root hdfs   20315498 2020-02-03 15:46 /user/lab/full_text_ts_complex/000002_0
+  -rwxr-xr-x   1 root hdfs    8239771 2020-02-03 15:46 /user/lab/full_text_ts_complex/000003_0
   ```
 
 - Redefine the schema and reload the data;
