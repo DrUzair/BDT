@@ -27,6 +27,8 @@
 - [UDTF](#udtf)
 - [Nested Queries](#nestedq)
 - [Partitioning and Bucketing](#pnb)
+  - [The Dataset](#ml_data)
+  - [Loading Movielense Data into Hive](#movies_data)
 - [Sqoop](#sqoop)
 
 ## Dataset <a name="data"></a> 
@@ -636,12 +638,14 @@ JOIN
 
 # Partitioning and Bucketing <a name='pnb'></a>
 
-## The Dataset <a name='pnb_data'></a>
+## The Dataset <a name='ml_data'></a>
 - the MovieLens dataset
   - The movielens dataset is a collection of movie ratings data and has been widely used in the industry and academia for experimenting with recommendation algorithms and we see many publications using this dataset to benchmark the performance of their algorithms.
   - For access to full-sized movielens data, go to http://grouplens.org/datasets/movielens/
 
 - Loading User Ratings Data into Hive - u.data
+
+**Steps:**
 
 1. Upload movielens.tgz file to linux sandbox /root/lab
 2. Extract the data from the MovieLens dataset
@@ -672,12 +676,14 @@ $ more u.data
 ```
 
 - Table description "u.data"
-
-field_1     userid
-field_2     movieid
-field_3     rating 
-
-field_4     unixtime
+--------------------
+| column     | name |
+-------------------
+| field_1    |  userid |
+| field_2    | movieid |
+| field_3    | rating  |
+| field_4    | unixtime |
+--------------------
 
 - Create a database called ml and table called user_ratings (tab-delimited)'
 
@@ -710,7 +716,7 @@ field_4     unixtime
   hive> SELECT * FROM ml.userratings LIMIT 10;
   ```
 
-## loading movies data into hive
+### loading movies data into hive <a name='movies_data'></a>
 
 - Move the movies data u.item into hadoop
 
@@ -784,15 +790,16 @@ hive> CREATE TABLE ml.movies
 1. load action.txt, comedy.txt, thriller.txt into hdfs
 You need to download these files from course shell and then upload to the sandbox first. Then copy to HDFS:
 
+```shell
 $ hadoop fs -put /home/lab/action.txt /user/lab/action
 $ hadoop fs -put /home/lab/comedy.txt /user/lab/comedy
 $ hadoop fs -put /home/lab/thriller.txt /user/lab/thriller
-
+```
 
 
 2. create a table called movies_partition with 4 columns (movieid, movie_title, release_date, imdb_url) that is partitioned on genre
 
-
+```shell
 hive> CREATE TABLE ml.movies_part 
       (movieid int, 
       movie_name string, 
@@ -800,10 +807,10 @@ hive> CREATE TABLE ml.movies_part
       imdb_url string)
 PARTITIONED BY (genre string)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
-
+```
 
 3. load each file into a partition
-
+```shell
 hive> LOAD DATA INPATH '/user/lab/action'
       INTO TABLE ml.movies_part
       PARTITION(genre='action');
@@ -813,37 +820,42 @@ hive> LOAD DATA INPATH '/user/lab/comedy'
 hive> LOAD DATA INPATH '/user/lab/thriller'
       INTO TABLE ml.movies_part
       PARTITION(genre='thriller');
-
+```
 4. describe the structure of the table and list the partitions (hint: describe and show partitions command)
+```shell
 hive> DESCRIBE ml.movies_part;
 hive> SHOW PARTITIONS ml.movies_part;
-
+```
 5. look at the hive warehouse to see the 3 subdirectories
-
+```shell
 hive> dfs -ls /apps/hive/warehouse/ml.db/movies_part
+```
 6. create a table called rating_buckets with the same column definitions as user_ratings, but with 8 buckets, clustered on movieid
+```shell
 hive> CREATE TABLE ml.rating_buckets 
          (userid int, 
           movieid int, 
           rating int, 
           unixtime int)
       CLUSTERED BY (movieid) INTO 8 BUCKETS;
-
+```
 7. use insert overwrite table to load the rows in user_ratings into rating_buckets. Dont' forget to set mapred.reduce.tasks to 8
-
+```shell
 hive> SET mapred.reduce.tasks = 8;
 hive> INSERT OVERWRITE TABLE ml.rating_buckets 
       SELECT *
       FROM ml.userratings CLUSTER BY movieid;
-
+---
 
 8. view the 8 files that were created. 
+```shell
 $ hadoop fs -ls /user/hive/warehouse/rating_buckets
-
+```
 9. count the rows in bucket 3 using tablesample
+```shell
 hive> SELECT count(1) FROM ml.rating_buckets
       TABLESAMPLE (BUCKET 3 OUT OF 8);[
-
+```
 10. Inspect table description
 ```shell
 hive> DESCRIBE FORMATTED ml.rating_buckets;
