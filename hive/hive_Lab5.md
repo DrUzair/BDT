@@ -77,22 +77,22 @@ Creating table and load data with complex types
   row format delimited
   fields terminated by '\t'
   stored as textfile
-  location '/user/twitter/full_text_ts_complex';
+  location '/user/lab/full_text_ts_complex';
   ```
 
   verify the directory for newly created table.  
 
   ```shell
-  hive> dfs -ls /user/twitter;
+  hive> dfs -ls /user/lab;
   Found 2 items
-  drwxr-xr-x   - root hdfs          0 2019-12-30 06:57 /user/twitter/full_text.txt
-  drwxr-xr-x   - root hdfs          0 2019-12-30 20:25 /user/twitter/full_text_ts_complex
+  drwxr-xr-x   - root hdfs          0 2019-12-30 06:57 /user/lab/full_text.txt
+  drwxr-xr-x   - root hdfs          0 2019-12-30 20:25 /user/lab/full_text_ts_complex
   ```
 
   The directory is empty for now.
 
   ```shell
-  hive> dfs -ls /user/twitter/full_text_ts_complex/;
+  hive> dfs -ls /user/lab/full_text_ts_complex/;
   ```
 
   
@@ -136,12 +136,12 @@ Creating table and load data with complex types
   Check the files on hdfs
 
   ```shell
-  hive>  dfs -ls /user/twitter/full_text_ts_complex/;
+  hive>  dfs -ls /user/lab/full_text_ts_complex/;
   Found 4 items
-  -rwxr-xr-x   1 root hdfs   20340506 2019-12-30 20:34 /user/twitter/full_text_ts_complex/000000_0
-  -rwxr-xr-x   1 root hdfs   20317378 2019-12-30 20:34 /user/twitter/full_text_ts_complex/000001_0
-  -rwxr-xr-x   1 root hdfs   20315498 2019-12-30 20:34 /user/twitter/full_text_ts_complex/000002_0
-  -rwxr-xr-x   1 root hdfs    8239771 2019-12-30 20:34 /user/twitter/full_text_ts_complex/000003_0
+  -rwxr-xr-x   1 root hdfs   20340506 2019-12-30 20:34 /user/lab/full_text_ts_complex/000000_0
+  -rwxr-xr-x   1 root hdfs   20317378 2019-12-30 20:34 /user/lab/full_text_ts_complex/000001_0
+  -rwxr-xr-x   1 root hdfs   20315498 2019-12-30 20:34 /user/lab/full_text_ts_complex/000002_0
+  -rwxr-xr-x   1 root hdfs    8239771 2019-12-30 20:34 /user/lab/full_text_ts_complex/000003_0
   ```
 
   select first two rows
@@ -154,7 +154,7 @@ Creating table and load data with complex types
   Time taken: 0.832 seconds, Fetched: 2 row(s)
   ```
 
-  - **NOTE**: we can drop the tmp hive table because all we need is the HDFS file '/user/twitter/full_text_ts_complex'
+  - **NOTE**: we can drop the tmp hive table because all we need is the HDFS file '/user/lab/full_text_ts_complex'
 
   ```sql
   drop table twitter.full_text_ts_complex_tmp;
@@ -163,7 +163,7 @@ Creating table and load data with complex types
   - To prove that the directory is still there... 
 
   ```shell
-  dfs -ls /user/twitter/full_text_ts_complex;
+  dfs -ls /user/lab/full_text_ts_complex;
   ```
 
 - Redefine the schema and reload the data;
@@ -187,7 +187,7 @@ Creating table and load data with complex types
   FIELDS TERMINATED BY '\t'
   COLLECTION ITEMS TERMINATED BY ','
   MAP KEYS TERMINATED BY ':'
-  LOCATION '/user/twitter/full_text_ts_complex';
+  LOCATION '/user/lab/full_text_ts_complex';
   ```
 
 - display first two rows
@@ -896,7 +896,7 @@ mysql> quit;
 - From linux prompt, use sqoop to transfer full_table from mysql to hive
 
 ```shell
-[root@sandbox etc]#  sqoop import -m 1 --connect jdbc:mysql://0.0.0.0:3306/twitter --username=root --password=hadoop --table full_text_mysql --driver com.mysql.jdbc.Driver --columns "id, ts, location" --map-column-hive id=string,ts=string,location=string --hive-import --fields-terminated-by '\t'  --hive-table twitter.full_text_mysql  --warehouse-dir /user/twitter/full_text_mysql
+[root@sandbox etc]#  sqoop import -m 1 --connect jdbc:mysql://0.0.0.0:3306/twitter --username=root --password=hadoop --table full_text_mysql --driver com.mysql.jdbc.Driver --columns "id, ts, location" --map-column-hive id=string,ts=string,location=string --hive-import --fields-terminated-by '\t'  --hive-table twitter.full_text_mysql  --warehouse-dir /user/lab/full_text_mysql
 ```
 
 [Top](#top)
