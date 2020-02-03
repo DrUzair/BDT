@@ -17,7 +17,9 @@
 - [Complex Data Types](#cdt)
   - array, map, struct
 - [Collections Funtions](#collections)
-  - array, map, struct
+  - [Directily create array, map, struct](#direct_create_collect)
+  - [Extract values](#extract_val)
+  - [Sort_array, Keys, Values](#more_collect_funcs)
 - [Advanced String Functions](#advstr)
   - sentences, ngrams, [context_ngrams](#context_ngrams), str_to_map
 - [UDAF](#udaf)
@@ -233,10 +235,9 @@ Time taken: 0.786 seconds, Fetched: 8 row(s)
 
 [Top](#top)
 
-Collection Functions <a name='collections'></a>
------------------------------------------------
+## Collection Functions <a name='collections'></a>
 
-- Create complex type directly using map(), array(), struct() functions
+### Create complex type directly using map(), array(), struct() functions <a name='direct_create_collect'></a>
 
 ````sql
 hive (twitter)> select id, ts, lat, lon,
@@ -251,7 +252,7 @@ USER_79321756   2010-03-03 04:55:32     47.528139       -122.197916     ["47.528
 Time taken: 1.253 seconds, Fetched: 2 row(s)
 ````
 
-- Work with collection functions
+### Extract Array/Map Elements <a name='extract_val'></a>
   - extract element from arrays/maps using indexing
   - extract element from struct using 'dot' notation
 
@@ -271,7 +272,7 @@ OK
 Time taken: 0.989 seconds, Fetched: 5 row(s)
 ```
 
-- Work with collection functions
+### Work with collection functions <a name='more_collect_funcs'></a>
   - extract all keys/values from maps
   - get number of elements in arrays/maps
 
