@@ -32,7 +32,7 @@
 - create and load tweet data as external table
 
 ```sql
-drop table twitter.full_text;
+hive (twitter)> drop table twitter.full_text;
 create external table twitter.full_text (                                                 
         id string, 
         ts string, 
@@ -50,7 +50,7 @@ location '/user/lab/full_text.txt';
 - convert timestamp
 
 ```sql
-drop table twitter.full_text_ts;
+hive (twitter)> drop table twitter.full_text_ts;
 create table twitter.full_text_ts as
 select id, cast(concat(substr(ts,1,10), ' ', substr(ts,12,8)) as timestamp) as ts, lat, lon, tweet
 from twitter.full_text;
@@ -67,7 +67,7 @@ Creating table and load data with complex types
 - create a temporary table schema
 
   ```sql
-  drop table IF EXISTS twitter.full_text_ts_complex_tmp;
+  hive (twitter)> drop table IF EXISTS twitter.full_text_ts_complex_tmp;
   create external table twitter.full_text_ts_complex_tmp (
                          id string,
                          ts timestamp,
@@ -87,7 +87,7 @@ Creating table and load data with complex types
   verify the directory for newly created table.  
 
   ```shell
-  hive> dfs -ls /user/lab;
+  hive (twitter)> dfs -ls /user/lab;
   Found 2 items
   drwxr-xr-x   - root hdfs          0 2019-12-30 06:57 /user/lab/full_text.txt
   drwxr-xr-x   - root hdfs          0 2019-12-30 20:25 /user/lab/full_text_ts_complex
@@ -96,7 +96,7 @@ Creating table and load data with complex types
   The directory is empty for now.
 
   ```shell
-  hive> dfs -ls /user/lab/full_text_ts_complex/;
+  hive (twitter)> dfs -ls /user/lab/full_text_ts_complex/;
   ```
 
   
@@ -104,7 +104,7 @@ Creating table and load data with complex types
 - load transformed data into the **full_text_ts_complex_tmp** table
 
   ```sql
-  insert overwrite table twitter.full_text_ts_complex_tmp
+  hive (twitter)> insert overwrite table twitter.full_text_ts_complex_tmp
   select id, ts, lat, lon, tweet, 
          concat(lat,',',lon) as location_array,
          concat('lat:', lat, ',', 'lon:', lon) as location_map, 
@@ -140,7 +140,7 @@ Creating table and load data with complex types
   Check the files on hdfs
 
   ```shell
-  hive>  dfs -ls /user/lab/full_text_ts_complex/;
+  hive (twitter)>  dfs -ls /user/lab/full_text_ts_complex/;
   Found 4 items
   -rwxr-xr-x   1 root hdfs   20340506 2019-12-30 20:34 /user/lab/full_text_ts_complex/000000_0
   -rwxr-xr-x   1 root hdfs   20317378 2019-12-30 20:34 /user/lab/full_text_ts_complex/000001_0
@@ -160,9 +160,9 @@ Creating table and load data with complex types
 
   - **NOTE**: we can drop the tmp hive table because all we need is the HDFS file '/user/lab/full_text_ts_complex'
   ```sql
-  hive> drop table twitter.full_text_ts_complex_tmp;
+  hive (twitter)> drop table twitter.full_text_ts_complex_tmp;
   ```
-  - Since the full_text_ts_complex_tmp, deleting it won't remove the actual files from hdrs. Verify the directory is still there... 
+  - Since the full_text_ts_complex_tmp was an __external table__, deleting it won't remove the actual files from hdrs. Verify the directory and files are still there... 
   ```shell
   hive (twitter)> dfs -ls /user/lab/full_text_ts_complex;
   Found 4 items
@@ -171,13 +171,24 @@ Creating table and load data with complex types
   -rwxr-xr-x   1 root hdfs   20315498 2020-02-03 15:46 /user/lab/full_text_ts_complex/000002_0
   -rwxr-xr-x   1 root hdfs    8239771 2020-02-03 15:46 /user/lab/full_text_ts_complex/000003_0
   ```
+  - However the table is gone
+  ```shell
+  hive (twitter)> show tables;
+  OK
+  dayofweek
+  full_text
+  full_text_ts
+  full_text_ts_complex
+  tweets_per_user
+  Time taken: 0.356 seconds, Fetched: 5 row(s)
+  ````
 
 - Redefine the schema and reload the data;
   - Reload the temp file using complex types instead of strings
     **NOTE**: you specify the complex type when you create the table schema
 
   ```sql
-  drop table IF EXISTS twitter.full_text_ts_complex;
+  hive (twitter)> drop table IF EXISTS twitter.full_text_ts_complex;
   create external table twitter.full_text_ts_complex (
          id                 string,
          ts                 timestamp,
