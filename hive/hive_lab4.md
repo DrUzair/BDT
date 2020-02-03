@@ -1,16 +1,13 @@
 # Lab 4: Programming Hive 
 
 1. In this lab session, we will start working with HiveQL
-2. In case you don't have the geo-tagged tweet data in Hadoop, you need reload it 
+2. In case you don't have the geo-tagged tweet data in Hadoop, you need to reload it 
 3. To avoid confusion, please always include database name 'twitter.' as part of your hive table name. e.g.,  twitter.full_text
    - If you don't specify the database name while you're not in the twitter database (did not issue the command 'use twitter'), you will not find the  the corresponding table. By default you're in a database called "default" 
-
-##### ATTENTION ! ! !
-
-- This set of lab instructions contain a 'bug' that we intentionally introduced.
-- Please follow and read the ERROR messages closely and understand what they are referring to.
-- When you find the 'bug' figure out a way to fix it. You are strongly encouraged to search on the internet and/or discuss the problem with your class mates.
-- After you have fixed the 'bug' (or failed to come up with a fix), notify your instructor. 
+   - **ATTENTION:** This set of lab instructions contain a **'bug'** that we intentionally introduced.
+   - Please follow and read the ERROR messages closely and understand what they are referring to.
+   - When you find the 'bug' figure out a way to fix it. You are strongly encouraged to search on the internet and/or discuss the problem with your class mates.
+   - After you have fixed the 'bug' (or failed to come up with a fix), notify your instructor. 
 
 [HIVE Language Manual](https://cwiki.apache.org/confluence/display/Hive/LanguageManual)
 
@@ -240,7 +237,7 @@ create external table twitter.full_text (
           tweet string)
 row format delimited 
 fields terminated by '\t'
-location '/user/twitter/full_text';   
+location '/user/lab/full_text';   
 ```
 
 [Top](#top)
@@ -256,13 +253,10 @@ drop table twitter.full_text_ts;
 ### SELECT Clause <a name="select"></a> 
 
 ```sql
-hive (twitter)> select id, ts from twitter.full_text limit 5;
+hive (twitter)> select id, ts from twitter.full_text limit 2;
 OK
 USER_79321756   2010-03-03T04:15:26     ÜT: 47.528139,-122.197916       47.528139       -122.197916     RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout NULL
 USER_79321756   2010-03-03T04:55:32     ÜT: 47.528139,-122.197916       47.528139       -122.197916     @USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*        NULL
-USER_79321756   2010-03-03T05:13:34     ÜT: 47.528139,-122.197916       47.528139       -122.197916     RT @USER_5d4d777a: YOURE A FOR GETTING IN THE MIDDLE OF THIS @USER_ab059bdc WHO THE FUCK ARE YOU ? A FUCKING NOBODY !!!!&gt;&gt;Lol! Dayum! Aye! NULL
-USER_79321756   2010-03-03T05:28:02     ÜT: 47.528139,-122.197916       47.528139       -122.197916     @USER_77a4822d yea ok..well answer that cheap as Sweden phone you came up on when I call.       NULL
-USER_79321756   2010-03-03T05:56:13     ÜT: 47.528139,-122.197916       47.528139       -122.197916     A sprite can disappear in her mouth - lil kim hmmmmm the can not the bottle right?      NULL
 Time taken: 0.254 seconds, Fetched: 5 row(s)
 ```
 
