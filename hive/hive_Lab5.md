@@ -161,17 +161,16 @@ Creating table and load data with complex types
   - **NOTE**: we can drop the tmp hive table because all we need is the HDFS file '/user/lab/full_text_ts_complex'
 
   ```sql
-  drop table twitter.full_text_ts_complex_tmp;
+  hive> drop table twitter.full_text_ts_complex_tmp;
   ```
 
-  - To prove that the directory is still there... 
+  - Since it is an external table, dropping should not delete the data file; Verify the directory is still there... 
 
   ```shell
-  dfs -ls /user/lab/full_text_ts_complex;
+  hive> dfs -ls /user/lab/full_text_ts_complex;
   ```
 
 - Redefine the schema and reload the data;
-
   - Reload the temp file using complex types instead of strings
     **NOTE**: you specify the complex type when you create the table schema
 
