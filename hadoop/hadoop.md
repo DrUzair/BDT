@@ -1,3 +1,7 @@
+## Installation Path
+```shell
+ls /usr/hdp/
+```
 ## Version
 
 ```shell
