@@ -239,12 +239,16 @@ Collection Functions <a name='collections'></a>
 - Create complex type directly using map(), array(), struct() functions
 
 ````sql
-select id, ts, lat, lon, 
-       array(lat, lon) as location_array, 
-       map('lat', lat, 'lon', lon)  as location_map, 
-       named_struct('lat', lat, 'lon',lon) as location_struct
-from twitter.full_text_ts
-limit 10;
+hive (twitter)> select id, ts, lat, lon,
+              >        array(lat, lon) as location_array,
+              >        map('lat', lat, 'lon', lon)  as location_map,
+              >        named_struct('lat', lat, 'lon',lon) as location_struct
+              > from twitter.full_text_ts
+              > limit 2;
+OK
+USER_79321756   2010-03-03 04:15:26     47.528139       -122.197916     ["47.528139","-122.197916"]     {"lat":"47.528139","lon":"-122.197916"} {"lat":"47.528139","lon":"-122.197916"}
+USER_79321756   2010-03-03 04:55:32     47.528139       -122.197916     ["47.528139","-122.197916"]     {"lat":"47.528139","lon":"-122.197916"} {"lat":"47.528139","lon":"-122.197916"}
+Time taken: 1.253 seconds, Fetched: 2 row(s)
 ````
 
 - Work with collection functions
