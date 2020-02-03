@@ -27,10 +27,19 @@
   - [DISTINCT](#distinct)
   - [GROUP By Clause](#groupby)
 
-
+## Hive Version
+```shell
+[root@sandbox ~]# /usr/bin/hive --version
+Hive 1.2.1000.2.5.0.0-1245
+Subversion git://c66-slave-20176e25-3/grid/0/jenkins/workspace/HDP-parallel-centos6/SOURCES/hive -r da6c690d384d1666f5a5f450be5cbc54e2fe4bd6
+Compiled by jenkins on Fri Aug 26 01:39:52 UTC 2016
+From source with checksum c30648316a632f7a753f4359e5c8f4d6
+```
 ## Hive CLI <a name="cli"></a> 
 
+
 - All commands should end with semi-colon ;
+
 
 ### Invoke
 
