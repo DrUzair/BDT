@@ -802,6 +802,7 @@ limit 5;
 
 ### explode() function and lateral_view <a name='udtf_explode_lv'></a>
   - __lateral view__ 
+  
   | Column        | Type          |
   | ------------- | ------------- |
   | PageID        | String        |
@@ -811,6 +812,19 @@ limit 5;
   |----------     |   ----------- |
   | front_page    |   [1, 2, 3]   |
   | contact_page  |   [3, 4, 5]   |
+  ```sql
+  SELECT pageid, adid
+  FROM pageAds LATERAL VIEW explode(adid_list) adTable AS adid;
+  ```
+  
+  |   pageid      |   adid_list   |
+  |----------     |   ----------- |
+  | front_page    |   1   |
+  | front_page    |   2   |
+  | front_page    |   3   |
+  | contact_page  |   3   |
+  | contact_page  |   4   |
+  | contact_page  |   5   |
   
   - explode() function is often used with lateral_view
   - 
