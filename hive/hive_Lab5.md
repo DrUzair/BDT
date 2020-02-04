@@ -864,9 +864,38 @@ Time taken: 76.764 seconds
 ```
 Check one row
 ```shell
-hive (twitter)> select * from twitter.full_text_ts_complex_1 limit 1;
+hive (twitter)> select id, mention from twitter.full_text_ts_complex_1 where id = 'USER_79321756';
 OK
-USER_79321756   2010-03-03 04:15:26     {"lat":"47.528139","lon":"-122.197916"} RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout 2ff4faca
+USER_79321756   2ff4faca
+USER_79321756   5d4d777a
+USER_79321756   dc5e5498
+USER_79321756   d5d93fec
+USER_79321756   d5d93fec
+USER_79321756   79321756
+USER_79321756   d5d93fec
+USER_79321756   620cd4b9
+USER_79321756   642c9c1b
+USER_79321756   9bc2644b
+USER_79321756   3914673e
+USER_79321756   4cecd527
+USER_79321756   d5d93fec
+USER_79321756   dc5e5498
+USER_79321756   620cd4b9
+USER_79321756   ccd38822
+USER_79321756   2c8fc9a4
+USER_79321756   dc5e5498
+USER_79321756   1ab41641
+USER_79321756   620cd4b9
+USER_79321756   f7506b59
+USER_79321756   f7506b59
+USER_79321756   9763f55c
+USER_79321756   7ec2204e
+USER_79321756   79321756
+USER_79321756   7ec2204e
+USER_79321756   621b922f
+USER_79321756   4dec75c1
+USER_79321756   79321756
+Time taken: 0.249 seconds, Fetched: 29 row(s)
 ```
 [Top](#top)
 
