@@ -30,7 +30,7 @@
 - [Partitioning and Bucketing](#pnb)
   - [The Movielense Dataset](#ml_data)
   - [Loading Movielense Data into Hive](#movies_data)
-  - [PARTITION BY ClAUSE](#partioning)
+  - [PARTITION BY CLAUSE](#partitioning)
   - [CLUSTER BY CLAUSE](#bucketing)
 - [Sqoop](#sqoop)
 
