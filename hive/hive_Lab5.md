@@ -806,9 +806,9 @@ limit 5;
   | Column        | Type          |
   | ------------- | ------------- |
   | PageID        | String        |
-  | AdList        | Array<int>    |
+  | AdList        | Array\<int\>    |
   
-  |   pageid      |   adid_list   |
+  |   PageID      |   AdList   |
   |----------     |   ----------- |
   | front_page    |   [1, 2, 3]   |
   | contact_page  |   [3, 4, 5]   |
@@ -817,7 +817,7 @@ limit 5;
   FROM pageAds LATERAL VIEW explode(adid_list) adTable AS adid;
   ```
   
-  |   pageid      |   adid_list   |
+  |   pageid      |   adid   |
   |----------     |   ----------- |
   | front_page    |   1   |
   | front_page    |   2   |
