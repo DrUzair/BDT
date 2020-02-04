@@ -470,10 +470,33 @@ Aggregation Functions (UDAF) <a name='udaf'></a>
   - *** Find twitter user who reside on the west most point of U.S. ***
     - You can visualize it using the map tool at: http://www.darrinward.com/lat-long/?id=461435
 
-```sql
-select distinct lat, lon
-from twitter.full_text_ts_complex x
-where cast(x.lon as float) IN (select min(cast(y.lon as float)) as lon from twitter.full_text_ts y);
+```shell
+hive (twitter)> select distinct lat, lon
+              > from twitter.full_text_ts_complex x
+              > where cast(x.lon as float) IN (select min(cast(y.lon as float)) as lon from twitter.full_text_ts y);
+Query ID = root_20200204152323_80d5d036-6df7-45aa-a672-8877a3ea5e62
+Total jobs = 1
+Launching Job 1 out of 1
+Tez session was closed. Reopening...
+Session re-established.
+
+
+Status: Running (Executing on YARN cluster with App id application_1580765662954_0002)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      6          6        0        0       0       0
+Map 3 ..........   SUCCEEDED      4          4        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+Reducer 4 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 04/04  [==========================>>] 100%  ELAPSED TIME: 446.74 s
+--------------------------------------------------------------------------------
+OK
+43.17136        -124.37165
+Time taken: 535.386 seconds, Fetched: 1 row(s)
+
 ```
 
 - SAVE the output of the above query in a directory on HDFS
@@ -491,6 +514,7 @@ WHERE cast(x.lon as float) IN (select min(cast(y.lon as float)) as lon from twit
 [Top](#top)
 
 - **PERCENTILE_APPROX** function (works with DOUBLE type) <a name='percentile_udaf'></a>
+  - __percentile_approx(DOUBLE col, p [, B])__: Returns an approximate pth percentile of a numeric column (including floating point types) in the group. The B parameter controls approximation accuracy at the cost of memory. Higher values yield better approximations, and the default is 10,000. When the number of distinct values in col is smaller than B, this gives an exact percentile value.
   - *** Find twitter users from north west part of U.S. ***
     - You can visualize it using the map tool: http://www.darrinward.com/lat-long/?id=461435
 
@@ -501,7 +525,9 @@ from twitter.full_text_ts_complex;   --  41.79976907219686
 
 select percentile_approx(cast(lon as double), array(0.1))
 from twitter.full_text_ts_complex;   --  -117.06394155417728
+```
 
+```sql
 select distinct lat, lon
 from twitter.full_text_ts_complex
 where cast(lat as double) >= 41.79976907219686 AND
