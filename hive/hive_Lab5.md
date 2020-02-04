@@ -801,7 +801,19 @@ limit 5;
 ## Table-generating Functions (UDTF) <a name='udtf'></a>
 
 ### explode() function and lateral_view <a name='udtf_explode_lv'></a>
+  - __lateral view__ 
+  | Column        | Type          |
+  | ------------- | ------------- |
+  | PageID        | String        |
+  | AdList        | Array<int>    |
+  
+  |   pageid      |   adid_list   |
+  |----------     |   ----------- |
+  | front_page    |   [1, 2, 3]   |
+  | contact_page  |   [3, 4, 5]   |
+  
   - explode() function is often used with lateral_view
+  - 
     - we extracted twitter mentions from tweets in earlier exercises. 
     - You've probably noticed that it's not optimal solution because the query we wrote didn't handle multiple mentions. 
     - It only extract the very first mention. A better approach is to tokenize the tweet first and then explode the tokens into rows and extract mentions from each token
