@@ -1105,18 +1105,20 @@ hive> CREATE TABLE ml.rating_buckets
           unixtime int)
       CLUSTERED BY (movieid) INTO 8 BUCKETS;
 ```
-7. use insert overwrite table to load the rows in user_ratings into rating_buckets. Dont' forget to set mapred.reduce.tasks to 8
+7. use insert overwrite table to load the rows in user_ratings into rating_buckets. 
+Dont' forget to set mapred.reduce.tasks to 8
 ```shell
 hive> SET mapred.reduce.tasks = 8;
 hive> INSERT OVERWRITE TABLE ml.rating_buckets 
       SELECT *
       FROM ml.userratings CLUSTER BY movieid;
----
+```
 
 8. view the 8 files that were created. 
 ```shell
 $ hadoop fs -ls /user/hive/warehouse/rating_buckets
 ```
+
 9. count the rows in bucket 3 using tablesample
 ```shell
 hive> SELECT count(1) FROM ml.rating_buckets
