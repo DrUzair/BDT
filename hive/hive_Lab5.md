@@ -870,7 +870,7 @@ USER_79321756   2010-03-03 04:15:26     {"lat":"47.528139","lon":"-122.197916"} 
 
 
 ## Nested Queries <a name='nestedq'></a>
-
+- Refer to creation of [full_text_ts_complex_2](#collect_set_udaf)
 - *** tweets that have a lot of mentions ***
 
 ```sql
