@@ -769,15 +769,15 @@ Time taken: 131.722 seconds, Fetched: 100 row(s)
 - **collect_set** function (UDAF) <a name='collect_set_udaf'></a>
   - collect_set(col) returns a set of objects with duplicate elements eliminated.
   - collect_list(col) returns a set of objects without duplicate elements eliminated.
-  - we run the query after completing [this step](#udtf_explode_lv) , 
+  - we run the query after completing [this step](#udtf_explode_lv) , The full_text_ts_complex_2 table also being used in [Nested queries](#nestedq) 
   - we get all the mentions in the tweets but if a user has multiple mentions in the same tweet, they are in different rows. 
   - To transpose all the mentions belonging to the same tweet/user, we can use the collect_set and group by to transpose the them into an array of mentions
 
-```sql
-create table twitter.full_text_ts_complex_2 as
-select id, ts, location_map, tweet, collect_list(mention) as mentions
-from twitter.full_text_ts_complex_1
-group by id, ts, location_map, tweet;
+```shell
+hive (twitter)> create table twitter.full_text_ts_complex_2 as
+              > select id, ts, location_map, tweet, collect_list(mention) as mentions
+              > from twitter.full_text_ts_complex_1
+              > group by id, ts, location_map, tweet;
 ```
   - check schema
 ```shell
