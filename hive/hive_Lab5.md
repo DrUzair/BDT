@@ -23,7 +23,7 @@
 - [Advanced String Functions](#advstr)
   - [sentences](#sentences), [ngrams](#ngrams), [explode](#explode), [context_ngrams](#context_ngrams), [str_to_map](#str_to_map)
 - [UDAF](#udaf)
-  - [MIN](#min_udaf), [PERCENTILE_APPROX](#percentile_udaf), [HISTOGRAM_NUMERIC](#histo_udaf), [COLLECT_SET](#collect_set_udaf)
+  - [MIN](#min_udaf), [PERCENTILE_APPROX](#percentile_udaf), [HISTOGRAM_NUMERIC](#histo_udaf), [COLLECT_SET & COLLECT_LIST](#collect_set_udaf)
 - [UDTF](#udtf)
   - [explode and lateral view](#udtf_explode_lv)
 - [Nested Queries](#nestedq)
@@ -767,8 +767,9 @@ Time taken: 131.722 seconds, Fetched: 100 row(s)
 [Top](#top)
 
 - **collect_set** function (UDAF) <a name='collect_set_udaf'></a>
-  - collect_set() is a UDAF aggregation function.. Returns a set of objects with duplicate elements eliminated.
-  - we run the query at this step from the previous step, 
+  - collect_set(col) returns a set of objects with duplicate elements eliminated.
+  - collect_list(col) returns a set of objects without duplicate elements eliminated.
+  - we run the query after completing [this step](#udtf_explode_lv) , 
   - we get all the mentions in the tweets but if a user has multiple mentions in the same tweet, they are in different rows. 
   - To transpose all the mentions belonging to the same tweet/user, we can use the collect_set and group by to transpose the them into an array of mentions
 
