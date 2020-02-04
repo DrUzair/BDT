@@ -626,20 +626,143 @@ from twitter.full_text_ts_complex) t;
 
 - write a nested query the cross-joins the 10x10 lat/lon points 
 
-```sql
-select t1.lat, t2.lon
-from 
-    (select t.hist_lat.x as lat 
-        from (select explode(histogram_numeric(lat, 10)) as hist_lat 
-                from twitter.full_text_ts_complex
-                where lat>=24.9493 AND lat<=49.5904 AND lon>=-125.0011 and lon<=-66.9326) t
-    ) t1
-JOIN
-    (select t.hist_lon.x as lon 
-        from (select explode(histogram_numeric(lon, 10)) as hist_lon 
-                from twitter.full_text_ts_complex
-                where lat>=24.9493 AND lat<=49.5904 AND lon>=-125.0011 and lon<=-66.9326) t
-    ) t2;
+```shell
+hive (twitter)> select t1.lat, t2.lon
+              > from
+              >     (select t.hist_lat.x as lat
+              >         from (select explode(histogram_numeric(lat, 10)) as hist_lat
+              >                 from twitter.full_text_ts_complex
+              >                 where lat>=24.9493 AND lat<=49.5904 AND lon>=-125.0011 and lon<=-66.9326) t
+              >     ) t1
+              > JOIN
+              >     (select t.hist_lon.x as lon
+              >         from (select explode(histogram_numeric(lon, 10)) as hist_lon
+              >                 from twitter.full_text_ts_complex
+              >                 where lat>=24.9493 AND lat<=49.5904 AND lon>=-125.0011 and lon<=-66.9326) t
+              >     ) t2;
+Warning: Map Join MAPJOIN[25][bigTable=?] in task 'Reducer 2' is a cross product
+Query ID = root_20200204164218_d5086421-5f65-4506-9e11-66a64817c22d
+Total jobs = 1
+Launching Job 1 out of 1
+Tez session was closed. Reopening...
+Dag submit failed due to java.io.IOException: All datanodes DatanodeInfoWithStorage[172.17.0.2:50010,DS-10c300da-2e2c-4d0e-bb2f-a01867179944,DISK] are bad. Aborting... stack trace: [org.apache.hadoop.service.ServiceStateException.convert(ServiceStateException.java:59), org.apache.hadoop.service.AbstractService.stop(AbstractService.java:225), org.apache.tez.dag.history.ats.acls.ATSV15HistoryACLPolicyManager.close(ATSV15HistoryACLPolicyManager.java:259), org.apache.tez.client.TezClient.stop(TezClient.java:594), org.apache.hadoop.hive.ql.exec.tez.TezSessionState.close(TezSessionState.java:270), org.apache.hadoop.hive.ql.exec.tez.TezSessionPoolManager.close(TezSessionPoolManager.java:185), org.apache.hadoop.hive.ql.exec.tez.TezSessionPoolManager.closeAndOpen(TezSessionPoolManager.java:310), org.apache.hadoop.hive.ql.exec.tez.TezTask.submit(TezTask.java:451), org.apache.hadoop.hive.ql.exec.tez.TezTask.execute(TezTask.java:181), org.apache.hadoop.hive.ql.exec.Task.executeTask(Task.java:160), org.apache.hadoop.hive.ql.exec.TaskRunner.runSequential(TaskRunner.java:89), org.apache.hadoop.hive.ql.Driver.launchTask(Driver.java:1745), org.apache.hadoop.hive.ql.Driver.execute(Driver.java:1491), org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1289), org.apache.hadoop.hive.ql.Driver.run(Driver.java:1156), org.apache.hadoop.hive.ql.Driver.run(Driver.java:1146), org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:216), org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:168), org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:379), org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:739), org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:684), org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:624), sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method), sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62), sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43), java.lang.reflect.Method.invoke(Method.java:498), org.apache.hadoop.util.RunJar.run(RunJar.java:233), org.apache.hadoop.util.RunJar.main(RunJar.java:148)] retrying...
+
+
+Status: Running (Executing on YARN cluster with App id application_1580765662954_0004)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      6          6        0        0       2       0
+Map 3 ..........   SUCCEEDED      6          6        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+Reducer 4 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 04/04  [==========================>>] 100%  ELAPSED TIME: 101.39 s
+--------------------------------------------------------------------------------
+OK
+25.989036884035983      -122.0496318538321
+25.989036884035983      -74.43433728110445
+25.989036884035983      -79.24579998902354
+25.989036884035983      -82.6378458384166
+25.989036884035983      -88.53423418706629
+25.989036884035983      -95.7496482747749
+25.989036884035983      -100.21637271756143
+25.989036884035983      -105.13660620194453
+25.989036884035983      -111.754289292571
+25.989036884035983      -117.79901808300262
+28.257638877620384      -122.0496318538321
+28.257638877620384      -74.43433728110445
+28.257638877620384      -79.24579998902354
+28.257638877620384      -82.6378458384166
+28.257638877620384      -88.53423418706629
+28.257638877620384      -95.7496482747749
+28.257638877620384      -100.21637271756143
+28.257638877620384      -105.13660620194453
+28.257638877620384      -111.754289292571
+28.257638877620384      -117.79901808300262
+29.9119122372187        -122.0496318538321
+29.9119122372187        -74.43433728110445
+29.9119122372187        -79.24579998902354
+29.9119122372187        -82.6378458384166
+29.9119122372187        -88.53423418706629
+29.9119122372187        -95.7496482747749
+29.9119122372187        -100.21637271756143
+29.9119122372187        -105.13660620194453
+29.9119122372187        -111.754289292571
+29.9119122372187        -117.79901808300262
+33.647963519193596      -122.0496318538321
+33.647963519193596      -74.43433728110445
+33.647963519193596      -79.24579998902354
+33.647963519193596      -82.6378458384166
+33.647963519193596      -88.53423418706629
+33.647963519193596      -95.7496482747749
+33.647963519193596      -100.21637271756143
+33.647963519193596      -105.13660620194453
+33.647963519193596      -111.754289292571
+33.647963519193596      -117.79901808300262
+36.08724346662918       -122.0496318538321
+36.08724346662918       -74.43433728110445
+36.08724346662918       -79.24579998902354
+36.08724346662918       -82.6378458384166
+36.08724346662918       -88.53423418706629
+36.08724346662918       -95.7496482747749
+36.08724346662918       -100.21637271756143
+36.08724346662918       -105.13660620194453
+36.08724346662918       -111.754289292571
+36.08724346662918       -117.79901808300262
+38.634435623491505      -122.0496318538321
+38.634435623491505      -74.43433728110445
+38.634435623491505      -79.24579998902354
+38.634435623491505      -82.6378458384166
+38.634435623491505      -88.53423418706629
+38.634435623491505      -95.7496482747749
+38.634435623491505      -100.21637271756143
+38.634435623491505      -105.13660620194453
+38.634435623491505      -111.754289292571
+38.634435623491505      -117.79901808300262
+40.92781411988116       -122.0496318538321
+40.92781411988116       -74.43433728110445
+40.92781411988116       -79.24579998902354
+40.92781411988116       -82.6378458384166
+40.92781411988116       -88.53423418706629
+40.92781411988116       -95.7496482747749
+40.92781411988116       -100.21637271756143
+40.92781411988116       -105.13660620194453
+40.92781411988116       -111.754289292571
+40.92781411988116       -117.79901808300262
+43.03514002841662       -122.0496318538321
+43.03514002841662       -74.43433728110445
+43.03514002841662       -79.24579998902354
+43.03514002841662       -82.6378458384166
+43.03514002841662       -88.53423418706629
+43.03514002841662       -95.7496482747749
+43.03514002841662       -100.21637271756143
+43.03514002841662       -105.13660620194453
+43.03514002841662       -111.754289292571
+43.03514002841662       -117.79901808300262
+44.700213582059 -122.0496318538321
+44.700213582059 -74.43433728110445
+44.700213582059 -79.24579998902354
+44.700213582059 -82.6378458384166
+44.700213582059 -88.53423418706629
+44.700213582059 -95.7496482747749
+44.700213582059 -100.21637271756143
+44.700213582059 -105.13660620194453
+44.700213582059 -111.754289292571
+44.700213582059 -117.79901808300262
+47.568058500336996      -122.0496318538321
+47.568058500336996      -74.43433728110445
+47.568058500336996      -79.24579998902354
+47.568058500336996      -82.6378458384166
+47.568058500336996      -88.53423418706629
+47.568058500336996      -95.7496482747749
+47.568058500336996      -100.21637271756143
+47.568058500336996      -105.13660620194453
+47.568058500336996      -111.754289292571
+47.568058500336996      -117.79901808300262
+Time taken: 131.722 seconds, Fetched: 100 row(s)
+
 ```
 [Top](#top)
 
