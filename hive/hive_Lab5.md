@@ -28,8 +28,10 @@
   - [explode and lateral view](#udtf_explode_lv)
 - [Nested Queries](#nestedq)
 - [Partitioning and Bucketing](#pnb)
-  - [The Dataset](#ml_data)
+  - [The Movielense Dataset](#ml_data)
   - [Loading Movielense Data into Hive](#movies_data)
+  - [PARTITION BY ClAUSE](#partioning)
+  - [CLUSTER BY CLAUSE](#bucketing)
 - [Sqoop](#sqoop)
 
 ## Dataset <a name="data"></a> 
@@ -1049,8 +1051,9 @@ hive> CREATE TABLE ml.movies
   $ hadoop fs -ls /apps/hive/warehouse/ml.db/userratings
   $ hadoop fs -ls /apps/hive/warehouse/ml.db/movies
   ```
+[Top](#top)
 
-## Partitioning and bucketing data in hive
+## Partitioning in Hive <a name='partitioning'></a>
 
 
 1. load action.txt, comedy.txt, thriller.txt into hdfs
@@ -1096,7 +1099,11 @@ hive> SHOW PARTITIONS ml.movies_part;
 ```shell
 hive> dfs -ls /apps/hive/warehouse/ml.db/movies_part
 ```
-6. create a table called rating_buckets with the same column definitions as user_ratings, but with 8 buckets, clustered on movieid
+[Top](#top)
+
+## Bucketing in Hive <a name='bucketing'></a>
+
+1. create a table called rating_buckets with the same column definitions as user_ratings, but with 8 buckets, clustered on movieid
 ```shell
 hive> CREATE TABLE ml.rating_buckets 
          (userid int, 
@@ -1105,7 +1112,7 @@ hive> CREATE TABLE ml.rating_buckets
           unixtime int)
       CLUSTERED BY (movieid) INTO 8 BUCKETS;
 ```
-7. use insert overwrite table to load the rows in user_ratings into rating_buckets. 
+2. use insert overwrite table to load the rows in user_ratings into rating_buckets. 
 Dont' forget to set mapred.reduce.tasks to 8
 ```shell
 hive> SET mapred.reduce.tasks = 8;
@@ -1114,17 +1121,17 @@ hive> INSERT OVERWRITE TABLE ml.rating_buckets
       FROM ml.userratings CLUSTER BY movieid;
 ```
 
-8. view the 8 files that were created. 
+3. view the 8 files that were created. 
 ```shell
 $ hadoop fs -ls /user/hive/warehouse/rating_buckets
 ```
 
-9. count the rows in bucket 3 using tablesample
+4. count the rows in bucket 3 using tablesample
 ```shell
 hive> SELECT count(1) FROM ml.rating_buckets
       TABLESAMPLE (BUCKET 3 OUT OF 8);[
 ```
-10. Inspect table description
+5. Inspect table description
 ```shell
 hive> DESCRIBE FORMATTED ml.rating_buckets;
 ```
