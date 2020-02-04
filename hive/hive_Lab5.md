@@ -1217,7 +1217,14 @@ Query OK, 1 row affected (0.08 sec)
 - create mysql table
 
 ```mysql
-mysql> create table twitter.full_text_mysql (id varchar(20), ts varchar(20), location varchar(20), lat varchar(20), lon varchar(20), tweet varchar(300));
+mysql> create table twitter.full_text_mysql
+    ->   (id varchar(20),
+    ->   ts varchar(20),
+    ->   location varchar(20),
+    ->   lat varchar(20),
+    ->   lon varchar(20),
+    ->   tweet varchar(300)
+    -> );
 ```
 
 - load twitter data into mysql and check whether the load is successful
