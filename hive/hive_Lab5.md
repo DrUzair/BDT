@@ -538,6 +538,7 @@ limit 10;
 [Top](#top)
 
 - **HISTOGRAM_NUMERIC** <a name='histo_udaf'></a>
+  - __histogram_numeric(col, b)__: Computes a histogram of a numeric column in the group using b non-uniformly spaced bins. The output is an array of size b of double-valued (x,y) coordinates that represent the bin centers and heights
   - *** Bucket U.S. into 10x10 grids using histogram_numeric ***
     - get 10 variable-sized bins for latitude and longitude first
     - get 10 variable-sized bins for latitude and longitude first
@@ -546,17 +547,79 @@ limit 10;
 
 - get 10 variable-sized bins and their counts
 
+```shell
+hive (twitter)> select explode(histogram_numeric(lat, 10)) as hist_lat from twitter.full_text_ts_complex;
+Query ID = root_20200204163106_927e72e5-cf58-49e3-89e4-5c5db290a838
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1580765662954_0003)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      6          6        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 02/02  [==========================>>] 100%  ELAPSED TIME: 60.49 s
+--------------------------------------------------------------------------------
+OK
+{"x":-25.507317679268976,"y":42.0}
+{"x":-7.171378443638485,"y":144.0}
+{"x":3.775214721759161,"y":12.0}
+{"x":13.004202445348104,"y":12.0}
+{"x":18.60583110731475,"y":49.0}
+{"x":28.66888114305991,"y":41611.0}
+{"x":34.69055706225886,"y":109796.0}
+{"x":40.755542000526084,"y":221597.0}
+{"x":46.834658134682165,"y":4334.0}
+{"x":55.82227104588559,"y":19.0}
+Time taken: 69.709 seconds, Fetched: 10 row(s)
+```
+
 ```sql
-select explode(histogram_numeric(lat, 10)) as hist_lat from twitter.full_text_ts_complex;
 select explode(histogram_numeric(lon, 10)) as hist_lon from twitter.full_text_ts_complex;
 ```
 
 - extract lat/lon points from the histogram output (struct type) separately 
 
-```sql
-select t.hist_lat.x from (select explode(histogram_numeric(lat, 10)) as hist_lat from twitter.full_text_ts_complex) t;
+```shell
+hive (twitter)> select t.hist_lat.x from (select explode(histogram_numeric(lat, 10)) as hist_lat 
+from twitter.full_text_ts_complex) t;
 
-select t.hist_lon.x from (select explode(histogram_numeric(lon, 10)) as hist_lon from twitter.full_text_ts_complex) t;
+Query ID = root_20200204163358_3a66680e-d099-44b7-9bd7-b78de94b6c5a
+Total jobs = 1
+Launching Job 1 out of 1
+
+
+Status: Running (Executing on YARN cluster with App id application_1580765662954_0003)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      6          6        0        0       0       0
+Reducer 2 ......   SUCCEEDED      1          1        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 02/02  [==========================>>] 100%  ELAPSED TIME: 62.04 s
+--------------------------------------------------------------------------------
+OK
+-25.507317679268976
+-7.171378443638485
+3.775214721759161
+13.004202445348104
+18.60583110731475
+28.66888114305991
+34.69055706225886
+40.755542000526084
+46.834658134682165
+55.82227104588559
+Time taken: 75.356 seconds, Fetched: 10 row(s)
+```
+
+```sql
+select t.hist_lon.y from (select explode(histogram_numeric(lon, 10)) as hist_lon 
+from twitter.full_text_ts_complex) t;
 ```
 
 [Top](#top)
