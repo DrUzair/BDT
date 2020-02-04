@@ -777,12 +777,23 @@ create table twitter.full_text_ts_complex_2 as
 select id, ts, location_map, tweet, collect_list(mention) as mentions
 from twitter.full_text_ts_complex_1
 group by id, ts, location_map, tweet;
-
-describe twitter.full_text_ts_complex_2;
-
-select * from twitter.full_text_ts_complex_2 
-where size(mentions) > 5
-limit 10;
+```
+  - check schema
+```shell
+hive (twitter)> describe twitter.full_text_ts_complex_2;
+OK
+id                      string
+ts                      timestamp
+location_map            map<string,string>
+tweet                   string
+mentions                array<string>
+Time taken: 1.85 seconds, Fetched: 5 row(s)
+```
+  - select first 5 rows
+```shell
+hive (twitter)> select id, mentions from twitter.full_text_ts_complex_2 
+where size(mentions) > 5 AND size(mentions) < 10
+limit 5;
 ```
 [Top](#top)
 
