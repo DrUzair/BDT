@@ -23,7 +23,7 @@
 - [Advanced String Functions](#advstr)
   - [sentences](#sentences), [ngrams](#ngrams), [explode](#explode), [context_ngrams](#context_ngrams), [str_to_map](#str_to_map)
 - [UDAF](#udaf)
-  - [MIN](#min_udaf), [PERCENTILE_APPROX](#percentile_udaf), [HISTOGRAM_NUMERIC](#histo_udaf)
+  - [MIN](#min_udaf), [PERCENTILE_APPROX](#percentile_udaf), [HISTOGRAM_NUMERIC](#histo_udaf), [COLLECT_SET](#collect_set_udaf)
 - [UDTF](#udtf)
   - [explode and lateral view](#udtf_explode_lv)
 - [Nested Queries](#nestedq)
@@ -766,10 +766,10 @@ Time taken: 131.722 seconds, Fetched: 100 row(s)
 ```
 [Top](#top)
 
-- **collect_set** function (UDAF)
-  - collect_set() is a UDAF aggregation function.. we run the query at this step from the previous step, 
+- **collect_set** function (UDAF) <a name='collect_set_udaf'></a>
+  - collect_set() is a UDAF aggregation function.. Returns a set of objects with duplicate elements eliminated.
+  - we run the query at this step from the previous step, 
   - we get all the mentions in the tweets but if a user has multiple mentions in the same tweet, they are in different rows. 
-
   - To transpose all the mentions belonging to the same tweet/user, we can use the collect_set and group by to transpose the them into an array of mentions
 
 ```sql
@@ -795,14 +795,36 @@ limit 10;
     - It only extract the very first mention. A better approach is to tokenize the tweet first and then explode the tokens into rows and extract mentions from each token
 
 ```sql
-drop table twitter.full_text_ts_complex_1;
-create table twitter.full_text_ts_complex_1 as
-select id, ts, location_map, tweet, regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2) as mention
-from twitter.full_text_ts_complex
-lateral view explode(split(tweet, '\\s')) tmp as tweet_element
-where trim(regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2)) != "" ;
+hive (twitter)> drop table twitter.full_text_ts_complex_1;
+hive (twitter)> create table twitter.full_text_ts_complex_1 as
+              > select id, ts, location_map, tweet, regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2) as mention
+              > from twitter.full_text_ts_complex
+              > lateral view explode(split(tweet, '\\s')) tmp as tweet_element
+              > where trim(regexp_extract(lower(tweet_element), '(.*)@user_(\\S{8})([:| ])(.*)',2)) != "" ;
+Query ID = root_20200204165258_72bf1a14-7ce8-4859-9e06-206b7e7f2170
+Total jobs = 1
+Launching Job 1 out of 1
 
-select * from twitter.full_text_ts_complex_1 limit 10;
+
+Status: Running (Executing on YARN cluster with App id application_1580765662954_0004)
+
+--------------------------------------------------------------------------------
+        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED
+--------------------------------------------------------------------------------
+Map 1 ..........   SUCCEEDED      6          6        0        0       0       0
+--------------------------------------------------------------------------------
+VERTICES: 01/01  [==========================>>] 100%  ELAPSED TIME: 40.09 s
+--------------------------------------------------------------------------------
+Moving data to directory hdfs://sandbox.hortonworks.com:8020/apps/hive/warehouse/twitter.db/full_text_ts_complex_1
+Table twitter.full_text_ts_complex_1 stats: [numFiles=6, numRows=72856, totalSize=13061147, rawDataSize=12988291]
+OK
+Time taken: 76.764 seconds
+```
+Check one row
+```shell
+hive (twitter)> select * from twitter.full_text_ts_complex_1 limit 1;
+OK
+USER_79321756   2010-03-03 04:15:26     {"lat":"47.528139","lon":"-122.197916"} RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout 2ff4faca
 ```
 [Top](#top)
 
