@@ -801,7 +801,7 @@ limit 5;
 ## Table-generating Functions (UDTF) <a name='udtf'></a>
 
 ### explode() function and lateral_view <a name='udtf_explode_lv'></a>
-  - __lateral view__ 
+  - __lateral view__ : Consider a table pageAds
   
   | Column        | Type          |
   | ------------- | ------------- |
@@ -814,7 +814,7 @@ limit 5;
   | contact_page  |   [3, 4, 5]   |
   ```sql
   SELECT pageid, adid
-  FROM pageAds LATERAL VIEW explode(adid_list) adTable AS adid;
+  FROM pageAds LATERAL VIEW explode(AdList) adTable AS adid;
   ```
   
   |   pageid      |   adid   |
