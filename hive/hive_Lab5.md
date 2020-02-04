@@ -941,14 +941,15 @@ $ more u.data
 ```
 
 - Table description "u.data"
---------------------
+
+
 | column     | name |
--------------------
+| -----------| -------- |
 | field_1    |  userid |
 | field_2    | movieid |
 | field_3    | rating  |
 | field_4    | unixtime |
---------------------
+
 
 - Create a database called ml and table called user_ratings (tab-delimited)'
 
