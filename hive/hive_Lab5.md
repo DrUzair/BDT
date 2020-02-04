@@ -1238,7 +1238,17 @@ mysql> quit;
 - From linux prompt, use sqoop to transfer full_table from mysql to hive
 
 ```shell
-[root@sandbox etc]#  sqoop import -m 1 --connect jdbc:mysql://0.0.0.0:3306/twitter --username=root --password=hadoop --table full_text_mysql --driver com.mysql.jdbc.Driver --columns "id, ts, location" --map-column-hive id=string,ts=string,location=string --hive-import --fields-terminated-by '\t'  --hive-table twitter.full_text_mysql  --warehouse-dir /user/lab/full_text_mysql
+[root@sandbox etc]#  sqoop import -m 1 --connect jdbc:mysql://0.0.0.0:3306/twitter 
+--username=root 
+--password=hadoop 
+--table full_text_mysql 
+--driver com.mysql.jdbc.Driver 
+--columns "id, ts, location" 
+--map-column-hive id=string,ts=string,location=string 
+--hive-import 
+--fields-terminated-by '\t'  
+--hive-table twitter.full_text_mysql  
+--warehouse-dir /user/lab/full_text_mysql
 ```
 
 [Top](#top)
