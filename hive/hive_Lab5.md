@@ -798,10 +798,13 @@ limit 5;
 ```
 [Top](#top)
 
-## Table-generating Functions (UDTF) <a name='udtf'></a>
+## User Defined Table-generating Functions (UDTF) <a name='udtf'></a>
+- A UDTF generates zero or more output rows for each input row. e.g. __explode()__
 
 ### explode() function and lateral_view <a name='udtf_explode_lv'></a>
-  - __lateral view__ : Consider a table pageAds
+  - A __lateral view__ first applies the UDTF to each row of base table and then joins resulting output rows to the input rows to form a virtual table.
+  
+  Consider a table pageAds
   
   | Column        | Type          |
   | ------------- | ------------- |
@@ -827,7 +830,6 @@ limit 5;
   | contact_page  |   5   |
   
   - explode() function is often used with lateral_view
-  - 
     - we extracted twitter mentions from tweets in earlier exercises. 
     - You've probably noticed that it's not optimal solution because the query we wrote didn't handle multiple mentions. 
     - It only extract the very first mention. A better approach is to tokenize the tweet first and then explode the tokens into rows and extract mentions from each token
