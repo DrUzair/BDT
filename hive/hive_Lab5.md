@@ -51,9 +51,10 @@ row format delimited
 fields terminated by '\t'
 location '/user/lab/'; 
 ```
-
-- note: you may have your data in a different hadoop directory and that's fine!
-
+- notes: 
+  - make sure you have full_text.txt file in hadoop file system at /user/lab/
+  - you may have your data in a different hadoop directory and that's fine!
+  - if you have more than one file in the /user/lab directory; all files meeting the criteria will be treated by hive as full_text table.
 - convert timestamp
 
 ```sql
