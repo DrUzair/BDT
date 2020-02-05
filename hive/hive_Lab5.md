@@ -49,7 +49,7 @@ create external table twitter.full_text (
         tweet string)
 row format delimited 
 fields terminated by '\t'
-location '/user/lab/full_text.txt'; 
+location '/user/lab/'; 
 ```
 
 - note: you may have your data in a different hadoop directory and that's fine!
