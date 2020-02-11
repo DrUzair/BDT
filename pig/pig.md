@@ -105,14 +105,16 @@ set job.name 'pig_test'
 ```shell
 grunt>  quit;
 ```
+[Top](#top)
 
 ### Execute a pig script <a name='grunt_exec'></a>
-- test1.pig
-	- batch mode
+- batch mode
+
 ```shell
 [hdfs@sandbox lab]$  pig test1.pig
 ```
-	- interactive mode: pig grunt shell
+- interactive mode: pig grunt shell
+
 ```shell
 grunt>  a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt>  b = limit a 2;
@@ -221,6 +223,7 @@ drwxr-xr-x   - root hdfs          0 2020-01-01 00:47 /user/pig/full_text_limit3
 grunt>  exec test1.pig
 ```
 [Top](#top)
+
 ### Shell commands (running from Pig grunt) <a name='shell_from_grunt'></a>
 
 
