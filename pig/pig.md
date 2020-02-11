@@ -48,7 +48,7 @@ total 56180
 -rw-r--r-- 1 root root      678 Dec 17 17:30 wc_reducer-2.py
 ```
 
-2. load **full_text.txt** it into HDFS
+3. load **full_text.txt** it into HDFS
 
 ```shell
 [hdfs@sandbox lab]$ hadoop fs -put full_text.txt /user/pig/
@@ -58,7 +58,7 @@ USER_79321756   2010-03-03T04:55:32     ÜT: 47.528139,-122.197916       47.5281
 ...
 ```
 
-3. Create two pig scripts that we will use later in this lab for invocation of the scripts from pig grunt
+4. Create two pig scripts that we will use later in this lab for invocation of the scripts from pig grunt
 
 - test1.pig
 ```shell
