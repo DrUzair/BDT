@@ -1,6 +1,6 @@
 # Tutorial
 # Topics <a name='top'></a>
-
+- [Introduction](#intro)
 - [Dataset](#dataset)
 - [Pig Utilities](#pigshell)
 - [Pig Basics](#piglatin)
@@ -17,17 +17,13 @@
 
 
 
-Primer
+Introduction <a name='intro'></a>
 --------------------------------------
 1. In this lab session, we will start working with Pig Shell - Grunt
 2. File full_text.txt is available under D2L -> Resources -> Geo-tagged Tweets Dataset 
    	Use Filezilla to copy file onto the virtual machine to /home/lab
 3. File dayofweek.txt is available under D2L -> Resources -> Geo-tagged Tweets Dataset
    	Use Filezilla to copy file onto the virtual machine to /home/lab
-4. Lines that begin with "--" are comments
-5. Lines that begin with "[hdfs@sandbox ~]" are Hadoop or Linux commands 
-6. Lines with no prefix are Pig commands.
-
 [Top](#top)
 
 Lab Data Preparation <a name='dataset'></a>
@@ -36,10 +32,12 @@ Lab Data Preparation <a name='dataset'></a>
 Run the following shell commands to place full_text.txt under /user/pig folder in HDFS
 
 1. create a working directory in Linux and hdfs for this exercise
-2. go to the directory that stores **full_text.txt** file in Linux
-
 ```shell
 [hdfs@sandbox ~]$ hadoop fs -mkdir /user/pig
+```
+
+2. go to the directory that stores **full_text.txt** file in Linux (it may be different than _/home/lab_ on your machine)
+```shell
 [hdfs@sandbox ~]$ cd /home/lab
 [root@sandbox lab]$ ll
 total 56180
@@ -49,33 +47,53 @@ total 56180
 -rw-r--r-- 1 root root      164 Dec 17 17:30 wc_mapper-2.py
 -rw-r--r-- 1 root root      678 Dec 17 17:30 wc_reducer-2.py
 ```
+[Top](#top)
 
 2. load **full_text.txt** it into HDFS
 
 ```shell
 [hdfs@sandbox lab]$ hadoop fs -put full_text.txt /user/pig/
-[hdfs@sandbox lab]$ hadoop fs -cat /user/pig/full_text.txt | head 
+[root@sandbox ~]# hadoop fs -cat /user/pig/full_text.txt | head
+USER_79321756   2010-03-03T04:15:26     ÜT: 47.528139,-122.197916       47.528139       -122.197916     RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME......IMA KNOCK HER DAMN KOOFIE OFF.....ON MY MOMMA&gt;&gt;haha. #cutthatout
+USER_79321756   2010-03-03T04:55:32     ÜT: 47.528139,-122.197916       47.528139       -122.197916     @USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*
+...
 ```
 
 3. Create two pig scripts that we will use later in this lab for invocation of the scripts from pig grunt
 
+- test1.pig
 ```shell
 [hdfs@sandbox lab]$ echo -e "set job.name 'pig_test' \n a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray); \n b = limit a 5; \n dump b;" > /home/lab/test1.pig
-
+```
+- check using cat command
+```shell
 [hdfs@sandbox lab]$ cat test1.pig
-## read the full_text from hdfs
-## apply schema
-## take first 5
-## store in /user/pig/full_text_limit3
-[hdfs@sandbox lab]$ echo -e "set job.name 'pig_test' \n a2 = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray); \n b2 = limit a2 5; \n store b2 into '/user/pig/full_text_limit3';" > /home/lab/test2.pig
+set job.name 'pig_test'
+ a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
+ b = limit a 5;
+ dump b;
+```
+- test2.pig
+	- read the full_text from hdfs
+	- apply schema
+	- take first 5
+	- store in /user/pig/full_text_limit3
 
+```shell
+[hdfs@sandbox lab]$ echo -e "set job.name 'pig_test' \n a2 = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray); \n b2 = limit a2 5; \n store b2 into '/user/pig/full_text_limit3';" > /home/lab/test2.pig
+```
+- check using cat command
+```shell
 [hdfs@sandbox lab]$ cat test2.pig
+set job.name 'pig_test'
+ a2 = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
+ b2 = limit a2 5;
+ store b2 into '/user/pig/full_text_limit3';
 ```
 
 [Top](#top)
 
-Pig Shell/Utility Commands <a name='pigshell'></a>
-----------------------------------------------------------------------------
+## Pig Shell/Utility Commands <a name='pigshell'></a>
 
 1.1 Launch pig grunt shell (interactive mode)
 
