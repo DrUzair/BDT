@@ -3,6 +3,7 @@
 - [Introduction](#intro)
 - [Dataset and Scripts](#dataset)
 - [Pig Utilities](#pigshell)
+	- [pig grunt shell](#grunt_shell), [exec pig scripts](#grunt_exec)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
   - [Datetime function](#dtefuncs)
@@ -17,8 +18,8 @@
 
 
 
-Introduction <a name='intro'></a>
---------------------------------------
+# Introduction <a name='intro'></a>
+
 1. In this lab session, we will start working with Pig Shell - Grunt
 2. File full_text.txt is available under D2L -> Resources -> Geo-tagged Tweets Dataset 
    	Use Filezilla to copy file onto the virtual machine to /home/lab
@@ -26,9 +27,7 @@ Introduction <a name='intro'></a>
    	Use Filezilla to copy file onto the virtual machine to /home/lab
 [Top](#top)
 
-Lab Data Preparation <a name='dataset'></a>
--------------------------------
-
+# Lab Data Preparation <a name='dataset'></a>
 Run the following shell commands to place full_text.txt under /user/pig folder in HDFS
 
 1. create a working directory in Linux and hdfs for this exercise
@@ -94,7 +93,7 @@ set job.name 'pig_test'
 
 ## Pig Shell/Utility Commands <a name='pigshell'></a>
 
-### Launch pig grunt shell (interactive mode)
+### Launch pig grunt shell (interactive mode) <a name='grunt_shell'></a>
 
 - NOTE: you can launch pig from any directory, ideally the directory where you store your pig scripts, functions and related files
 
@@ -106,7 +105,8 @@ set job.name 'pig_test'
 grunt>  quit;
 ```
 
-- Execute a pig script test1.pig
+### Execute a pig script <a name='grunt_exec'></a>
+- test1.pig
 	- batch mode
 ```shell
 [hdfs@sandbox lab]$  pig test1.pig
