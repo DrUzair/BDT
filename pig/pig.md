@@ -5,7 +5,7 @@
 - [Pig Utilities](#pigshell)
 	- [pig grunt shell](#grunt_shell)
 	- [Executing pig commands/scripts from linux shell](#linux_shell)
-	- [Executing pig commands/scripts from grunt shell](#grunt_run)
+	- [Executing pig commands/scripts from grunt shell](#grunt_shell)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
@@ -114,33 +114,6 @@ grunt>  quit;
 ```shell
 [hdfs@sandbox lab]$  pig test1.pig
 ```
-- interactive mode: pig grunt shell
-
-```shell
-grunt>  a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
-grunt>  b = limit a 2;
-grunt> dump b;
-2020-02-11 16:26:42,195 [main] INFO  org.apache.pig.tools.pigstats.ScriptState - Pig features used in the script: LIMIT
-2020-02-11 16:26:42,392 [main] INFO  org.apache.pig.data.SchemaTupleBackend - Key [pig.schematuple] was not set... will not generate code.
-2020-02-11 16:26:42,444 [main] INFO  org.apache.pig.newplan.logical.optimizer.LogicalPlanOptimizer - {RULES_ENABLED=[AddForEach, ColumnMapKeyPrune, ConstantCalculator, GroupByConstParallelSetter, LimitOptimizer, LoadTypeCastInserter, MergeFilter, MergeForEach, PartitionFilterOptimizer, PredicatePushdownOptimizer, PushDownForEachFlatten, PushUpFilter, SplitFilter, StreamTypeCastInserter]}
-2020-02-11 16:26:42,618 [main] INFO  org.apache.pig.impl.util.SpillableMemoryManager - Selected heap (PS Old Gen) of size 699400192 to monitor. collectionUsageThreshold = 489580128, usageThreshold = 489580128
-2020-02-11 16:26:42,735 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - File Output Committer Algorithm version is 1
-2020-02-11 16:26:42,735 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
-2020-02-11 16:26:42,893 [main] INFO  org.apache.pig.data.SchemaTupleBackend - Key [pig.schematuple] was not set... will not generate code.
-2020-02-11 16:26:43,025 [main] WARN  org.apache.pig.data.SchemaTupleBackend - SchemaTupleBackend has already been initialized
-2020-02-11 16:26:43,032 [main] INFO  org.apache.pig.builtin.PigStorage - Using PigTextInputFormat
-2020-02-11 16:26:43,063 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
-2020-02-11 16:26:43,074 [main] INFO  org.apache.pig.backend.hadoop.executionengine.util.MapRedUtil - Total input paths to process : 1
-2020-02-11 16:26:43,320 [main] INFO  com.hadoop.compression.lzo.GPLNativeCodeLoader - Loaded native gpl library
-2020-02-11 16:26:43,395 [main] INFO  com.hadoop.compression.lzo.LzoCodec - Successfully loaded & initialized native-lzo library [hadoop-lzo rev 7a4b57bedce694048432dd5bf5b90a6c8ccdba80]
-2020-02-11 16:26:46,846 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - Saved output of task 'attempt__0001_m_000001_1' to hdfs://sandbox.hortonworks.com:8020/tmp/temp442487576/tmp813752665/_temporary/0/task__0001_m_000001
-2020-02-11 16:26:46,947 [main] WARN  org.apache.pig.data.SchemaTupleBackend - SchemaTupleBackend has already been initialized
-2020-02-11 16:26:46,973 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
-2020-02-11 16:26:46,973 [main] INFO  org.apache.pig.backend.hadoop.executionengine.util.MapRedUtil - Total input paths to process : 1
-(USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,47.528137,-122.197914,RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME...
-(USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,47.528137,-122.197914,@USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*)
-```
-
 - In case you encounter _Cannot create directory /tmp/temp68693105. Name node is in safe mode._ error. Remove some files from hdfs that were used in previous exercises.
 
 - Execute second pig script test2.pig
@@ -210,7 +183,6 @@ job_1581437856867_0002
 2020-02-11 16:41:34,504 [main] INFO  org.apache.pig.Main - Pig script completed in 3 minutes, 48 seconds and 196 milliseconds (228196 ms)
 ```
 
-
 - Check the /user/pig directory on hdfs to verify the output.
 
 ```shell
@@ -221,6 +193,34 @@ drwxr-xr-x   - root hdfs          0 2020-01-01 00:47 /user/pig/full_text_limit3
 ```
 [Top](#top)
 
+### Executing pig commands/script (grunt shell) <a name='grunt_shell'></a>
+
+- interactive mode: pig grunt shell
+
+```shell
+grunt>  a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
+grunt>  b = limit a 2;
+grunt> dump b;
+2020-02-11 16:26:42,195 [main] INFO  org.apache.pig.tools.pigstats.ScriptState - Pig features used in the script: LIMIT
+2020-02-11 16:26:42,392 [main] INFO  org.apache.pig.data.SchemaTupleBackend - Key [pig.schematuple] was not set... will not generate code.
+2020-02-11 16:26:42,444 [main] INFO  org.apache.pig.newplan.logical.optimizer.LogicalPlanOptimizer - {RULES_ENABLED=[AddForEach, ColumnMapKeyPrune, ConstantCalculator, GroupByConstParallelSetter, LimitOptimizer, LoadTypeCastInserter, MergeFilter, MergeForEach, PartitionFilterOptimizer, PredicatePushdownOptimizer, PushDownForEachFlatten, PushUpFilter, SplitFilter, StreamTypeCastInserter]}
+2020-02-11 16:26:42,618 [main] INFO  org.apache.pig.impl.util.SpillableMemoryManager - Selected heap (PS Old Gen) of size 699400192 to monitor. collectionUsageThreshold = 489580128, usageThreshold = 489580128
+2020-02-11 16:26:42,735 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - File Output Committer Algorithm version is 1
+2020-02-11 16:26:42,735 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+2020-02-11 16:26:42,893 [main] INFO  org.apache.pig.data.SchemaTupleBackend - Key [pig.schematuple] was not set... will not generate code.
+2020-02-11 16:26:43,025 [main] WARN  org.apache.pig.data.SchemaTupleBackend - SchemaTupleBackend has already been initialized
+2020-02-11 16:26:43,032 [main] INFO  org.apache.pig.builtin.PigStorage - Using PigTextInputFormat
+2020-02-11 16:26:43,063 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2020-02-11 16:26:43,074 [main] INFO  org.apache.pig.backend.hadoop.executionengine.util.MapRedUtil - Total input paths to process : 1
+2020-02-11 16:26:43,320 [main] INFO  com.hadoop.compression.lzo.GPLNativeCodeLoader - Loaded native gpl library
+2020-02-11 16:26:43,395 [main] INFO  com.hadoop.compression.lzo.LzoCodec - Successfully loaded & initialized native-lzo library [hadoop-lzo rev 7a4b57bedce694048432dd5bf5b90a6c8ccdba80]
+2020-02-11 16:26:46,846 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - Saved output of task 'attempt__0001_m_000001_1' to hdfs://sandbox.hortonworks.com:8020/tmp/temp442487576/tmp813752665/_temporary/0/task__0001_m_000001
+2020-02-11 16:26:46,947 [main] WARN  org.apache.pig.data.SchemaTupleBackend - SchemaTupleBackend has already been initialized
+2020-02-11 16:26:46,973 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2020-02-11 16:26:46,973 [main] INFO  org.apache.pig.backend.hadoop.executionengine.util.MapRedUtil - Total input paths to process : 1
+(USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,47.528137,-122.197914,RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME...
+(USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,47.528137,-122.197914,@USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*)
+```
 1.5 execute a pig script from pig grunt (parameters/relations in the script are NOT passed to the current grunt environment)
 
 ```shell
