@@ -1,7 +1,7 @@
 # Tutorial
 # Topics <a name='top'></a>
 - [Introduction](#intro)
-- [Dataset](#dataset)
+- [Dataset and Scripts](#dataset)
 - [Pig Utilities](#pigshell)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
@@ -47,7 +47,6 @@ total 56180
 -rw-r--r-- 1 root root      164 Dec 17 17:30 wc_mapper-2.py
 -rw-r--r-- 1 root root      678 Dec 17 17:30 wc_reducer-2.py
 ```
-[Top](#top)
 
 2. load **full_text.txt** it into HDFS
 
@@ -95,16 +94,22 @@ set job.name 'pig_test'
 
 ## Pig Shell/Utility Commands <a name='pigshell'></a>
 
-1.1 Launch pig grunt shell (interactive mode)
+### Launch pig grunt shell (interactive mode)
 
-- NOTE: you can launch pig from any directory, ideally the directory where you store your pig scripts, functions and side files
+- NOTE: you can launch pig from any directory, ideally the directory where you store your pig scripts, functions and related files
 
 ```shell
 [hdfs@sandbox lab]$  pig
+```
+- Quiting pig grunt shell
+```shell
 grunt>  quit;
 ```
 
-1.2 Execute a pig script from command line
+``
+ Cannot create directory /tmp/temp68693105. Name node is in safe mode.
+```
+### Execute a pig script from command line
 
 ```shell
 [hdfs@sandbox lab]$  pig test2.pig
@@ -119,8 +124,8 @@ Found 2 items
 drwxr-xr-x   - root hdfs          0 2020-01-01 00:47 /user/pig/full_text_limit3
 ```
 
-Shell commands (running from Pig grunt)
----------------------------------------------
+### Shell commands (running from Pig grunt)
+
 
 ```shell
 [hdfs@sandbox lab]$  pig
@@ -128,12 +133,12 @@ grunt>  sh pwd
 grunt>  sh ls -alF /home/lab
 ```
 
-fs Shell commands (working with HDFS files)
-----------------------------------------------
+### Hadoop fs Shell commands (working with HDFS files)
 
-1.4 Run HDFS commands in pig grunt
 
-- Note: make sure you update the path properly 
+- Run HDFS commands in pig grunt
+
+	- Note: make sure you update the path properly 
 
 ```shell
 grunt>  fs -ls /user
