@@ -3,7 +3,9 @@
 - [Introduction](#intro)
 - [Dataset and Scripts](#dataset)
 - [Pig Utilities](#pigshell)
-	- [pig grunt shell](#grunt_shell), [grunt exec pig scripts](#grunt_exec), [grunt run pig scripts](#grunt_run)
+	- [pig grunt shell](#grunt_shell)
+	- [Executing pig commands/scripts from linux shell](#linux_shell)
+	- [Executing pig commands/scripts from grunt shell](#grunt_run)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
@@ -107,9 +109,8 @@ grunt>  quit;
 ```
 [Top](#top)
 
-### Execute a pig script <a name='grunt_exec'></a>
-- batch mode
-
+### Executing pig commands/script (linux shell) <a name='linux_shell'></a>
+- test1.pig script
 ```shell
 [hdfs@sandbox lab]$  pig test1.pig
 ```
@@ -218,11 +219,42 @@ Found 2 items
 -rw-r--r--   1 root hdfs   57135918 2019-12-30 23:50 /user/pig/full_text.txt
 drwxr-xr-x   - root hdfs          0 2020-01-01 00:47 /user/pig/full_text_limit3
 ```
-- interactive mode: does allow running batch of pig commands. 
+[Top](#top)
+
+1.5 execute a pig script from pig grunt (parameters/relations in the script are NOT passed to the current grunt environment)
+
 ```shell
 grunt>  exec test1.pig
 ```
-[Top](#top)
+
+- test environment for parameters
+
+```shell
+grunt> describe a
+2020-02-11 17:18:51,176 [main] ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1003: Unable to find an operator for alias a
+Details at logfile: /home/lab/pig_1581441417154.log
+```
+
+(Why did you get an error message? What went wrong here?)
+
+1.6 run a pig script from pig grunt (parameters are passed to the current grunt environment)
+
+```shell
+grunt>  run test2.pig
+```
+
+- test environment for parameters
+
+```shell
+grunt>  describe a2;
+```
+
+**Note** : 
+
+__exec__ (batch mode) does not allow access from grunt shell to aliases within the script, 
+
+__run__ (interactive mode) allows access to aliases defined in the script. Moreover, all the script commands are available in command history.
+
 
 ### Shell commands (running from Pig grunt) <a name='shell_from_grunt'></a>
 
@@ -271,42 +303,11 @@ grunt>  fs -put /home/lab/full_text.txt /user/pig/full_text_1.txt
 
 [Top](#top)
 
+
 Utility commands
 -------------------
 
-1.5 execute a pig script from pig grunt (parameters/relations in the script are NOT passed to the current grunt environment)
 
-```shell
-grunt>  exec test1.pig
-```
-
-- test environment for parameters
-
-```shell
-grunt> describe a
-2020-02-11 17:18:51,176 [main] ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1003: Unable to find an operator for alias a
-Details at logfile: /home/lab/pig_1581441417154.log
-```
-
-(Why did you get an error message? What went wrong here?)
-
-1.6 run a pig script from pig grunt (parameters are passed to the current grunt environment)
-
-```shell
-grunt>  run test2.pig
-```
-
-- test environment for parameters
-
-```shell
-grunt>  describe a2;
-```
-
-**Note** : 
-
-__exec__ (batch mode) does not allow access from grunt shell to aliases within the script, 
-
-__run__ (interactive mode) allows access to aliases defined in the script. Moreover, all the script commands are available in command history.
 
 1.7 list an HDFS directory in pig grunt
 
