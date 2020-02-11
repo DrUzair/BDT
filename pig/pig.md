@@ -6,7 +6,7 @@
 	- [Launching pig grunt shell](#laungch_grunt_shell)
 	- [Executing pig commands/scripts from linux shell](#linux_shell)
 	- [Executing pig commands/scripts from grunt shell](#grunt_shell)
-		- [> grunt interactive](#grunt interactive), [> grunt exec](#grunt exec), [> grunt run](#grunt_run)
+		- [> grunt interactive](#grunt_interactive), [> grunt exec](#grunt_exec), [> grunt run](#grunt_run)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
