@@ -106,7 +106,7 @@ set job.name 'pig_test'
 grunt>  quit;
 ```
 
-- Execute a pig script 
+- Execute a pig script test1.pig
 	- batch mode
 ```shell
 [hdfs@sandbox lab]$  pig test1.pig
@@ -138,6 +138,74 @@ grunt> dump b;
 ```
 
 - In case you encounter _Cannot create directory /tmp/temp68693105. Name node is in safe mode._ error. Remove some files from hdfs that were used in previous exercises.
+
+- Execute second pig script test2.pig
+	- batch mode
+```shell
+[root@sandbox lab]# pig test2.pig
+20/02/11 16:37:47 INFO pig.ExecTypeProvider: Trying ExecType : LOCAL
+20/02/11 16:37:47 INFO pig.ExecTypeProvider: Trying ExecType : MAPREDUCE
+.
+.
+.
+.
+.
+HadoopVersion   PigVersion      UserId  StartedAt       FinishedAt      Features
+2.7.3.2.5.0.0-1245      0.16.0.2.5.0.0-1245     root    2020-02-11 16:38:03     2020-02-11 16:41:32     LIMIT
+
+Success!
+
+Job Stats (time in seconds):
+JobId   Maps    Reduces MaxMapTime      MinMapTime      AvgMapTime      MedianMapTime   MaxReduceTime   MinReduceTime   AvgReduceTime   MedianReducetime        Alias   Feature Outputs
+job_1581437856867_0001  1       1       13      13      13      13      15      15      15      15      a2,b2
+job_1581437856867_0002  1       1       24      24      24      24      11      11      11      11      a2              /user/pig/full_text_limit3,
+
+Input(s):
+Successfully read 5 records (131457 bytes) from: "/user/pig/full_text.txt"
+
+Output(s):
+Successfully stored 5 records (950 bytes) in: "/user/pig/full_text_limit3"
+
+Counters:
+Total records written : 5
+Total bytes written : 950
+Spillable Memory Manager spill count : 0
+Total bags proactively spilled: 0
+Total records proactively spilled: 0
+
+Job DAG:
+job_1581437856867_0001  ->      job_1581437856867_0002,
+job_1581437856867_0002
+
+
+2020-02-11 16:41:33,069 [main] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2020-02-11 16:41:33,069 [main] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:8050
+2020-02-11 16:41:33,070 [main] INFO  org.apache.hadoop.yarn.client.AHSProxy - Connecting to Application History server at sandbox.hortonworks.com/172.17.0.2:10200
+2020-02-11 16:41:33,081 [main] INFO  org.apache.hadoop.mapred.ClientServiceDelegate - Application state is completed. FinalApplicationStatus=SUCCEEDED. Redirecting to job history server
+2020-02-11 16:41:33,310 [main] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2020-02-11 16:41:33,310 [main] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:8050
+2020-02-11 16:41:33,311 [main] INFO  org.apache.hadoop.yarn.client.AHSProxy - Connecting to Application History server at sandbox.hortonworks.com/172.17.0.2:10200
+2020-02-11 16:41:33,326 [main] INFO  org.apache.hadoop.mapred.ClientServiceDelegate - Application state is completed. FinalApplicationStatus=SUCCEEDED. Redirecting to job history server
+2020-02-11 16:41:33,531 [main] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2020-02-11 16:41:33,532 [main] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:8050
+2020-02-11 16:41:33,532 [main] INFO  org.apache.hadoop.yarn.client.AHSProxy - Connecting to Application History server at sandbox.hortonworks.com/172.17.0.2:10200
+2020-02-11 16:41:33,547 [main] INFO  org.apache.hadoop.mapred.ClientServiceDelegate - Application state is completed. FinalApplicationStatus=SUCCEEDED. Redirecting to job history server
+2020-02-11 16:41:33,747 [main] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2020-02-11 16:41:33,747 [main] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:8050
+2020-02-11 16:41:33,747 [main] INFO  org.apache.hadoop.yarn.client.AHSProxy - Connecting to Application History server at sandbox.hortonworks.com/172.17.0.2:10200
+2020-02-11 16:41:33,763 [main] INFO  org.apache.hadoop.mapred.ClientServiceDelegate - Application state is completed. FinalApplicationStatus=SUCCEEDED. Redirecting to job history server
+2020-02-11 16:41:33,951 [main] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2020-02-11 16:41:33,951 [main] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:8050
+2020-02-11 16:41:33,952 [main] INFO  org.apache.hadoop.yarn.client.AHSProxy - Connecting to Application History server at sandbox.hortonworks.com/172.17.0.2:10200
+2020-02-11 16:41:33,973 [main] INFO  org.apache.hadoop.mapred.ClientServiceDelegate - Application state is completed. FinalApplicationStatus=SUCCEEDED. Redirecting to job history server
+2020-02-11 16:41:34,262 [main] INFO  org.apache.hadoop.yarn.client.api.impl.TimelineClientImpl - Timeline service address: http://sandbox.hortonworks.com:8188/ws/v1/timeline/
+2020-02-11 16:41:34,265 [main] INFO  org.apache.hadoop.yarn.client.RMProxy - Connecting to ResourceManager at sandbox.hortonworks.com/172.17.0.2:8050
+2020-02-11 16:41:34,269 [main] INFO  org.apache.hadoop.yarn.client.AHSProxy - Connecting to Application History server at sandbox.hortonworks.com/172.17.0.2:10200
+2020-02-11 16:41:34,285 [main] INFO  org.apache.hadoop.mapred.ClientServiceDelegate - Application state is completed. FinalApplicationStatus=SUCCEEDED. Redirecting to job history server
+2020-02-11 16:41:34,386 [main] INFO  org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.MapReduceLauncher - Success!
+2020-02-11 16:41:34,504 [main] INFO  org.apache.pig.Main - Pig script completed in 3 minutes, 48 seconds and 196 milliseconds (228196 ms)
+```
+
 
 - Check the /user/pig directory on hdfs to verify the output.
 
