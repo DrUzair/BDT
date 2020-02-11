@@ -106,12 +106,12 @@ set job.name 'pig_test'
 grunt>  quit;
 ```
 
-- Execute a pig script from command line or from pig grunt shell
-
+- Execute a pig script 
+	- batch mode
 ```shell
 [hdfs@sandbox lab]$  pig test1.pig
 ```
-
+	- interactive mode: pig grunt shell
 ```shell
 grunt>  a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt>  b = limit a 2;
@@ -136,6 +136,7 @@ grunt> dump b;
 (USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,47.528137,-122.197914,RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME...
 (USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,47.528137,-122.197914,@USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*)
 ```
+
 - In case you encounter _Cannot create directory /tmp/temp68693105. Name node is in safe mode._ error. Remove some files from hdfs that were used in previous exercises.
 
 - Check the /user/pig directory on hdfs to verify the output.
@@ -145,6 +146,10 @@ grunt> dump b;
 Found 2 items
 -rw-r--r--   1 root hdfs   57135918 2019-12-30 23:50 /user/pig/full_text.txt
 drwxr-xr-x   - root hdfs          0 2020-01-01 00:47 /user/pig/full_text_limit3
+```
+- interactive mode: does allow running batch of pig commands. 
+```shell
+grunt>  exec test1.pig
 ```
 
 ### Shell commands (running from Pig grunt)
