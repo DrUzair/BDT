@@ -106,9 +106,6 @@ set job.name 'pig_test'
 grunt>  quit;
 ```
 
-- In case you encounter _Cannot create directory /tmp/temp68693105. Name node is in safe mode._ error. Remove some files from hdfs that were used in previous exercises.
-
-
 - Execute a pig script from command line or from pig grunt shell
 
 ```shell
@@ -139,6 +136,7 @@ grunt> dump b;
 (USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,47.528137,-122.197914,RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME...
 (USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,47.528137,-122.197914,@USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*)
 ```
+- In case you encounter _Cannot create directory /tmp/temp68693105. Name node is in safe mode._ error. Remove some files from hdfs that were used in previous exercises.
 
 - Check the /user/pig directory on hdfs to verify the output.
 
