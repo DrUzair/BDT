@@ -4,6 +4,7 @@
 - [Dataset and Scripts](#dataset)
 - [Pig Utilities](#pigshell)
 	- [pig grunt shell](#grunt_shell), [exec pig scripts](#grunt_exec)
+	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
   - [Datetime function](#dtefuncs)
@@ -219,17 +220,40 @@ drwxr-xr-x   - root hdfs          0 2020-01-01 00:47 /user/pig/full_text_limit3
 ```shell
 grunt>  exec test1.pig
 ```
-
-### Shell commands (running from Pig grunt)
+[Top](#top)
+### Shell commands (running from Pig grunt) <a name='shell_from_grunt'></a>
 
 
 ```shell
 [hdfs@sandbox lab]$  pig
 grunt>  sh pwd
-grunt>  sh ls -alF /home/lab
+/home/lab
+grunt> sh ls -alF /home/lab
+total 61232
+drwxr-xr-x 2 root root     4096 Feb 11 16:00 ./
+drwxr-xr-x 1 root root     4096 Dec 17 17:42 ../
+-rw-r--r-- 1 root root    25038 Jan 28 02:35 action.txt
+-rw-r--r-- 1 root root   374603 Apr 12  2018 cities15000.txt
+-rw-r--r-- 1 root root    51553 Jan 28 02:35 comedy.txt
+-rw-r--r-- 1 root root       24 Jan  1 04:40 data
+-rw-r--r-- 1 root root      115 Jun 29  2016 dayofweek.txt
+-rw-r--r-- 1 root root    12527 Jan 28 02:04 full_text_mysql.java
+-rw-r--r-- 1 root root 57135918 May  7  2018 full_text.txt
+-rw-r--r-- 1 root root  4948405 Jan 28 02:35 movielens.tgz
+-rw-r--r-- 1 root root    33637 Jan  1 04:57 pig_1577750226111.log
+-rw-r--r-- 1 root root     1280 Jan  1 00:40 pig_1577839220501.log
+-rw-r--r-- 1 root root     5232 Feb 11 15:55 pig_1581436344541.log
+-rw-r--r-- 1 root root     6872 Feb 11 15:55 pig_1581436540458.log
+-rw-r--r-- 1 root root    10708 Feb 11 16:00 pig_1581436792101.log
+-rw-r--r-- 1 root root      180 Feb 11 15:44 test1.pig
+-rw-r--r-- 1 root root      219 Feb 11 15:49 test2.pig
+-rw-r--r-- 1 root root       71 Jan  1 04:56 text_data
+-rw-r--r-- 1 root root    23876 Jan 28 02:35 thriller.txt
+-rw-r--r-- 1 root root      164 Dec 17 17:30 wc_mapper-2.py
+-rw-r--r-- 1 root root      678 Dec 17 17:30 wc_reducer-2.py
 ```
-
-### Hadoop fs Shell commands (working with HDFS files)
+[Top](#top)
+### Hadoop fs Shell commands (working with HDFS files) <a name='hdfs_from_grunt'></a>
 
 
 - Run HDFS commands in pig grunt
