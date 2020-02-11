@@ -3,7 +3,7 @@
 - [Introduction](#intro)
 - [Dataset and Scripts](#dataset)
 - [Pig Utilities](#pigshell)
-	- [pig grunt shell](#grunt_shell)
+	- [Launching pig grunt shell](#laungch_grunt_shell)
 	- [Executing pig commands/scripts from linux shell](#linux_shell)
 	- [Executing pig commands/scripts from grunt shell](#grunt_shell)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
@@ -96,7 +96,7 @@ set job.name 'pig_test'
 
 ## Pig Shell/Utility Commands <a name='pigshell'></a>
 
-### Launch pig grunt shell (interactive mode) <a name='grunt_shell'></a>
+### Launch pig grunt shell (interactive mode) <a name='laungch_grunt_shell'></a>
 
 - NOTE: you can launch pig from any directory, ideally the directory where you store your pig scripts, functions and related files
 
@@ -110,14 +110,14 @@ grunt>  quit;
 [Top](#top)
 
 ### Executing pig commands/script (linux shell) <a name='linux_shell'></a>
+#### Batch Mode
 - test1.pig script
 ```shell
 [hdfs@sandbox lab]$  pig test1.pig
 ```
-- In case you encounter _Cannot create directory /tmp/temp68693105. Name node is in safe mode._ error. Remove some files from hdfs that were used in previous exercises.
 
-- Execute second pig script test2.pig
-	- batch mode
+- test2.pig script
+	- In case you encounter _Cannot create directory /tmp/temp68693105. Name node is in safe mode._ error. Remove some files from hdfs that were used in previous exercises.
 ```shell
 [root@sandbox lab]# pig test2.pig
 20/02/11 16:37:47 INFO pig.ExecTypeProvider: Trying ExecType : LOCAL
