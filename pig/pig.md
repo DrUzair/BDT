@@ -222,7 +222,7 @@ grunt> dump b;
 (USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,47.528137,-122.197914,RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME...
 (USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,47.528137,-122.197914,@USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*)
 ```
-
+[Top](#top)
 #### Batch Mode grunt shell <a name='grunt_batch'></a>
 - execute a pig script from pig grunt (parameters/relations in the script are NOT passed to the current grunt environment)
 
@@ -239,7 +239,7 @@ Details at logfile: /home/lab/pig_1581441417154.log
 ```
 - Why did you get an error message? What went wrong here?
 - __exec__ (batch mode) does not allow access from grunt shell to aliases within the script, 
-
+[Top](#top)
 #### Batch+ Mode grunt shell <a name='grunt_run'></a>
 - run a pig script from pig grunt (parameters are passed to the current grunt environment)
 
@@ -254,7 +254,7 @@ grunt>  describe a2;
 ```
 - __run__ (interactive mode) allows access to aliases defined in the script. Moreover, all the script commands are available in command history.
 
-
+[Top](#top)
 ### Shell commands (running from Pig grunt) <a name='shell_from_grunt'></a>
 
 
