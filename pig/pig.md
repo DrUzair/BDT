@@ -3,7 +3,7 @@
 - [Introduction](#intro)
 - [Dataset and Scripts](#dataset)
 - [Pig Utilities](#pigshell)
-	- [pig grunt shell](#grunt_shell), [exec pig scripts](#grunt_exec)
+	- [pig grunt shell](#grunt_shell), [grunt exec pig scripts](#grunt_exec), [grunt run pig scripts](#grunt_run)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
@@ -280,7 +280,9 @@ grunt>  exec test1.pig
 - test environment for parameters
 
 ```shell
-grunt>  describe a;
+grunt> describe a
+2020-02-11 17:18:51,176 [main] ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1003: Unable to find an operator for alias a
+Details at logfile: /home/lab/pig_1581441417154.log
 ```
 
 (Why did you get an error message? What went wrong here?)
