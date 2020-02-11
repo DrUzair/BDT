@@ -6,6 +6,7 @@
 	- [Launching pig grunt shell](#laungch_grunt_shell)
 	- [Executing pig commands/scripts from linux shell](#linux_shell)
 	- [Executing pig commands/scripts from grunt shell](#grunt_shell)
+		- [> grunt interactive](#grunt interactive), [> grunt exec](#grunt exec), [> grunt run](#grunt_run)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
@@ -195,8 +196,8 @@ drwxr-xr-x   - root hdfs          0 2020-01-01 00:47 /user/pig/full_text_limit3
 
 ### Executing pig commands/script (grunt shell) <a name='grunt_shell'></a>
 
-- interactive mode: pig grunt shell
-
+#### interactive mode: pig grunt shell <a name='grunt_interactive'></a>
+- Run individual lines of pig Latin;
 ```shell
 grunt>  a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt>  b = limit a 2;
@@ -221,7 +222,9 @@ grunt> dump b;
 (USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,47.528137,-122.197914,RT @USER_2ff4faca: IF SHE DO IT 1 MORE TIME...
 (USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,47.528137,-122.197914,@USER_77a4822d @USER_2ff4faca okay:) lol. Saying ok to both of yall about to different things!:*)
 ```
-1.5 execute a pig script from pig grunt (parameters/relations in the script are NOT passed to the current grunt environment)
+
+#### Batch Mode grunt shell <a name='grunt_batch'></a>
+- execute a pig script from pig grunt (parameters/relations in the script are NOT passed to the current grunt environment)
 
 ```shell
 grunt>  exec test1.pig
@@ -234,10 +237,11 @@ grunt> describe a
 2020-02-11 17:18:51,176 [main] ERROR org.apache.pig.tools.grunt.Grunt - ERROR 1003: Unable to find an operator for alias a
 Details at logfile: /home/lab/pig_1581441417154.log
 ```
+- Why did you get an error message? What went wrong here?
+- __exec__ (batch mode) does not allow access from grunt shell to aliases within the script, 
 
-(Why did you get an error message? What went wrong here?)
-
-1.6 run a pig script from pig grunt (parameters are passed to the current grunt environment)
+#### Batch+ Mode grunt shell <a name='grunt_run'></a>
+- run a pig script from pig grunt (parameters are passed to the current grunt environment)
 
 ```shell
 grunt>  run test2.pig
@@ -248,12 +252,7 @@ grunt>  run test2.pig
 ```shell
 grunt>  describe a2;
 ```
-
-**Note** : 
-
-__exec__ (batch mode) does not allow access from grunt shell to aliases within the script, 
-
-__run__ (interactive mode) allows access to aliases defined in the script. Moreover, all the script commands are available in command history.
+- __run__ (interactive mode) allows access to aliases defined in the script. Moreover, all the script commands are available in command history.
 
 
 ### Shell commands (running from Pig grunt) <a name='shell_from_grunt'></a>
