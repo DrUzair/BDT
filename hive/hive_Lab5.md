@@ -517,9 +517,9 @@ WHERE cast(x.lon as float) IN (select min(cast(y.lon as float)) as lon from twit
 [Top](#top)
 
 - **PERCENTILE_APPROX** function (works with DOUBLE type) <a name='percentile_udaf'></a>
-  - __percentile_approx(DOUBLE col, array(p1 [, p2]...) [, B])__: Returns an approximate pth percentile of a numeric column (including floating point types) in the group. The B parameter controls approximation accuracy at the cost of memory. accepts and returns an array of percentile values.
+  - __percentile_approx(DOUBLE col, p [, B])__: Returns an approximate pth percentile of a numeric column (including floating point types) in the group. The B parameter controls approximation accuracy at the cost of memory. accepts and returns an array of percentile values.
   - *** Find twitter users from north west part of U.S. ***
-    - You can visualize it using the map tool: http://www.darrinward.com/lat-long/?id=461435
+  - You can visualize it using the map tool: http://www.darrinward.com/lat-long/?id=461435
 
 ```sql
 select percentile_approx(cast(lat as double), array(0.9))
