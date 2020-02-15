@@ -465,10 +465,32 @@ dump d;
 	- The second parameter:  the delimiter or regex to split on; (optional) '\s' if not provided
 	- The third parameter: a limit to the number of results. (max limit) (optional)
 ```shell
-a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
-b = foreach a generate id, STRSPLITTOBAG(tweet, '[ ",()*]', 0);
-c = limit b 3;
-dump c;
+grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
+grunt> b = foreach a generate id, STRSPLITTOBAG(tweet, '[ ",()*]', 0);
+grunt> c = limit b 3;
+grunt> dump c;
+```
+output
+```shell
+2020-02-15 13:57:57,318 [main] INFO  org.apache.pig.tools.pigstats.ScriptState - Pig features used in the script: LIMIT
+2020-02-15 13:57:57,372 [main] INFO  org.apache.pig.data.SchemaTupleBackend - Key [pig.schematuple] was not set... will not generate code.
+2020-02-15 13:57:57,372 [main] INFO  org.apache.pig.newplan.logical.optimizer.LogicalPlanOptimizer - {RULES_ENABLED=[AddForEach, ColumnMapKeyPrune, ConstantCalculator, GroupByConstParallelSetter, LimitOptimizer, LoadTypeCastInserter, MergeFilter, MergeForEach, PartitionFilterOptimizer, PredicatePushdownOptimizer, PushDownForEachFlatten, PushUpFilter, SplitFilter, StreamTypeCastInserter]}
+2020-02-15 13:57:57,374 [main] INFO  org.apache.pig.newplan.logical.rules.ColumnPruneVisitor - Columns pruned for a: $1, $2, $3, $4
+2020-02-15 13:57:57,406 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - File Output Committer Algorithm version is 1
+2020-02-15 13:57:57,406 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - FileOutputCommitter skip cleanup _temporary folders under output directory:false, ignore cleanup failures: false
+2020-02-15 13:57:57,420 [main] INFO  org.apache.pig.data.SchemaTupleBackend - Key [pig.schematuple] was not set... will not generate code.
+2020-02-15 13:57:57,449 [main] WARN  org.apache.pig.data.SchemaTupleBackend - SchemaTupleBackend has already been initialized
+2020-02-15 13:57:57,450 [main] INFO  org.apache.pig.builtin.PigStorage - Using PigTextInputFormat
+2020-02-15 13:57:57,453 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2020-02-15 13:57:57,453 [main] INFO  org.apache.pig.backend.hadoop.executionengine.util.MapRedUtil - Total input paths to process : 1
+2020-02-15 13:57:57,557 [main] INFO  org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter - Saved output of task 'attempt__0001_m_000001_1' to hdfs://sandbox.hortonworks.com:8020/tmp/temp-298388458/tmp1160460878/_temporary/0/task__0001_m_000001
+2020-02-15 13:57:57,591 [main] WARN  org.apache.pig.data.SchemaTupleBackend - SchemaTupleBackend has already been initialized
+2020-02-15 13:57:57,600 [main] INFO  org.apache.hadoop.mapreduce.lib.input.FileInputFormat - Total input paths to process : 1
+2020-02-15 13:57:57,600 [main] INFO  org.apache.pig.backend.hadoop.executionengine.util.MapRedUtil - Total input paths to process : 1
+(USER_79321756,{(RT),(@USER_2ff4faca:),(IF),(SHE),(DO),(IT),(1),(MORE),(TIME......IMA),(KNOCK),(HER),(DAMN),(KOOFIE),(OFF.....ON),(MY),(MOMMA&gt;&gt;haha.),(#cutthatout)})
+(USER_79321756,{(@USER_77a4822d),(@USER_2ff4faca),(okay:),(),(lol.),(Saying),(ok),(to),(both),(of),(yall),(about),(to),(different),(things!:)})
+(USER_79321756,{(RT),(@USER_5d4d777a:),(YOURE),(A),(FOR),(GETTING),(IN),(THE),(MIDDLE),(OF),(THIS),(@USER_ab059bdc),(WHO),(THE),(),(ARE),(YOU),(?),(A),(ING),(NOBODY),(!!!!&gt;&gt;Lol!),(Dayum!),(Aye!)})
+
 ```
 [Top](#top)
 - FLATTEN() <a name='FLATTEN'></a>
