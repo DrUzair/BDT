@@ -10,8 +10,8 @@
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
-  - [Datetime function](#dtefuncs)
-  - [String function](#strfuncs)
+  - [Datetime functions](#dtefuncs)
+  - [String functions](#strfuncs); [LOWER](#lower), [UPPER][LOWER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT]#(STRSPLIT), [FLATTEN](#FLATTEN), [SUBSTRING](#SUBSTRING)
   - [Conditional function](#cond)
 - [Pig Relational Operations](#filter)
 - [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
@@ -423,7 +423,7 @@ dump d;
 
 ### 3.2 STRING functions <a name='strfuncs'></a>
 
-- LOWER()
+- LOWER() <a name='lower'></a>
 
 ```shell
 a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -431,8 +431,8 @@ b = foreach a generate id, ts, location, LOWER(tweet) as tweet;
 c = limit b 5;
 dump c;
 ```
-
-- UPPER()
+[Top](#top)
+- UPPER() <a name='upper'></a>
 
 ```shell
 a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -440,8 +440,8 @@ b = foreach a generate id, ts, location, UPPER(tweet) as tweet;
 c = limit b 5;
 dump c;
 ```
-
-- STARTSWITH() 
+[Top](#top)
+- STARTSWITH()  <a name='STARTSWITH'></a>
   - to get retweets : tweets starting with RT 
   - explanation of filter, group, count will follow later in the exercise.
 
@@ -452,14 +452,14 @@ c = group b all;
 d = foreach c generate COUNT(b);
 dump d;
 ```
-
+[Top](#top)
 - ENDSWITH()
 
 ```shell
 
 ```
 
-- STRSPLIT()
+- STRSPLIT() <a name='STRSPLIT'></a>
 - [STRSPLITTOBAG(string, regex, limit)](https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/builtin/STRSPLITTOBAG.html)
 	- First parameter: a string to split;
 	- The second parameter:  the delimiter or regex to split on; (optional) '\s' if not provided
@@ -470,14 +470,15 @@ b = foreach a generate id, STRSPLITTOBAG(tweet, '[ ",()*]', 0);
 c = limit b 3;
 dump c;
 ```
-
+[Top](#top)
+- FLATTEN() <a name='FLATTEN'></a>
 ```shell
 a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 b = foreach a generate id, FLATTEN(STRSPLITTOBAG(tweet, ' ', 0));
 c = limit b 15;
 dump c;
 ```
-
+[Top](#top)
 - SIZE()
 
 ```shell
@@ -498,8 +499,8 @@ c = order b by tweet_len desc;
 d = limit c 10;
 dump d;
 ```
-
-- SUBSTRING()
+[Top](#top)
+- SUBSTRING() <a name='SUBSTRING'></a>
   - to extract year from ts string
 
 ```shell
@@ -508,6 +509,7 @@ b = foreach a generate id, ts, SUBSTRING(ts, 0,4);
 c = limit b 5;
 dump c;
 ```
+[Top](#top)
 
 - TRIM()
 - INDEXOF()
