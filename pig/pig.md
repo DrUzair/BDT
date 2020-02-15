@@ -10,12 +10,12 @@
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
-  - [Datetime functions](#dtefuncs)
-  - [String functions](#strfuncs); [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [FLATTEN](#FLATTEN), [SUBSTRING](#SUBSTRING)
-  - [Conditional function](#cond)
-- [Pig Relational Operations](#filter)
-- [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
-- [Join](#join), [flatten](#flatten), [nested foreach](#nested_foreach),  [Cross](#cross)
+  - [1. Datetime functions](#dtefuncs)
+  - [2. String functions](#strfuncs); [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [FLATTEN](#FLATTEN), [SUBSTRING](#SUBSTRING)
+  - [3. Conditional](#cond)
+  - [4. Pig Relational Operations](#filter)
+  	- [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
+  	- [Join](#join), [flatten](#flatten), [nested foreach](#nested_foreach),  [Cross](#cross)
 - [Complex Data  Types](#cdt)
 - [Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
@@ -627,8 +627,7 @@ grunt> dump f;
 
 [Top](#top)
 
-CONDITIONAL function <a name='cond'></a>
---------------------------------------------------------------
+### CONDITIONAL function <a name='cond'></a>
 
 - Find users who like to tw-eating
 
@@ -644,8 +643,7 @@ grunt> dump d;
 
 [Top](#top)
 
-4. Pig Relational Operations 
-----------------------------------------------------------------------------
+## 4. Pig Relational Operations 
 
 ### Filter <a name='filter'></a>
 
