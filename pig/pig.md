@@ -11,7 +11,7 @@
 - [Pig Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
   - [Datetime functions](#dtefuncs)
-  - [String functions](#strfuncs); [LOWER](#lower), [UPPER][LOWER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT]#(STRSPLIT), [FLATTEN](#FLATTEN), [SUBSTRING](#SUBSTRING)
+  - [String functions](#strfuncs); [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [FLATTEN](#FLATTEN), [SUBSTRING](#SUBSTRING)
   - [Conditional function](#cond)
 - [Pig Relational Operations](#filter)
 - [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
