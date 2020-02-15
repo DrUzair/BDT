@@ -17,8 +17,8 @@
   - [4. Pig Relational Operations](#filter)
   	- [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
   	- [Join](#join), [flatten](#flatten), [nested foreach](#nested_foreach),  [Cross](#cross)
-- [Complex Data  Types](#cdt)
-- [Working with Pig UDFs](#udf)
+- [5. Complex Data  Types](#cdt)
+- [6. Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
 
 
