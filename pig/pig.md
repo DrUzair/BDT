@@ -461,7 +461,9 @@ dump d;
 
 - STRSPLIT()
 - [STRSPLITTOBAG(string, regex, limit)](https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/builtin/STRSPLITTOBAG.html)
-
+	- First parameter: a string to split;
+	- The second parameter:  the delimiter or regex to split on; (optional) '\s' if not provided
+	- The third parameter: a limit to the number of results. (max limit) (optional)
 ```shell
 a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 b = foreach a generate id, STRSPLITTOBAG(tweet, '[ ",()*]', 0);
