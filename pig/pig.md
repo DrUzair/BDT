@@ -567,8 +567,8 @@ grunt> d = limit c 5;
 grunt> dump d;
 ```
 
-		-  Find first  3 twitter handles mentioned in a tweet 
-		-  method 1
+-  Find first  3 twitter handles mentioned in a tweet 
+  -  method 1
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -581,7 +581,7 @@ grunt> d = limit c 20;
 grunt> dump d;
 ```
 
-- method 2
+  - method 2
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
