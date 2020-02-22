@@ -370,11 +370,11 @@ Time taken: 35.485 seconds, Fetched: 1 row(s)
 - Casting a string to date
   - With pattern
   ```shell
-  select cast(to_date(from_unixtime(unix_timestamp('01-05-2020', 'dd-MM-yyyy'))) as date);
+  hive > select cast(to_date(from_unixtime(unix_timestamp('01-05-2020', 'dd-MM-yyyy'))) as date);
   ```
   - The default representation of a date is ISO8601, stored as binary.
   ```shell
-  SELECT cast('2020-01-05' as date);
+  hive > select cast('2020-01-05' as date);
   ```
 - String to timestamp
   - cast() function; convert datatype string to timestamp 
