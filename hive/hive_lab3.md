@@ -369,12 +369,19 @@ Time taken: 35.485 seconds, Fetched: 1 row(s)
 ## Functions 
 
 ### Time and Date <a name="dt_funcs"></a>
-
-Example: Convert string to timestamp
-
-- cast() function; convert datatype string to timestamp 
-- concat() function; concatanate multiple strings into one
-- substr() function; extract some portion of a string
+- Casting a string to date
+  - With pattern
+  ```shell
+  select cast(to_date(from_unixtime(unix_timestamp('01-05-2020', 'dd-MM-yyyy'))) as date);
+  ```
+  - The default representation of a date is ISO8601, stored as binary.
+  ```shell
+  SELECT cast('2020-01-05' as date);
+  ```
+- String to timestamp
+  - cast() function; convert datatype string to timestamp 
+  - concat() function; concatanate multiple strings into one
+  - substr() function; extract some portion of a string
 
 ```sql
 hive (twitter)> create table twitter.full_text_ts as select id, cast(concat(substr(ts, 1, 10), ' ', substr(ts, 12, 18)) as timestamp) as ts, lat, lon, tweet from twitter.full_text;
