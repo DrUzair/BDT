@@ -13,7 +13,7 @@
 - [Hive Version](#version)
 - [Hive CLI](#cli)
 - [Working with Hive Databases](#db)
-  - List, Connect, Location, Creation, Drop
+  - [List](#list_db), Connect, Location, Creation, Drop
 - [Working with Hive Tables](#tbls)
   - [List](#tbl_lst), [Location](#tbl_loc), [Creation](#tbl_create), [Schema](#tbl_schema), [Drop](#tbl_drop)
 - [Hive QL](#hql)
@@ -22,7 +22,11 @@
   - [ORDER By Clause](#oderby)
   - [DISTINCT](#distinct)
   - [GROUP By Clause](#groupby)
-
+- Hive Funcations
+  - [Date and Time](#dt_funcs)
+  - [Strings and Regex](#str_funcs)
+  - [Conditionals](#cnds)
+  
 ## Hive Version <a name="version"></a> 
 ```shell
 [root@sandbox ~]# /usr/bin/hive --version
@@ -41,15 +45,11 @@ Compiled by jenkins on Fri Aug 26 01:39:52 UTC 2016
 From source with checksum c30648316a632f7a753f4359e5c8f4d6
 ```
 ## Hive CLI <a name="cli"></a> 
-
-
 - All commands should end with semi-colon ;
 
 
 ### Invoke
-
 If installed and configured properly, hive command will launch the hive CLI
-
 ```shell
 [root@sandbox lab]# hive
 hive
@@ -66,7 +66,7 @@ Ctrl-c or
 quit;
 ```
 
-### List Databases <a name="db"></a> 
+### List Databases <a name="listdb"></a> 
 
 ```shell
 hive> show databases;
@@ -296,11 +296,9 @@ Storage Desc Params:
 Time taken: 1.109 seconds, Fetched: 37 row(s)
 
 ```
-
 [Top](#top)
 
 ### Dropping a Table <a name='tbl_drop'></a>
-
 ```sql
 drop table twitter.full_text_ts;
 ```
