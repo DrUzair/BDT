@@ -369,8 +369,8 @@ Time taken: 35.485 seconds, Fetched: 1 row(s)
 ### Time and Date <a name="dt_funcs"></a>
 - Unix time and ISO8601 
 ```shell
-hive> select unix_timestamp();
-hive> select from_unixtime(unix_timestamp());
+hive> select unix_timestamp(); # 1582369919 bigint 
+hive> select from_unixtime(unix_timestamp()); # 2020-02-22 11:13:27
 ```
 - Casting a string to date
   - With pattern
