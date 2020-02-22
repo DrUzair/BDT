@@ -367,6 +367,11 @@ Time taken: 35.485 seconds, Fetched: 1 row(s)
 ## Functions 
 
 ### Time and Date <a name="dt_funcs"></a>
+- Unix time and ISO8601 
+```shell
+hive> select unix_timestamp();
+hive> select from_unixtime(unix_timestamp());
+```
 - Casting a string to date
   - With pattern
   ```shell
@@ -375,6 +380,10 @@ Time taken: 35.485 seconds, Fetched: 1 row(s)
   - The default representation of a date is ISO8601, stored as binary.
   ```shell
   hive > select cast('2020-01-05' as date);
+  ```
+- Catring bigint to unixtime
+  ```shell
+  select from_unixtime(cast('1582369919' as bigint));
   ```
 - String to timestamp
   - cast() function; convert datatype string to timestamp 
