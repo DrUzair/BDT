@@ -13,6 +13,7 @@
   - [1. Datetime functions](#dtefuncs)
   - [2. String functions](#strfuncs); 
   	- [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [SUBSTRING](#SUBSTRING)
+	- [TOKENIZE](#tokenize), [FLATTEN](#flatten)
   - [3. Conditional](#cond)
   - [4. Pig Relational Operations](#filter)
   	- [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
@@ -458,9 +459,6 @@ grunt> dump d;
 [Top](#top)
 - ENDSWITH()
 
-```shell
-
-```
 
 - STRSPLIT() <a name='STRSPLIT'></a>
 - [STRSPLITTOBAG(string, regex, limit)](https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/builtin/STRSPLITTOBAG.html)
@@ -496,6 +494,36 @@ output
 
 ```
 [Top](#top)
+
+- TOKENIZE <a name='tokenize'></a>
+	- **Case sensitive**
+```shell
+[root@sandbox ]# echo -e "this is a line; with a comma, and a semicolon; the end." > a_line
+[root@sandbox ]# hadoop fs -put a_line /user/pig
+```
+In grunt shell
+```shell
+grunt> a = load '/user/pig/a_line' as (text:chararray);
+grunt> b = foreach a generate TOKENIZE(text) as t;
+grunt> dump b
+...
+({(this),(is),(a),(line;),(with),(a),(comma),(and),(a),(semicolon;),(the),(end.)})
+grunt> c = foreach a generate flatten(TOKENIZE(text)) as t;
+...
+(this)
+(is)
+(a)
+(line;)
+(with)
+(a)
+(comma)
+(and)
+(a)
+(semicolon;)
+(the)
+(end.)
+```
+
 - FLATTEN() <a name='FLATTEN'></a>
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -747,10 +775,8 @@ grunt> dump f;
 		- [FILTER](#filter)
 		- [FLATTEN](#flatten)
 		- PigStorage
-
+Create example data file and store in hdfs.
 ```shell
-grunt> quit
-
 [hdfs@sandbox ~]$ echo -e "user1\t{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])} \nuser2\t{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}\nuser3\t{([city#neverland]),([name#def]),([interest#sports])}" > data_test_map
 
 [hdfs@sandbox ~]$ cat data_test_map
@@ -758,11 +784,10 @@ user1   {([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])
 user2   {([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}
 user3   {([city#neverland]),([name#def]),([interest#sports])}
 
-[hdfs@sandbox ~]$ hadoop fs -put data_test_map '/user/pig/data_test_map'
-[hdfs@sandbox ~]$ pig
-.
-.
-.
+[hdfs@sandbox ~]$ hadoop fs -put data_test_map /user/pig/data_test_map
+```
+Open grunt shell.
+```shell
 grunt> a = load '/user/pig/data_test_map' using PigStorage('\t') as (id:chararray, info:bag{t:(m:map[])});
 grunt> b = foreach a generate id, info, flatten(info) as info_flat;
 grunt> c = filter b by info_flat#'city'=='toronto';
