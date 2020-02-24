@@ -19,6 +19,7 @@
   	- [Join](#join), [flatten](#flatten), [nested foreach](#nested_foreach),  [Cross](#cross)
 - [5. Complex Data  Types](#cdt)
 	- [Map](#map)
+	- [Bag](#bag)
 - [6. Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
 
@@ -741,10 +742,11 @@ grunt> dump f;
 
 # 5. Complex Data Types <a name='cdt'></a>
 
-- 5.1 MAP example 1
-	- [FILTER](#filter)
-	- [FLATTEN](#flatten)
-	- PigStorage
+- 5.1 MAP <a name='map'></a>
+	- Example 1
+		- [FILTER](#filter)
+		- [FLATTEN](#flatten)
+		- PigStorage
 
 ```shell
 grunt> quit
@@ -771,7 +773,7 @@ grunt> dump c;
 (user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[city#toronto])
 (user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[city#toronto])
 ```
-
+[Top](#top)
 - 5.2 MAP example 2:  
 	- data prep (transformations on the original full_text file and store into another file in HDFS)
 
@@ -800,8 +802,9 @@ grunt> c = filter b by (int)freq_word_m#'I' > 5;
 grunt> d = limit c 10;
 grunt> dump d;
 ```
-
-- 5.3 BAG example (star expression)
+[Top](#top)
+- 5.3 BAG example <a name='bag'></a>
+	- star expression
 
 ```shell
 grunt> quit
