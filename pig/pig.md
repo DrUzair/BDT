@@ -12,7 +12,7 @@
 - [Pig Functions](#pigfuncs)
   - [1. Datetime functions](#dtefuncs)
   - [2. String functions](#strfuncs); 
-  	- [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [SUBSTRING](#SUBSTRING)
+  	- [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [SUBSTRING](#SUBSTRING), [REGEX_EXTRACT](#regex_extract)
 	- [TOKENIZE](#tokenize), [FLATTEN](#flatten)
   - [3. Conditional](#cond)
   - [4. Pig Relational Operations](#filter)
@@ -586,7 +586,7 @@ grunt> dump c;
 - INDEXOF()
 - LASTINDEXOF()
 - REGEX_EXTRACT_ALL()
-- REGEX_EXTRACT()
+- REGEX_EXTRACT() <a name='regex_extract'></a>
   - Find first twitter handles mentioned in a tweet
 
 ```shell
