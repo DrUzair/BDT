@@ -594,12 +594,6 @@ grunt> b = foreach a generate id, ts, location, LOWER(tweet) as tweet;
 grunt> c = foreach b generate id, ts, location, REGEX_EXTRACT(tweet, '(.*)@user_(\\S{8})([:| ])(.*)',2) as tweet;
 grunt> d = limit c 5;
 grunt> dump d;
-...
-(USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,2ff4faca)
-(USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,2ff4faca)
-(USER_79321756,2010-03-03T05:13:34,ÜT: 47.528139,-122.197916,ab059bdc)
-(USER_79321756,2010-03-03T05:28:02,ÜT: 47.528139,-122.197916,77a4822d)
-(USER_79321756,2010-03-03T05:56:13,ÜT: 47.528139,-122.197916,)
 ```
 
 -  Find first  3 twitter handles mentioned in a tweet 
