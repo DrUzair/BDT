@@ -889,25 +889,24 @@ grunt> dump g;  -- 3
 ### COGROUP <a name='cogroup'></a>
 
 - 6.1 COGROUP example
-
+Create example data.
 ```shell
-[hdfs@sandbox ~]$ echo -e "u1,14,M,US\nu2,32,F,UK\nu3,22,M,US" > /home/lab/user.txt
-[hdfs@sandbox ~]$ hadoop fs -put /home/lab/user.txt /user/pig/user.txt
-
--- u1, 14, M, US
--- u2, 32, F, UK
--- u3, 22, M, US
-
-```shell
-[hdfs@sandbox ~]$ echo -e "u1,US\nu1,UK\nu1,CA\nu2,US" > /home/lab/session.txt
+[hdfs@sandbox ~]$ echo -e "u1,14,M,US\nu2,32,F,UK\nu3,22,M,US" > user.txt
+[hdfs@sandbox ~]$ cat user.txt
+u1,14,M,US
+u2,32,F,UK
+u3,22,M,US
+[hdfs@sandbox ~]$ hadoop fs -put user.txt /user/pig/user.txt
+[hdfs@sandbox ~]$
+[hdfs@sandbox ~]$ echo -e "u1,US\nu1,UK\nu1,CA\nu2,US" > session.txt
+[hdfs@sandbox ~]$ cat session.txt
+u1,US
+u1,UK
+u1,CA
+u2,US
 [hdfs@sandbox ~]$ hadoop fs -put /home/lab/session.txt /user/pig/session.txt
 ```
-
--- u1, US
--- u1, UK
--- u1, CA
--- u2, US
-
+Continue to grunt shell.
 ```shell
 grunt> user = load '/user/pig/user.txt' using PigStorage(',') as (uid:chararray, age:int, gender:chararray, region:chararray);
 grunt> session = load '/user/pig/session.txt' using PigStorage(',') as (uid:chararray, region:chararray);
