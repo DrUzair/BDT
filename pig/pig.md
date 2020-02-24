@@ -8,7 +8,7 @@
 	- [Executing pig commands/scripts from grunt shell](#grunt_shell)
 		- [> grunt interactive](#grunt_interactive) , [> grunt exec](#grunt_batch) , [> grunt run](#grunt_run)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
-- [Pig Basics](#piglatin)
+- [Pig Latin Basics](#piglatin)
 - [Pig Functions](#pigfuncs)
   - [1. Datetime functions](#dtefuncs)
   - [2. String functions](#strfuncs); 
@@ -372,7 +372,10 @@ grunt>  quit
 [Top](#top)
 
 # 2. Pig Latin Basics <a name='piglatin'></a>
-
+- Case Sensitivity
+	- The names (aliases) of relations and fields are case sensitive. 
+	- The names of Pig Latin functions are case sensitive. 
+	- The names of parameters and all other [Pig Latin keywords](https://pig.apache.org/docs/latest/basic.html#reserved-keywords) are case insensitive.
 ### 2.1 Data exploration using limit and dump
 
 ```shell
