@@ -913,6 +913,14 @@ Continue to grunt shell.
 grunt> user = load '/user/pig/user.txt' using PigStorage(',') as (uid:chararray, age:int, gender:chararray, region:chararray);
 grunt> session = load '/user/pig/session.txt' using PigStorage(',') as (uid:chararray, region:chararray);
 grunt> C = cogroup user by uid, session by uid;
+grunt> dump C;
+...
+(u1,{(u1,14,M,US)},{(u1,CA),(u1,UK),(u1,US)})
+(u2,{(u2,32,F,UK)},{(u2,US)})
+(u3,{(u3,22,M,US)},{})
+```
+Cross user and session
+```shell
 grunt> D = foreach C {
     crossed = cross user, session;
     generate crossed;
