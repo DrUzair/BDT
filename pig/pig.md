@@ -18,6 +18,7 @@
   	- [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
   	- [Join](#join), [flatten](#flatten), [nested foreach](#nested_foreach),  [Cross](#cross)
 - [5. Complex Data  Types](#cdt)
+	- [Map](#map)
 - [6. Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
 
@@ -741,8 +742,8 @@ grunt> dump f;
 # 5. Complex Data Types <a name='cdt'></a>
 
 - 5.1 MAP example 1
-	- FILTER
-	- FLATTEN
+	- [FILTER](#filter)
+	- [FLATTEN](#flatten)
 	- PigStorage
 
 ```shell
@@ -764,9 +765,15 @@ grunt> a = load '/user/pig/data_test_map' using PigStorage('\t') as (id:chararra
 grunt> b = foreach a generate id, info, flatten(info) as info_flat;
 grunt> c = filter b by info_flat#'city'=='toronto';
 grunt> dump c;
+.
+.
+.
+(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[city#toronto])
+(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[city#toronto])
 ```
 
-- 5.2 MAP example 2:  data prep (transformations on the original full_text file and store into another file in HDFS)
+- 5.2 MAP example 2:  
+	- data prep (transformations on the original full_text file and store into another file in HDFS)
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
