@@ -16,7 +16,7 @@
 	- [TOKENIZE](#tokenize), [FLATTEN](#flatten)
   - [3. Conditional](#cond)
   - [4. Pig Relational Operations](#filter)
-  	- [Filter](#filter), [group](#groupby), [cogroup](#cogroup)
+  	- [Filter](#filter), [group](#groupby), [group all](#groupall), (COUNT_STAR](#count),[cogroup](#cogroup)
   	- [Join](#join), [flatten](#flatten), [nested foreach](#nested_foreach),  [Cross](#cross)
 - [5. Complex Data  Types](#cdt)
 	- [Map](#map)
@@ -763,8 +763,10 @@ grunt> e = limit d 5;
 grunt> dump e;
 ```
 
-- 4.6 Count total number of records
-
+[Top](#top)
+- 4.6 Count total number of records <a name='groupall'></a>
+	- COUNT_STAR (similar to COUNT) is used to get the number of elements in a bag. 
+	- While counting the elements, the COUNT_STAR() function includes the NULL values.
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt> b = group a ALL;
