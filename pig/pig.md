@@ -887,8 +887,10 @@ grunt> dump g;  -- 3
 # 6. ADVANCED FUNCTIONS
 
 ### COGROUP <a name='cogroup'></a>
+COGROUP Works similar way as Group but for two relations.
 
 - 6.1 COGROUP example
+
 Create example data.
 ```shell
 [hdfs@sandbox ~]$ echo -e "u1,14,M,US\nu2,32,F,UK\nu3,22,M,US" > user.txt
@@ -916,6 +918,10 @@ grunt> D = foreach C {
     generate crossed;
 }
 grunt> dump D;  
+...
+({(u1,14,M,US,u1,CA),(u1,14,M,US,u1,UK),(u1,14,M,US,u1,US)})
+({(u2,32,F,UK,u2,US)})
+({})
 ```
 
 - 6.2 Use COGROUP for SET Intersection 
