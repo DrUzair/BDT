@@ -741,21 +741,29 @@ grunt> dump f;
 # 5. Complex Data Types <a name='cdt'></a>
 
 - 5.1 MAP example 1
+	- FILTER
+	- FLATTEN
+	- PigStorage
 
 ```shell
 grunt> quit
 
-[hdfs@sandbox ~]$ echo -e "user1\t{([address#2436 mains st]),([name#sebnem]),([phone#222-222-2222]),([city#toronto])} \nuser2\t{([address#456 king st]),([name#jenny]),([occupation#doctor]),([city#toronto])}\nuser3\t{([city#mississauga]),([name#larry]),([interest#sports])}" > data_test_map
+[hdfs@sandbox ~]$ echo -e "user1\t{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])} \nuser2\t{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}\nuser3\t{([city#neverland]),([name#def]),([interest#sports])}" > data_test_map
 
 [hdfs@sandbox ~]$ cat data_test_map
+user1   {([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])}
+user2   {([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}
+user3   {([city#neverland]),([name#def]),([interest#sports])}
+
 [hdfs@sandbox ~]$ hadoop fs -put data_test_map '/user/pig/data_test_map'
 [hdfs@sandbox ~]$ pig
-
+.
+.
+.
 grunt> a = load '/user/pig/data_test_map' using PigStorage('\t') as (id:chararray, info:bag{t:(m:map[])});
 grunt> b = foreach a generate id, info, flatten(info) as info_flat;
 grunt> c = filter b by info_flat#'city'=='toronto';
-grunt> d = limit c 5;
-grunt> dump d;
+grunt> dump c;
 ```
 
 - 5.2 MAP example 2:  data prep (transformations on the original full_text file and store into another file in HDFS)
