@@ -1096,37 +1096,35 @@ grunt> dump X;
 [Top](#top)
 
 ### CROSS <a name='cross'></a>
-
 - 6.10 Parameter distribution using CROSS
-  -- parameter file:
-  --(nfriends, 2)
-  --(ndays, 100)
-  --(nvists, 13)
-
-- friend table:
-  --(Amy, George)
-  --(George, Fred)
-  --(Fred, Anne)
-  --(George, Joe)
-  --(George, Harry)
-
-- Create parameter file and friend table using the Linux commands below
-
+Prepare example data.
 ```shell
-[hdfs@sandbox ~]$ echo -e "nfriends,2\nndays,100\nnvisits,13" > /home/lab/params.txt
-[hdfs@sandbox ~]$ echo -e "Amy,George\nGeorge,Fred\nFred,Anne\nGeorge,Joe\nGeorge,Harry" > /home/lab/friend.txt
-[hdfs@sandbox ~]$ hadoop fs -put params.txt /user/pig/  
-[hdfs@sandbox ~]$ hadoop fs -put friend.txt /user/pig/  
-[hdfs@sandbox ~]$ pig
+[root@sandbox data]# echo -e "nfriends,2\nndays,100\nnvisits,13" > params.txt
+[root@sandbox data]# cat params.txt
+nfriends,2
+ndays,100
+nvisits,13
+[root@sandbox data]# hadoop fs -put params.txt /user/pig/  
+[root@sandbox data]# echo -e "Amy,George\nGeorge,Fred\nFred,Anne\nGeorge,Joe\nGeorge,Harry" > friend.txt
+[root@sandbox data]# cat friend.txt
+Amy,George
+George,Fred
+Fred,Anne
+George,Joe
+George,Harry
+[root@sandbox data]# hadoop fs -put friend.txt /user/pig/  
+```
+Continue to grunt shell
+```shell
 grunt> params = load '/user/pig/params.txt' using PigStorage(',') as (p_name:chararray, value:int);
 grunt> friend = load '/user/pig/friend.txt' using PigStorage(',') as (name:chararray, friend:chararray);
-
+grunt>
 grunt> friend_grp = group friend by name;
 grunt> friend_cnt = foreach friend_grp generate group as name, COUNT(friend.friend) as cnt;
-
+grunt>
 grunt> friend_param = filter params by p_name=='nfriends';
 grunt> friend_param_p = foreach friend_param generate value;
-
+grunt>
 grunt> friend_cross = CROSS friend_cnt, friend_param_p;
 grunt> friend_cross_1 = filter friend_cross by friend_cnt::cnt >= friend_param_p::value;
 grunt> dump friend_cross_1;
