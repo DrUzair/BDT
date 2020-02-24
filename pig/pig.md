@@ -16,7 +16,7 @@
 	- [TOKENIZE](#tokenize), [FLATTEN](#flatten)
   - [3. Conditional](#cond)
   - [4. Pig Relational Operations](#filter)
-  	- [Filter](#filter), [group](#groupby), [group all](#groupall), (COUNT_STAR](#count),[cogroup](#cogroup)
+  	- [Filter](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [cogroup](#cogroup)
   	- [Join](#join), [flatten](#flatten), [nested foreach](#nested_foreach),  [Cross](#cross)
 - [5. Complex Data  Types](#cdt)
 	- [Map](#map)
