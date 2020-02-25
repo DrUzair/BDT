@@ -982,7 +982,13 @@ grunt> dump set_diff;
 - prepare lookup table 'dayofweek'
 
 ```shell
-fs -put /home/lab/dayofweek.txt /user/pig/
+[root@sandbox twitter]# cat dayofweek.txt
+2010-03-02      Tuesday
+2010-03-03      Wednesday
+2010-03-04      Thursday
+2010-03-05      Friday
+2010-03-06      Saturday
+[root@sandbox twitter]# hadoop fs -put dayofweek.txt /user/pig/
 ```
 
 - 6.4 **INNER JOIN** : Find Weekend Tweets
@@ -990,19 +996,41 @@ fs -put /home/lab/dayofweek.txt /user/pig/
 ```shell
 grunt> a = load '/user/pig/full_text.txt' using PigStorage('\t') AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt> a1 = foreach a generate id, ts, SUBSTRING(ts,0,10) as date;
-
+grunt>
 grunt> b = load '/user/pig/dayofweek.txt' using PigStorage('\t') as (date:chararray, dow:chararray);
 grunt> b1 = filter b by dow=='Saturday' or dow=='Sunday';
-
+grunt> dump b1;
+...
+(2010-03-06,Saturday)
+(2010-03-07,Sunday)
 grunt> c = join a1 by date, b1 by date;
 grunt> d = foreach c generate a1::id .. a1::date, b1::dow as dow;
 grunt> e = limit d 5;
 grunt> dump e;
+...
+(USER_606adf97,2010-03-06T08:16:55,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06T17:51:27,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06T18:49:45,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06T19:03:48,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06T19:19:05,2010-03-06,Saturday)
 ```
-
+	- Project-range ( .. ) expressions can be used to project a range of columns from input.
+```shell
+grunt> d = foreach c generate a1::id, a1::date, b1::dow as dow;
+grunt> e = limit d 5;
+grunt> dump e;
+...
+(USER_606adf97,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06,Saturday)
+(USER_8c704efa,2010-03-06,Saturday)
+```
+[Top](#top)
+	
 - 6.5 **Using Replicated JOIN** : Find Weekend Tweets
-
-
+	- A special type of join that works well if one or more relations are small enough to fit into main memory. 
+	- In such cases, Pig can perform a very efficient join because all of the hadoop work is done on the map side. 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' using PigStorage('\t') AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt> a1 = foreach a generate id, ts, SUBSTRING(ts,0,10) as date;
