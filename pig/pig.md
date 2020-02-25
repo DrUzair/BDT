@@ -9,19 +9,19 @@
 		- [> grunt interactive](#grunt_interactive) , [> grunt exec](#grunt_batch) , [> grunt run](#grunt_run)
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Latin Basics](#piglatin)
-- [Pig Functions](#pigfuncs)
-  - [1. Datetime functions](#dtefuncs)
-  - [2. String functions](#strfuncs); 
-  	- [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [SUBSTRING](#SUBSTRING), [REGEX_EXTRACT](#regex_extract)
-	- [TOKENIZE](#tokenize), [FLATTEN](#flatten)
-  - [3. Conditional](#cond)
-  - [4. Pig Relational Operations](#filter)
-  	- [FILTER](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [COGROUP](#cogroup)
-  	- [JOIN](#join), [FLATTEN](#flatten), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
-- [5. Complex Data  Types](#cdt)
+- [Complex Data  Types](#cdt)
 	- [Map](#map)
 	- [Bag](#bag)
-- [6. Working with Pig UDFs](#udf)
+- [Pig Functions](#pigfuncs)
+  - [Datetime functions](#dtefuncs)
+  - [String functions](#strfuncs); 
+  	- [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [SUBSTRING](#SUBSTRING), [REGEX_EXTRACT](#regex_extract)
+	- [TOKENIZE](#tokenize), [FLATTEN](#flatten)
+  - [Conditional](#cond)
+  - [Pig Relational Operations](#filter)
+  	- [FILTER](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [COGROUP](#cogroup)
+  	- [JOIN](#join), [FLATTEN](#flatten), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
+- [Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
 
 
@@ -413,9 +413,109 @@ grunt> describe b;
 
 [Top](#top)
 
-# 3. Pig Functions <a name='pigfuncs'></a>
+# Complex Data Types <a name='cdt'></a>
 
-### 3.1 DATE/Time functions <a name='dtefuncs'></a>
+- MAP <a name='map'></a>
+	- A set of key value pairs. e.g [name#abc]
+	- Example 1
+		- [FILTER](#filter)
+		- [FLATTEN](#flatten)
+		- using PigStorage: Default read/write of tab delimited files
+Create example data file and store in hdfs.
+```shell
+[hdfs@sandbox ~]$ echo -e "user1\t{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])} \nuser2\t{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}\nuser3\t{([city#neverland]),([name#def]),([interest#sports])}" > data_test_map
+
+[hdfs@sandbox ~]$ cat data_test_map
+user1   {([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])}
+user2   {([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}
+user3   {([city#neverland]),([name#def]),([interest#sports])}
+
+[hdfs@sandbox ~]$ hadoop fs -put data_test_map /user/pig/data_test_map
+```
+Open grunt shell.
+```shell
+grunt> a = load '/user/pig/data_test_map' using PigStorage('\t') as (id:chararray, info:bag{t:(m:map[])});
+grunt> b = foreach a generate id, info, flatten(info) as info_flat;
+grunt> c = filter b by info_flat#'city'=='toronto';
+grunt> dump c;
+.
+.
+.
+(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[city#toronto])
+(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[city#toronto])
+```
+[Top](#top)
+- MAP example 2:  
+	- data prep (transformations on the original full_text file and store into another file in HDFS)
+
+```shell
+grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
+grunt> b = foreach a generate id, ts, TOTUPLE(lat, lon) as loc_tuple:tuple(lat:chararray, lon:chararray), flatten(TOKENIZE(tweet)) as token;
+grunt> c = group b by (id, token);
+grunt> d = foreach c generate flatten(group) as (id, token), COUNT(b) as cnt; 
+grunt> e = group d by id;
+grunt> f = foreach e generate group as id, flatten(TOP(10, 2, d)) as (id1, word,cnt);
+grunt> g = foreach f generate id, TOMAP(word, cnt) as freq_word:map[];
+grunt> h = group g by id;
+grunt> store h into '/user/pig/full_text_t_map';
+
+grunt> aa = load '/user/pig/full_text_t_map';       
+grunt> bb = limit aa 3;
+grunt> dump bb;
+```
+
+- load map type and extract tweeters who have tweeted word 'I' more than 5 times
+
+```shell
+grunt> a = load '/user/pig/full_text_t_map' as (id:chararray, freq_word:bag{t:(id1:chararray, freq_word_m:map[])});
+grunt> b = foreach a generate id, flatten(freq_word) as (id1, freq_word_m);
+grunt> c = filter b by (int)freq_word_m#'I' > 5;
+grunt> d = limit c 10;
+grunt> dump d;
+```
+[Top](#top)
+- BAG example <a name='bag'></a>
+	- A bag is a collection of tuples. e.g {(19,2), (18,1)}
+	- star expression
+
+```shell
+[root@sandbox data]# echo -e "user1\ta\tb\tc\nuser2\ta\tb\nuser3\ta" > data_test_bag
+[root@sandbox data]# cat data_test_bag
+user1   a       b       c
+user2   a       b
+user3   a
+[hdfs@sandbox data]$ hadoop fs -put data_test_bag /user/pig/data_test_bag
+```
+Continue to grunt shell
+```shell
+grunt> a = load '/user/pig/data_test_bag' using PigStorage('\t') as (id:chararray, f1:chararray, f2:chararray, f3:chararray);
+grunt> dump a;
+...
+(user1,a,b,c)
+(user2,a,b,)
+(user3,a,,)
+grunt> b = group a ALL;
+grunt> dump b;
+...
+(all,{(user3,a,,),(user2,a,b,),(user1,a,b,c)})
+grunt> c = foreach b generate COUNT(a.$0);
+grunt> dump c;  -- 3
+grunt> d = foreach b generate COUNT(a.$1); <--[equivalent of]-->  c = foreach b generate COUNT(a.f1);
+grunt> dump d;  -- 3
+grunt> e = foreach b generate COUNT(a.$2);
+grunt> dump e;  -- 2
+grunt> f = foreach b generate COUNT(a.$3);
+grunt> dump f;  -- 1
+grunt> g = foreach b generate COUNT(a);
+grunt> dump g;  -- 3
+grunt> h = foreach b generate COUNT(a.*);   -- error
+```
+
+[Top](#top)
+
+# Pig Functions <a name='pigfuncs'></a>
+
+### DATE/Time functions <a name='dtefuncs'></a>
 
 - CurrentTime()
 - GetYear()
@@ -436,7 +536,7 @@ grunt> dump d;
 
 [Top](#top)
 
-### 3.2 STRING functions <a name='strfuncs'></a>
+### STRING functions <a name='strfuncs'></a>
 
 - LOWER() <a name='lower'></a>
 
@@ -772,7 +872,7 @@ grunt> dump e;
 ```
 
 [Top](#top)
-- 4.6 Count total number of records <a name='groupall'></a>
+- Count total number of records <a name='groupall'></a>
 	- COUNT_STAR (similar to COUNT) is used to get the number of elements in a bag. 
 	- While counting the elements, the COUNT_STAR() function includes the NULL values.
 ```shell
@@ -787,7 +887,7 @@ grunt> dump c;
 --------------------------------------
 ### ORDER BY
 
-- 4.7 Find top 10 tweeters in NYC
+- Find top 10 tweeters in NYC
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -802,100 +902,7 @@ grunt> dump f;
 
 [Top](#top)
 
-# Complex Data Types <a name='cdt'></a>
-
-- MAP <a name='map'></a>
-	- Example 1
-		- [FILTER](#filter)
-		- [FLATTEN](#flatten)
-		- PigStorage
-Create example data file and store in hdfs.
-```shell
-[hdfs@sandbox ~]$ echo -e "user1\t{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])} \nuser2\t{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}\nuser3\t{([city#neverland]),([name#def]),([interest#sports])}" > data_test_map
-
-[hdfs@sandbox ~]$ cat data_test_map
-user1   {([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])}
-user2   {([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])}
-user3   {([city#neverland]),([name#def]),([interest#sports])}
-
-[hdfs@sandbox ~]$ hadoop fs -put data_test_map /user/pig/data_test_map
-```
-Open grunt shell.
-```shell
-grunt> a = load '/user/pig/data_test_map' using PigStorage('\t') as (id:chararray, info:bag{t:(m:map[])});
-grunt> b = foreach a generate id, info, flatten(info) as info_flat;
-grunt> c = filter b by info_flat#'city'=='toronto';
-grunt> dump c;
-.
-.
-.
-(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[city#toronto])
-(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[city#toronto])
-```
-[Top](#top)
-- MAP example 2:  
-	- data prep (transformations on the original full_text file and store into another file in HDFS)
-
-```shell
-grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
-grunt> b = foreach a generate id, ts, TOTUPLE(lat, lon) as loc_tuple:tuple(lat:chararray, lon:chararray), flatten(TOKENIZE(tweet)) as token;
-grunt> c = group b by (id, token);
-grunt> d = foreach c generate flatten(group) as (id, token), COUNT(b) as cnt; 
-grunt> e = group d by id;
-grunt> f = foreach e generate group as id, flatten(TOP(10, 2, d)) as (id1, word,cnt);
-grunt> g = foreach f generate id, TOMAP(word, cnt) as freq_word:map[];
-grunt> h = group g by id;
-grunt> store h into '/user/pig/full_text_t_map';
-
-grunt> aa = load '/user/pig/full_text_t_map';       
-grunt> bb = limit aa 3;
-grunt> dump bb;
-```
-
-- load map type and extract tweeters who have tweeted word 'I' more than 5 times
-
-```shell
-grunt> a = load '/user/pig/full_text_t_map' as (id:chararray, freq_word:bag{t:(id1:chararray, freq_word_m:map[])});
-grunt> b = foreach a generate id, flatten(freq_word) as (id1, freq_word_m);
-grunt> c = filter b by (int)freq_word_m#'I' > 5;
-grunt> d = limit c 10;
-grunt> dump d;
-```
-[Top](#top)
-- 5.3 BAG example <a name='bag'></a>
-	- star expression
-
-```shell
-[root@sandbox data]# echo -e "user1\ta\tb\tc\nuser2\ta\tb\nuser3\ta" > data_test_bag
-[root@sandbox data]# cat data_test_bag
-user1   a       b       c
-user2   a       b
-user3   a
-[hdfs@sandbox data]$ hadoop fs -put data_test_bag /user/pig/data_test_bag
-```
-Continue to grunt shell
-```shell
-grunt> a = load '/user/pig/data_test_bag' using PigStorage('\t') as (id:chararray, f1:chararray, f2:chararray, f3:chararray);
-grunt> b = group a ALL;
-grunt> dump b;
-...
-(all,{(user3,a,,),(user2,a,b,),(user1,a,b,c)})
-grunt> c = foreach b generate COUNT(a.$0);
-grunt> d = foreach b generate COUNT(a.$1);
-grunt> e = foreach b generate COUNT(a.$2);
-grunt> f = foreach b generate COUNT(a.$3);
-grunt> g = foreach b generate COUNT(a);
-grunt> h = foreach b generate COUNT(a.*);   -- error
-grunt> dump c;  -- 3
-grunt> dump d;  -- 3
-grunt> dump e;  -- 2
-grunt> dump f;  -- 1
-grunt> dump g;  -- 3
-```
-
-[Top](#top)
-
-# 6. ADVANCED FUNCTIONS
+# ADVANCED FUNCTIONS <a name='adv_funcs'></a>
 
 ### COGROUP <a name='cogroup'></a>
 COGROUP Works similar way as Group but for two relations.
