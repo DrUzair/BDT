@@ -17,7 +17,7 @@
   - [3. Conditional](#cond)
   - [4. Pig Relational Operations](#filter)
   	- [FILTER](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [COGROUP](#cogroup)
-  	- [JOIN](#join), [FLATTEN](#flatten), [nested foreach](#nested_foreach),  [CROSS](#cross)
+  	- [JOIN](#join), [FLATTEN](#flatten), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
 - [5. Complex Data  Types](#cdt)
 	- [Map](#map)
 	- [Bag](#bag)
@@ -943,7 +943,7 @@ grunt> dump D;
 ({})
 ```
 
-- 6.2 Use COGROUP for SET Intersection 
+- Use COGROUP for SET Intersection 
 
 ```shell
 [hdfs@sandbox ~]$ echo -e "John,3\nHarry,4\nGeorge,2" > /home/lab/s1.txt
@@ -957,7 +957,7 @@ grunt> grps = COGROUP s1 BY name, s2 BY name;
 grunt> grps2 = FILTER grps by NOT(IsEmpty(s1)) AND NOT(IsEmpty(s2));
 grunt> dump grps2;
 ```
--- 6.3 Use COGROUP for set difference 
+- Use COGROUP for set difference 
 ```shell
 grunt> s1 = load '/user/pig/s1.txt' using PigStorage(',') as (name:chararray, hits:int);
 grunt> s2 = load '/user/pig/s2.txt' using PigStorage(',') as (name:chararray, errors:int);
@@ -967,7 +967,7 @@ grunt> set_diff = FOREACH grps2 GENERATE group as grp, s1, s2 ;
 grunt> dump set_diff;
 ```
 
-- 6.3 Use COGROUP for set difference 
+- Use COGROUP for set difference 
 
 ```shell
 grunt> s1 = load '/user/pig/s1.txt' using PigStorage(',') as (name:chararray, hits:int);
@@ -1190,7 +1190,7 @@ grunt> dump friend_cross_1;
 	- To identify field names after JOIN, COGROUP, CROSS Operators
 [Top](#top)
 
-# Scalar Projection
+# Scalar Projection <a name='scalar_proj'></a>
 
 - Normalize the number of tweets of each user against global average number
 
