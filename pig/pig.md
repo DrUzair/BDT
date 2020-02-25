@@ -10,8 +10,7 @@
 	- [linux shell from grunt](#shell_from_grunt), [hdfs from grunt](#hdfs_from_grunt)
 - [Pig Latin Basics](#piglatin)
 - [Complex Data  Types](#cdt)
-	- [Map](#map)
-	- [Bag](#bag)
+	- [Tuple](#tuple), [Bag](#bag), [Map](#map)
 - [Pig Functions](#pigfuncs)
   - [Datetime functions](#dtefuncs)
   - [String functions](#strfuncs); 
@@ -281,8 +280,6 @@ a: {id: chararray,ts: chararray,location: chararray,lat: float,lon: float,tweet:
 [Top](#top)
 
 ### Shell commands (running from Pig grunt) <a name='shell_from_grunt'></a>
-
-
 ```shell
 [hdfs@sandbox lab]$  pig
 grunt>  sh pwd
@@ -313,8 +310,6 @@ drwxr-xr-x 1 root root     4096 Dec 17 17:42 ../
 ```
 [Top](#top)
 ### Hadoop fs Shell commands (working with HDFS files) <a name='hdfs_from_grunt'></a>
-
-
 - Run HDFS commands in pig grunt
 
 	- Note: make sure you update the path properly 
@@ -330,10 +325,7 @@ grunt>  fs -put /home/lab/full_text.txt /user/pig/full_text_1.txt
 
 Utility commands
 -------------------
-
-
-
-1.7 list an HDFS directory in pig grunt
+- list an HDFS directory in pig grunt
 
 ```shell
 grunt>  fs -ls /user/pig
@@ -347,7 +339,7 @@ grunt>  rmf /user/pig/full_text_limit3
 
 **Note** In contrast to hadoop fs -rmdir /2/dir/ the rmf /2/dir doesn't throw exception if the director is not empty.
 
-1.9 set pig job properties in pig grunt/script
+- set pig job properties in pig grunt/script
 
 ```shell
 grunt>  set job.name 'testing'
@@ -355,13 +347,13 @@ grunt>  set default_parallel 10
 grunt>  set job.priority high
 ```
 
-1.10 clear screen
+- clear screen
 
 ```shell
 grunt>  clear
 ```
 
-1.11 quit pig grunt and return to Linux
+- quit pig grunt and return to Linux
 
 ```shell
 grunt>  quit
@@ -371,7 +363,7 @@ grunt>  quit
 
 [Top](#top)
 
-# 2. Pig Latin Basics <a name='piglatin'></a>
+# Pig Latin Basics <a name='piglatin'></a>
 - Case Sensitivity
 	- The names (aliases) of relations and fields are case sensitive. 
 	- The names of Pig Latin functions are case sensitive. 
@@ -384,7 +376,7 @@ grunt>  quit
 - **Aliases**: Arbitrary names of the relations
 
 
-### 2.1 Data exploration using limit and dump
+### Data exploration using limit and dump
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -416,7 +408,46 @@ grunt> describe b;
 [Top](#top)
 
 # Complex Data Types <a name='cdt'></a>
+- Tuple <a name='tuple'></a>
+	- tuple() or tuple(list_of_fields), where list_of_fields is a comma-separated list of field declarations.
+	- as (a:tuple(), b:tuple(x:int, y:int))
+[Top](#top)
+- BAG example <a name='bag'></a>
+	- A bag is a collection of tuples. e.g {(19,2), (18,1)}
+```shell
+[root@sandbox data]# echo -e "user1\ta\tb\tc\nuser2\ta\tb\nuser3\ta" > data_test_bag
+[root@sandbox data]# cat data_test_bag
+user1   a       b       c
+user2   a       b
+user3   a
+[hdfs@sandbox data]$ hadoop fs -put data_test_bag /user/pig/data_test_bag
+```
+Continue to grunt shell
+```shell
+grunt> a = load '/user/pig/data_test_bag' using PigStorage('\t') as (id:chararray, f1:chararray, f2:chararray, f3:chararray);
+grunt> dump a;
+...
+(user1,a,b,c)
+(user2,a,b,)
+(user3,a,,)
+grunt> b = group a ALL;
+grunt> dump b;
+...
+(all,{(user3,a,,),(user2,a,b,),(user1,a,b,c)})
+grunt> c = foreach b generate COUNT(a.$0);
+grunt> dump c;  -- 3
+grunt> d = foreach b generate COUNT(a.$1); <--[equivalent of]-->  c = foreach b generate COUNT(a.f1);
+grunt> dump d;  -- 3
+grunt> e = foreach b generate COUNT(a.$2);
+grunt> dump e;  -- 2
+grunt> f = foreach b generate COUNT(a.$3);
+grunt> dump f;  -- 1
+grunt> g = foreach b generate COUNT(a);
+grunt> dump g;  -- 3
+grunt> h = foreach b generate COUNT(a.*);   -- error
+```
 
+[Top](#top)
 - MAP <a name='map'></a>
 	- A set of key value pairs. e.g [name#abc]
 	- Example 1
@@ -443,6 +474,19 @@ grunt> dump a;
 (user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])})
 (user3,{([city#neverland]),([name#def]),([interest#sports])})
 grunt> b = foreach a generate id, info, flatten(info) as info_flat;
+grunt> dump b;
+...
+(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[address#123 st])
+(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[name#abc])
+(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[phone#222-222-2222])
+(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[city#toronto])
+(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[address#456 st])
+(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[name#xyz])
+(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[occupation#doctor])
+(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[city#toronto])
+(user3,{([city#neverland]),([name#def]),([interest#sports])},[city#neverland])
+(user3,{([city#neverland]),([name#def]),([interest#sports])},[name#def])
+(user3,{([city#neverland]),([name#def]),([interest#sports])},[interest#sports])
 grunt> c = filter b by info_flat#'city'=='toronto';
 grunt> dump c;
 ...
@@ -479,44 +523,7 @@ grunt> d = limit c 10;
 grunt> dump d;
 ```
 [Top](#top)
-- BAG example <a name='bag'></a>
-	- A bag is a collection of tuples. e.g {(19,2), (18,1)}
-	- star expression
 
-```shell
-[root@sandbox data]# echo -e "user1\ta\tb\tc\nuser2\ta\tb\nuser3\ta" > data_test_bag
-[root@sandbox data]# cat data_test_bag
-user1   a       b       c
-user2   a       b
-user3   a
-[hdfs@sandbox data]$ hadoop fs -put data_test_bag /user/pig/data_test_bag
-```
-Continue to grunt shell
-```shell
-grunt> a = load '/user/pig/data_test_bag' using PigStorage('\t') as (id:chararray, f1:chararray, f2:chararray, f3:chararray);
-grunt> dump a;
-...
-(user1,a,b,c)
-(user2,a,b,)
-(user3,a,,)
-grunt> b = group a ALL;
-grunt> dump b;
-...
-(all,{(user3,a,,),(user2,a,b,),(user1,a,b,c)})
-grunt> c = foreach b generate COUNT(a.$0);
-grunt> dump c;  -- 3
-grunt> d = foreach b generate COUNT(a.$1); <--[equivalent of]-->  c = foreach b generate COUNT(a.f1);
-grunt> dump d;  -- 3
-grunt> e = foreach b generate COUNT(a.$2);
-grunt> dump e;  -- 2
-grunt> f = foreach b generate COUNT(a.$3);
-grunt> dump f;  -- 1
-grunt> g = foreach b generate COUNT(a);
-grunt> dump g;  -- 3
-grunt> h = foreach b generate COUNT(a.*);   -- error
-```
-
-[Top](#top)
 
 # Pig Functions <a name='pigfuncs'></a>
 
