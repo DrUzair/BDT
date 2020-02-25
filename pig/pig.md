@@ -877,6 +877,9 @@ Continue to grunt shell
 ```shell
 grunt> a = load '/user/pig/data_test_bag' using PigStorage('\t') as (id:chararray, f1:chararray, f2:chararray, f3:chararray);
 grunt> b = group a ALL;
+grunt> dump b;
+...
+(all,{(user3,a,,),(user2,a,b,),(user1,a,b,c)})
 grunt> c = foreach b generate COUNT(a.$0);
 grunt> d = foreach b generate COUNT(a.$1);
 grunt> e = foreach b generate COUNT(a.$2);
@@ -1187,10 +1190,9 @@ grunt> dump friend_cross_1;
 	- To identify field names after JOIN, COGROUP, CROSS Operators
 [Top](#top)
 
-Scalar Projection
---------------------------------------
+# Scalar Projection
 
-- 6.11 Normalize the number of tweets of each user against global average number
+- Normalize the number of tweets of each user against global average number
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -1206,7 +1208,7 @@ grunt> b = limit a 10;
 grunt> dump b;
 ```
 
-7. Pig UDF (User Defined Function) <a name='udf'></a>
+Pig UDF (User Defined Function) <a name='udf'></a>
 ----------------------------------------------------------------------------
 
 piggybank UDFs <a name='piggy'></a>
