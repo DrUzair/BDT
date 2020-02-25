@@ -392,7 +392,9 @@ grunt> b = limit a 5;
 grunt> dump b;
 ```
 
-### 2.2 load and store data
+### load and store data
+- PigStorage: Default
+- Others JSON, MongoDB etc
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -400,7 +402,7 @@ rmf /user/pig/full_text_1.txt
 grunt> c = store a into '/user/pig/full_text_1.txt';
 ```
 
-### 2.3 Referencing fields (using position and field names)
+### Referencing fields (using position and field names)
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -435,12 +437,15 @@ user3   {([city#neverland]),([name#def]),([interest#sports])}
 Open grunt shell.
 ```shell
 grunt> a = load '/user/pig/data_test_map' using PigStorage('\t') as (id:chararray, info:bag{t:(m:map[])});
+grunt> dump a;
+...
+(user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])})
+(user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])})
+(user3,{([city#neverland]),([name#def]),([interest#sports])})
 grunt> b = foreach a generate id, info, flatten(info) as info_flat;
 grunt> c = filter b by info_flat#'city'=='toronto';
 grunt> dump c;
-.
-.
-.
+...
 (user1,{([address#123 st]),([name#abc]),([phone#222-222-2222]),([city#toronto])},[city#toronto])
 (user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[city#toronto])
 ```
