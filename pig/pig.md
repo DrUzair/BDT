@@ -376,6 +376,13 @@ grunt>  quit
 	- The names (aliases) of relations and fields are case sensitive. 
 	- The names of Pig Latin functions are case sensitive. 
 	- The names of parameters and all other [Pig Latin keywords](https://pig.apache.org/docs/latest/basic.html#reserved-keywords) are case insensitive.
+- **Relations**: Pig Latin statements treat Data as relations. A relation can be defined as follows:
+	- A relation is a bag.
+	- A bag is a collection of tuples.
+	- A tuple is an ordered set of fields.
+	- A field is a piece of data. Field values can be accessed by name (alias) or by position in tuple.
+- **Aliases**: Arbitrary names of the relations
+	-  
 ### 2.1 Data exploration using limit and dump
 
 ```shell
@@ -1096,7 +1103,8 @@ grunt> dump X;
 [Top](#top)
 
 ### CROSS <a name='cross'></a>
-- 6.10 Parameter distribution using CROSS
+- computes the cross-product of two or more relations.
+
 Prepare example data.
 ```shell
 [root@sandbox data]# echo -e "nfriends,2\nndays,100\nnvisits,13" > params.txt
@@ -1116,20 +1124,38 @@ George,Harry
 ```
 Continue to grunt shell
 ```shell
-grunt> params = load '/user/pig/params.txt' using PigStorage(',') as (p_name:chararray, value:int);
 grunt> friend = load '/user/pig/friend.txt' using PigStorage(',') as (name:chararray, friend:chararray);
-grunt>
+grunt> 
 grunt> friend_grp = group friend by name;
+grunt> dum friend_grp;
+...
+(Amy,{(Amy,George)})
+(Fred,{(Fred,Anne)})
+(George,{(George,Harry),(George,Joe),(George,Fred)})
 grunt> friend_cnt = foreach friend_grp generate group as name, COUNT(friend.friend) as cnt;
-grunt>
+grunt> dump friend_cnt;
+...
+(Amy,1)
+(Fred,1)
+(George,3)
+grunt> params = load '/user/pig/params.txt' using PigStorage(',') as (p_name:chararray, value:int);
 grunt> friend_param = filter params by p_name=='nfriends';
 grunt> friend_param_p = foreach friend_param generate value;
-grunt>
+...
+(2)
 grunt> friend_cross = CROSS friend_cnt, friend_param_p;
+grunt> dump friend_cross;
+...
+(George,3,2)
+(Fred,1,2)
+(Amy,1,2)
 grunt> friend_cross_1 = filter friend_cross by friend_cnt::cnt >= friend_param_p::value;
 grunt> dump friend_cross_1;
+...
+(George,3,2)
 ```
-
+- :: (double-colon) is the disambiguate operator 
+	- To identify field names after JOIN, COGROUP, CROSS Operators
 [Top](#top)
 
 Scalar Projection
