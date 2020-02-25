@@ -22,6 +22,7 @@
   	- [JOIN](#join), [FLATTEN](#flatten), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
 - [Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
+  - [Define Functions](#define)
 
 
 
@@ -1314,7 +1315,7 @@ grunt> register /home/lab/pigeon-0.1.jar;
 grunt> register /home/lab/esri-geometry-api-1.2.1.jar;
 ```
 
-- define functions
+## define functions <a name='define'></a>
 
 ```shell
 grunt> DEFINE ST_MakeBox edu.umn.cs.pigeon.MakeBox;
