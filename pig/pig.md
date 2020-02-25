@@ -581,8 +581,6 @@ grunt> dump d;
 ```
 [Top](#top)
 - ENDSWITH()
-
-
 - STRSPLIT() <a name='STRSPLIT'></a>
 - [STRSPLITTOBAG(string, regex, limit)](https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/builtin/STRSPLITTOBAG.html)
 	- First parameter: a string to split;
@@ -965,16 +963,36 @@ grunt> dump D;
 - Use COGROUP for SET Intersection 
 
 ```shell
-[hdfs@sandbox ~]$ echo -e "John,3\nHarry,4\nGeorge,2" > /home/lab/s1.txt
-[hdfs@sandbox ~]$ echo -e "John,2\nJohn,3\nGeorge,0\nSue,1" > /home/lab/s2.txt
+[hdfs@sandbox ~]$ echo -e "John,3\nHarry,4\nGeorge,2" > s1.txt
+[hdfs@sandbox ~]$ echo -e "John,2\nJohn,3\nGeorge,0\nSue,1" > s2.txt
+[hdfs@sandbox ~]$ cat s1.txt
+John,3
+Harry,4
+George,2
+[hdfs@sandbox ~]$ cat s2.txt
+John,2
+John,3
+George,0
+Sue,1
 [hdfs@sandbox ~]$ hadoop fs -put s1.txt /user/pig/  
 [hdfs@sandbox ~]$ hadoop fs -put s2.txt /user/pig/  
-[hdfs@sandbox ~]$ pig
+```
+Continue to grunt shell.
+```shell
 grunt> s1 = load '/user/pig/s1.txt' using PigStorage(',') as (name:chararray, hits:int);
 grunt> s2 = load '/user/pig/s2.txt' using PigStorage(',') as (name:chararray, errors:int);
 grunt> grps = COGROUP s1 BY name, s2 BY name;
+grunt> dump grps;
+...
+(Sue,{},{(Sue,1)})
+(John,{(John,3)},{(John,3),(John,2)})
+(Harry,{(Harry,4)},{})
+(George,{(George,2)},{(George,0)})
 grunt> grps2 = FILTER grps by NOT(IsEmpty(s1)) AND NOT(IsEmpty(s2));
 grunt> dump grps2;
+...
+(John,{(John,3)},{(John,3),(John,2)})
+(George,{(George,2)},{(George,0)})
 ```
 - Use COGROUP for set difference 
 ```shell
@@ -1101,10 +1119,9 @@ grunt> dump f;
 
 [Top](#top)
 
-Nested Foreach <a name='nested_foreach'></a>
---------------------------------------
+## Nested Foreach <a name='nested_foreach'></a>
 
-- 6.8 Get top word of each user and store in bags
+- Get top word of each user and store in bags
   - method 1
 
 ```shell
@@ -1227,13 +1244,12 @@ grunt> b = limit a 10;
 grunt> dump b;
 ```
 
-Pig UDF (User Defined Function) <a name='udf'></a>
-----------------------------------------------------------------------------
+# Pig UDF (User Defined Function) <a name='udf'></a>
 
-piggybank UDFs <a name='piggy'></a>
------------------
+## piggybank UDFs <a name='piggy'></a>
 
-- 7.1 iso time to unix time conversion, register UDFs and define functions first
+
+- iso time to unix time conversion, register UDFs and define functions first
 
 ```shell
 grunt> register '/home/lab/piggybank-0.15.0.jar';
@@ -1249,9 +1265,7 @@ grunt> dump c;
 
 
 ## DataFu UDFs <a name='datafu'></a>
-
-
-- 7.2 Calculate median latitude value using DataFu median function, register UDFs and define functions first
+- Calculate median latitude value using DataFu median function, register UDFs and define functions first
 
 ```shell
 grunt> register /home/lab/datafu-pig-incubating-1.3.0.jar
@@ -1261,7 +1275,7 @@ grunt> data1 = foreach (group data ALL) generate Median(data.lat);
 grunt> dump data1;
 ```
 
-- 7.3 Simple Random Sampling : Take a 1% random sample from the dataset
+- Simple Random Sampling : Take a 1% random sample from the dataset
   - register UDFs and define functions first
 
 ```shell
@@ -1272,7 +1286,7 @@ grunt> sampled = foreach (group data all) generate flatten(SRS(data));
 grunt> store sampled into '/user/pig/full_text_src';
 ```
 
-- 7.4 Stratified Sampling (by date)
+- Stratified Sampling (by date)
   -- Take a 1% random sample from each date using SRS and group by date
   - register UDFs and define functions first
 
@@ -1289,11 +1303,9 @@ grunt> store sampled into '/user/pig/full_text_stratified';
 
 [Top](#top)
 
------------------
-Pigeon UDFs <a name='pigeon'></a>
------------------
 
-- 7.5 Find tweets tweeted from NYC using bounding box and Pigeon UDF
+## Pigeon UDFs <a name='pigeon'></a>
+- Find tweets tweeted from NYC using bounding box and Pigeon UDF
   -- Plot the results at: http://www.darrinward.com/lat-long/?id=490564 
   - register UDFs 
 
@@ -1302,7 +1314,7 @@ grunt> register /home/lab/pigeon-0.1.jar;
 grunt> register /home/lab/esri-geometry-api-1.2.1.jar;
 ```
 
--- define functions
+- define functions
 
 ```shell
 grunt> DEFINE ST_MakeBox edu.umn.cs.pigeon.MakeBox;
