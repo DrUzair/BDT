@@ -382,7 +382,8 @@ grunt>  quit
 	- A tuple is an ordered set of fields.
 	- A field is a piece of data. Field values can be accessed by name (alias) or by position in tuple.
 - **Aliases**: Arbitrary names of the relations
-	-  
+
+
 ### 2.1 Data exploration using limit and dump
 
 ```shell
