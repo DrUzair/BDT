@@ -706,11 +706,11 @@ grunt> dump d;
 
 [Top](#top)
 
-## 4. Pig Relational Operations 
+## Pig Relational Operations 
 
 ### Filter <a name='filter'></a>
 
-- 4.1 Find tweets that have mentions using FILTER
+- Find tweets that have mentions using FILTER
 
 ```shell
 grunt> data = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -719,7 +719,7 @@ grunt> limt = limit filtr 500;
 grunt> dump limt;
 ```
 
-- 4.2 Find all tweets by a user
+- Find all tweets by a user
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -727,7 +727,7 @@ grunt> b = FILTER a by id=='USER_ae406f1d';
 grunt> dump b;
 ```
 
-- 4.3 Find all tweets tweeted from NYC vicinity (using bounding box -74.2589, 40.4774, -73.7004, 40.9176)
+- Find all tweets tweeted from NYC vicinity (using bounding box -74.2589, 40.4774, -73.7004, 40.9176)
   -- http://www.darrinward.com/lat-long/?id=461435
 
 ```shell
@@ -741,7 +741,7 @@ grunt> e = limit d 500;
 grunt> dump e;
 ```
 
-- 4.4 Filtering data in pig, find retweets in NYC on 12th with length smaller than 50 characters
+- Filtering data in pig, find retweets in NYC on 12th with length smaller than 50 characters
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -760,7 +760,7 @@ grunt> dump d;
 
 ### GROUP BY - Aggregation
 
-- 4.5 Calculate number of tweets per user 
+- Calculate number of tweets per user 
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -802,9 +802,9 @@ grunt> dump f;
 
 [Top](#top)
 
-# 5. Complex Data Types <a name='cdt'></a>
+# Complex Data Types <a name='cdt'></a>
 
-- 5.1 MAP <a name='map'></a>
+- MAP <a name='map'></a>
 	- Example 1
 		- [FILTER](#filter)
 		- [FLATTEN](#flatten)
@@ -833,7 +833,7 @@ grunt> dump c;
 (user2,{([address#456 st]),([name#xyz]),([occupation#doctor]),([city#toronto])},[city#toronto])
 ```
 [Top](#top)
-- 5.2 MAP example 2:  
+- MAP example 2:  
 	- data prep (transformations on the original full_text file and store into another file in HDFS)
 
 ```shell
@@ -866,15 +866,15 @@ grunt> dump d;
 	- star expression
 
 ```shell
-grunt> quit
-
-[hdfs@sandbox ~]$ echo -e "user1\ta\tb\tc\nuser2\ta\tb\nuser3\ta" > data_test_bag
-[hdfs@sandbox ~]$ cat data_test_bag
-[hdfs@sandbox ~]$ hadoop fs -rmr /user/pig/data_test_bag
-[hdfs@sandbox ~]$ hadoop fs -put data_test_bag /user/pig/data_test_bag
-
-
-
+[root@sandbox data]# echo -e "user1\ta\tb\tc\nuser2\ta\tb\nuser3\ta" > data_test_bag
+[root@sandbox data]# cat data_test_bag
+user1   a       b       c
+user2   a       b
+user3   a
+[hdfs@sandbox data]$ hadoop fs -put data_test_bag /user/pig/data_test_bag
+```
+Continue to grunt shell
+```shell
 grunt> a = load '/user/pig/data_test_bag' using PigStorage('\t') as (id:chararray, f1:chararray, f2:chararray, f3:chararray);
 grunt> b = group a ALL;
 grunt> c = foreach b generate COUNT(a.$0);
@@ -991,7 +991,7 @@ grunt> dump set_diff;
 [root@sandbox twitter]# hadoop fs -put dayofweek.txt /user/pig/
 ```
 
-- 6.4 **INNER JOIN** : Find Weekend Tweets
+- **INNER JOIN** : Find Weekend Tweets
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' using PigStorage('\t') AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -1028,7 +1028,7 @@ grunt> dump e;
 ```
 [Top](#top)
 	
-- 6.5 **Using Replicated JOIN** : Find Weekend Tweets
+- **Using Replicated JOIN** : Find Weekend Tweets
 	- A special type of join that works well if one or more relations are small enough to fit into main memory. 
 	- In such cases, Pig can perform a very efficient join because all of the hadoop work is done on the map side. 
 ```shell
@@ -1049,7 +1049,7 @@ grunt> dump e;
 Flatten <a name='flatten'></a>
 ---------------------
 
-- 6.6 **Flatten Tuples** : Calculate number of tweets per user per day
+- **Flatten Tuples** : Calculate number of tweets per user per day
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -1065,7 +1065,7 @@ grunt> dump f;
 grunt> illustrate d;
 ```
 
-- 6.7 **Flatten Bags** : Flatten Bags Example
+- **Flatten Bags** : Flatten Bags Example
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -1113,7 +1113,7 @@ grunt> g = limit f 10;
 grunt> dump g;
 ```
 
-- 6.9 Nested Foreach example
+- Nested Foreach example
 
 ```shell
 hdfs@sandbox ~]$ echo -e "www.ccc.com,www.hjk.com\nwww.ddd.com,www.xyz.org\nwww.aaa.com,www.cvn.org\nwww.www.com,www.kpt.net\nwww.www.com,www.xyz.org\nwww.ddd.com,www.xyz.org" > /home/lab/url.txt
@@ -1226,9 +1226,9 @@ grunt> dump c;
 
 [Top](#top)
 
------------------
-DataFu UDFs <a name='datafu'></a>
------------------
+
+## DataFu UDFs <a name='datafu'></a>
+
 
 - 7.2 Calculate median latitude value using DataFu median function, register UDFs and define functions first
 
