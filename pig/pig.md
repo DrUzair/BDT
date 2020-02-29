@@ -14,8 +14,7 @@
 - [Pig Functions](#pigfuncs)
   - [Datetime functions](#dtefuncs)
   - [String functions](#strfuncs); 
-  	- [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [SUBSTRING](#SUBSTRING), [REGEX_EXTRACT](#regex_extract)
-	- [TOKENIZE](#tokenize)
+  	- [LOWER](#lower), [UPPER](#upper), [STARTSWITH](#STARTSWITH), [STRSPLIT](#STRSPLIT), [SUBSTRING](#SUBSTRING), [REGEX_EXTRACT](#regex_extract), [TOKENIZE](#tokenize)
   - [Conditional](#cond)
   - [Pig Relational Operations](#filter)
   	- [FILTER](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [COGROUP](#cogroup)
@@ -1074,6 +1073,7 @@ output
 (USER_79321756,TIME......IMA)
 (USER_79321756,@USER_2ff4faca:)
 ```
+[Top](#top)
 - **Flatten Tuples** : <a name='flatten_tuples'></a> 
 	- When you group a relation, the result is a new relation with two columns: 
 		- “group” and the name of the original relation. 
@@ -1095,7 +1095,7 @@ grunt> dump f;
 ```shell
 grunt> illustrate d;
 ```
-
+[Top](#top)
 - **Flatten Bags** : <a name='flatten_bags'></a> 
 Flatten Bags Example
 
