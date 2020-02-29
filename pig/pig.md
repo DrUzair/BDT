@@ -19,7 +19,7 @@
   - [Conditional](#cond)
   - [Pig Relational Operations](#filter)
   	- [FILTER](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [COGROUP](#cogroup)
-  	- [JOIN](#join), [FLATTEN](#flatten), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
+  	- [JOIN](#join), [FLATTEN Tuples](#flatten_tuples), [FLATTEN Bags](#flatten_bags), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
 - [Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
   - [Define Functions](#define)
@@ -647,6 +647,8 @@ grunt> c = foreach a generate flatten(TOKENIZE(text)) as t;
 ```
 
 - FLATTEN() <a name='FLATTEN'></a>
+	- changes the structure of tuples and bags in a way that a [UDF](#udf) cannot. Flatten un-nests tuples, bags and maps.
+
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt> b = foreach a generate id, FLATTEN(STRSPLITTOBAG(tweet, ' ', 0));
@@ -1087,11 +1089,16 @@ grunt> dump e;
 
 [Top](#top)
 
-Flatten <a name='flatten'></a>
+Flatten <a name='flatten2'></a>
 ---------------------
-
-- **Flatten Tuples** : Calculate number of tweets per user per day
-
+- **Flatten Tuples** : <a name='flatten_tuples'></a> 
+	- When you group a relation, the result is a new relation with two columns: 
+		- “group” and the name of the original relation. 
+		- The group column has the schema of what you grouped by. 
+		- grouping by an integer column, the type will be int. 
+		- grouping by a tuple of several columns, as in the following example, the “group” column will be a tuple with two fields, “id” and “date”.
+		- The grouped fields can be retrieved by **flatten(group)**, or by directly accessing them: “group.id, group.date”:
+	- Example: Calculate number of tweets per user per day
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt> b = foreach a generate id, SUBSTRING(ts, 0, 10) as date, lat, lon, tweet;
@@ -1106,7 +1113,8 @@ grunt> dump f;
 grunt> illustrate d;
 ```
 
-- **Flatten Bags** : Flatten Bags Example
+- **Flatten Bags** : <a name='flatten_bags'></a> 
+Flatten Bags Example
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
