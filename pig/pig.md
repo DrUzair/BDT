@@ -19,7 +19,7 @@
   - [Pig Relational Operations](#filter)
   	- [FILTER](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [COGROUP](#cogroup)
   	- [JOIN](#join), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
-	- [FLATTEN](#flatten), [FLATTEN Tuples](#flatten_tuples), [FLATTEN Bags](#flatten_bags)
+	- [FLATTEN](#flatten), [FLATTEN](#FLATTEN_Grp), [FLATTEN Tuples](#flatten_tuples), [FLATTEN Bags](#flatten_bags)
 - [Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
   - [Define Functions](#define)
@@ -1048,7 +1048,7 @@ grunt> dump e;
 
 - **FLATTEN()** <a name='FLATTEN'></a>
 	- changes the structure of tuples and bags in a way that a [UDF](#udf) cannot. Flatten un-nests tuples, bags and maps.
-
+Example 1
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
 grunt> b = foreach a generate id, FLATTEN(STRSPLITTOBAG(tweet, ' ', 0));
@@ -1062,18 +1062,72 @@ output
 (USER_79321756,IF)
 (USER_79321756,IT)
 (USER_79321756,MY)
-(USER_79321756,RT)
-(USER_79321756,HER)
-(USER_79321756,SHE)
-(USER_79321756,DAMN)
-(USER_79321756,MORE)
-(USER_79321756,KNOCK)
-(USER_79321756,KOOFIE)
-(USER_79321756,OFF.....ON)
-(USER_79321756,TIME......IMA)
-(USER_79321756,@USER_2ff4faca:)
+...
 ```
 [Top](#top)
+
+Example 2 involving **flatten(group)** <a name='FLATTEN_Grp'></a>
+- example data
+```shell
+[root@sandbox data]# echo -e "1, line number line one\n2, line two on line two" > two_lines
+[root@sandbox data]# cat two_lines
+1, line number one
+2, second line
+[root@sandbox data]# hadoop fs -put two_lines '/user/pig/'
+```
+```shell
+grunt> a = load '/user/pig/two_lines' using PigStorage(',') as (id:int, text:chararray);
+grunt> b = foreach a generate id, text, flatten(TOKENIZE(text)) as token;
+grunt> dump b;
+...
+(1, line number line one,line)
+(1, line number line one,number)
+(1, line number line one,line)
+(1, line number line one,one)
+(2, line two on line two,line)
+(2, line two on line two,two)
+(2, line two on line two,on)
+(2, line two on line two,line)
+(2, line two on line two,two)
+grunt> c = group b by (id, token);
+grunt> describe c;
+c: {group: (id: int,token: chararray),b: {(id: int,text: chararray,token: chararray)}}
+grunt> dump c;
+...
+((1,one),{(1, line number line one,one)})
+((1,line),{(1, line number line one,line),(1, line number line one,line)})
+((1,number),{(1, line number line one,number)})
+((2,on),{(2, line two on line two,on)})
+((2,two),{(2, line two on line two,two),(2, line two on line two,two)})
+((2,line),{(2, line two on line two,line),(2, line two on line two,line)})
+grunt> d = foreach c generate flatten(group) as (id, token), COUNT(b) as cnt;
+grunt> dump d;
+...
+(1,one,1)
+(1,line,2)
+(1,number,1)
+(2,on,1)
+(2,two,2)
+(2,line,2)
+grunt> d_ = foreach c generate group.id, group.token, COUNT(b) as cnt;
+grunt> dump d_;
+...
+(1,one,1)
+(1,line,2)
+(1,number,1)
+(2,on,1)
+(2,two,2)
+(2,line,2)
+grunt> e = group d by id;
+grunt> dump e;
+(1,{(1,number,1),(1,line,1),(1,one,1)})
+(2,{(2,second,1),(2,line,1)})
+grunt> f = foreach e generate group as id, TOP(10, 2, d);
+grunt> g = limit f 10;
+grunt> dump g;
+```
+[Top](#top)
+
 - **Flatten Tuples** : <a name='flatten_tuples'></a> 
 	- When you group a relation, the result is a new relation with two columns: 
 		- “group” and the name of the original relation. 
@@ -1132,46 +1186,6 @@ grunt> dump g;
 ```
 
 - method 2
-example data
-```shell
-[root@sandbox data]# cat two_lines
-1, line number one
-2, second line
-[root@sandbox data]# hadoop fs -put two_lines '/user/pig/'
-```
-```shell
-grunt> a = load '/user/pig/two_lines' using PigStorage(',') as (id:int, text:chararray);
-grunt> b = foreach a generate id, text, flatten(TOKENIZE(text)) as token;
-grunt> dump b;
-...
-(1, line number one,line)
-(1, line number one,number)
-(1, line number one,one)
-(2, second line,second)
-(2, second line,line)
-grunt> c = group b by (id, token);
-grunt> dump c;
-...
-((1,one),{(1, line number one,one)})
-((1,line),{(1, line number one,line)})
-((1,number),{(1, line number one,number)})
-((2,line),{(2, second line,line)})
-((2,second),{(2, second line,second)})
-grunt> d = foreach c generate flatten(group) as (id, token), COUNT(b) as cnt;
-grunt> dump d;
-(1,one,1)
-(1,line,1)
-(1,number,1)
-(2,line,1)
-(2,second,1)
-grunt> e = group d by id;
-grunt> dump e;
-(1,{(1,number,1),(1,line,1),(1,one,1)})
-(2,{(2,second,1),(2,line,1)})
-grunt> f = foreach e generate group as id, TOP(10, 2, d);
-grunt> g = limit f 10;
-grunt> dump g;
-```
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
