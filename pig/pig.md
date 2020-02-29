@@ -19,7 +19,7 @@
   - [Pig Relational Operations](#filter)
   	- [FILTER](#filter), [group](#groupby), [group all](#groupall), [COUNT_STAR](#count), [COGROUP](#cogroup)
   	- [JOIN](#join), [nested foreach](#nested_foreach),  [CROSS](#cross), [Scalar Projection](#scalar_proj)
-	- [FLATTEN](#flatten), [FLATTEN](#FLATTEN_Grp), [FLATTEN Tuples](#flatten_tuples), [FLATTEN Bags](#flatten_bags)
+	- [FLATTEN](#flatten), [FLATTEN(group)](#FLATTEN_Grp), [FLATTEN Tuples](#flatten_tuples), [FLATTEN Bags](#flatten_bags)
 - [Working with Pig UDFs](#udf)
   - [Piggybank](#piggy),  [DataFu](#datafu), [Pigeon](#pigeon)
   - [Define Functions](#define)
@@ -684,26 +684,13 @@ grunt> c = foreach b generate id, ts, location,
      REGEX_EXTRACT(tweet, '[^@]*@user_(\\S{8})[^@]*', 1) as mentions1,
      REGEX_EXTRACT(tweet, '[^@]*@user_(\\S{8})[^@]*@user_(\\S{8})[^@]*', 2) as mentions2,
      REGEX_EXTRACT(tweet, '[^@]*@user_(\\S{8})[^@]*@user_(\\S{8})[^@]*@user_(\\S{8})[^@]*', 3) as mentions3;
-grunt> d = limit c 20;
+grunt> d = limit c 5;
 grunt> dump d;
 (USER_79321756,2010-03-03T04:15:26,ÜT: 47.528139,-122.197916,2ff4faca,,)
 (USER_79321756,2010-03-03T04:55:32,ÜT: 47.528139,-122.197916,77a4822d,2ff4faca,)
 (USER_79321756,2010-03-03T05:13:34,ÜT: 47.528139,-122.197916,5d4d777a,ab059bdc,)
 (USER_79321756,2010-03-03T05:28:02,ÜT: 47.528139,-122.197916,77a4822d,,)
 (USER_79321756,2010-03-03T05:56:13,ÜT: 47.528139,-122.197916,,,)
-(USER_79321756,2010-03-03T16:52:44,ÜT: 47.528139,-122.197916,a5b463b2,,)
-(USER_79321756,2010-03-03T16:57:24,ÜT: 47.528139,-122.197916,,,)
-(USER_79321756,2010-03-03T20:20:40,ÜT: 47.528139,-122.197916,,,)
-(USER_79321756,2010-03-03T23:23:33,ÜT: 47.528139,-122.197916,a9fe21e9,,)
-(USER_79321756,2010-03-03T23:37:36,ÜT: 47.528139,-122.197916,,,)
-(USER_79321756,2010-03-04T01:32:24,ÜT: 47.528139,-122.197916,d5d93fec,,)
-(USER_79321756,2010-03-04T01:55:55,ÜT: 47.528139,-122.197916,dc5e5498,,)
-(USER_79321756,2010-03-04T05:09:29,ÜT: 47.528139,-122.197916,,,)
-(USER_79321756,2010-03-04T05:57:35,ÜT: 47.528139,-122.197916,,,)
-(USER_79321756,2010-03-04T06:00:09,ÜT: 47.528139,-122.197916,d5d93fec,,)
-(USER_79321756,2010-03-04T06:00:37,ÜT: 47.528139,-122.197916,60939380,,)
-(USER_79321756,2010-03-04T06:04:49,ÜT: 47.528139,-122.197916,,,)
-(USER_79321756,2010-03-04T06:15:01,ÜT: 47.528139,-122.197916,d5d93fec,79321756,d5d93fec)
 ...
 ```
 
@@ -1067,6 +1054,11 @@ output
 [Top](#top)
 
 Example 2 involving **flatten(group)** <a name='FLATTEN_Grp'></a>
+	- When you group a relation, the result is a new relation with two columns: “group” and the name of the original relation. 
+		- The group column has the schema of what you grouped by. 
+			- grouping by an integer column, the type will be int. 
+			- grouping by a tuple of several columns, as in the following example, the “group” column will be a tuple with two fields, “id” and “date”.
+		- The grouped fields can be retrieved by **flatten(group)**, or by directly accessing them: “group.id, group.date”:
 - example data
 ```shell
 [root@sandbox data]# echo -e "1, line number line one\n2, line two on line two" > two_lines
@@ -1120,21 +1112,19 @@ grunt> dump d_;
 (2,line,2)
 grunt> e = group d by id;
 grunt> dump e;
-(1,{(1,number,1),(1,line,1),(1,one,1)})
-(2,{(2,second,1),(2,line,1)})
-grunt> f = foreach e generate group as id, TOP(10, 2, d);
+...
+(1,{(1,number,1),(1,line,2),(1,one,1)})
+(2,{(2,line,2),(2,two,2),(2,on,1)})
+grunt> f = foreach e generate group as id, TOP(4, 2, d);
 grunt> g = limit f 10;
 grunt> dump g;
+(1,{(1,number,1),(1,line,2),(1,one,1)})
+(2,{(2,on,1),(2,two,2),(2,line,2)})
 ```
 [Top](#top)
 
 - **Flatten Tuples** : <a name='flatten_tuples'></a> 
-	- When you group a relation, the result is a new relation with two columns: 
-		- “group” and the name of the original relation. 
-		- The group column has the schema of what you grouped by. 
-		- grouping by an integer column, the type will be int. 
-		- grouping by a tuple of several columns, as in the following example, the “group” column will be a tuple with two fields, “id” and “date”.
-		- The grouped fields can be retrieved by **flatten(group)**, or by directly accessing them: “group.id, group.date”:
+	- Check [flatten(group)](#FLATTEN_Grp) for explanation.
 	- Example: Calculate number of tweets per user per day
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
