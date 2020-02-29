@@ -1141,6 +1141,46 @@ grunt> dump g;
 ```
 
 - method 2
+example data
+```shell
+[root@sandbox data]# cat two_lines
+1, line number one
+2, second line
+[root@sandbox data]# hadoop fs -put two_lines '/user/pig/'
+```
+```shell
+grunt> a = load '/user/pig/two_lines' using PigStorage(',') as (id:int, text:chararray);
+grunt> b = foreach a generate id, text, flatten(TOKENIZE(text)) as token;
+grunt> dump b;
+...
+(1, line number one,line)
+(1, line number one,number)
+(1, line number one,one)
+(2, second line,second)
+(2, second line,line)
+grunt> c = group b by (id, token);
+grunt> dump c;
+...
+((1,one),{(1, line number one,one)})
+((1,line),{(1, line number one,line)})
+((1,number),{(1, line number one,number)})
+((2,line),{(2, second line,line)})
+((2,second),{(2, second line,second)})
+grunt> d = foreach c generate flatten(group) as (id, token), COUNT(b) as cnt;
+grunt> dump d;
+(1,one,1)
+(1,line,1)
+(1,number,1)
+(2,line,1)
+(2,second,1)
+grunt> e = group d by id;
+grunt> dump e;
+(1,{(1,number,1),(1,line,1),(1,one,1)})
+(2,{(2,second,1),(2,line,1)})
+grunt> f = foreach e generate group as id, TOP(10, 2, d);
+grunt> g = limit f 10;
+grunt> dump g;
+```
 
 ```shell
 grunt> a = load '/user/pig/full_text.txt' AS (id:chararray, ts:chararray, location:chararray, lat:float, lon:float, tweet:chararray);
@@ -1196,7 +1236,7 @@ Continue to grunt shell
 grunt> friend = load '/user/pig/friend.txt' using PigStorage(',') as (name:chararray, friend:chararray);
 grunt> 
 grunt> friend_grp = group friend by name;
-grunt> dum friend_grp;
+grunt> dump friend_grp;
 ...
 (Amy,{(Amy,George)})
 (Fred,{(Fred,Anne)})
