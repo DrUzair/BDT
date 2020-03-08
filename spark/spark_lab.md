@@ -57,9 +57,11 @@ These commands are for reference only. DO NOT RUN these now.
 >>> nums = sc.parallelize([1, 2, 3])
 ```
 - Map each element to zero or more others and flatten into single large list
->>> numrange=nums.flatMap(lambda x: range(x))
 ```shell
+>>> numrange=nums.flatMap(lambda x: range(x))
+```
 - Pass each element through a function
+```shell
 >>> squares = nums.map(lambda x: x*x)
 ```
 - Keep elements passing a predicate
