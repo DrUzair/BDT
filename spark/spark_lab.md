@@ -34,11 +34,8 @@ hbase             ranger-hdfs-plugin   solr
 ```shell
 >>> quit()
 ```
-
-
 # PySpark Shell Commands
 These commands are for reference only. DO NOT RUN these now.
-
 - Turn a Python collection into an RDD and print to screen
 ```shell
 numtest = sc.parallelize([1, 2, 3])
@@ -54,23 +51,22 @@ texttest2 = sc.textFile("/user/lab/shakespeare.txt")
 ```shell
 texttest3 = sc.textFile("hdfs://sandbox.hortonworks.com:8020/user/lab/shakespeare.txt")
 ```
-####################
 # Basic Transformation (Numeric)
-####################
 
--- Numeric transformation example
-
+- Numeric transformation example
+```shell
 nums = sc.parallelize([1, 2, 3])
-
--- Map each element to zero or more others and flatten into single large list
+```
+- Map each element to zero or more others and flatten into single large list
 numrange=nums.flatMap(lambda x: range(x))
-
--- Pass each element through a function
+```shell
+- Pass each element through a function
 squares = nums.map(lambda x: x*x)
-
--- Keep elements passing a predicate
+```
+- Keep elements passing a predicate
+```shell
 even = squares.filter(lambda x: x % 2 == 0)
-
+```
 ####################
 # Basic Action (Numeric)
 ####################
