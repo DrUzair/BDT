@@ -5,6 +5,7 @@ Topics <a name='top'></a>
 - Transformations: [Numeric](#transformations_numeric), [Text](#transformations_text)
 - Actions: [Numeric](#actions_numeric), [Text](#actions_text)
 - [Wordcount Example](#wordcount_exp)
+- [RDD Operations](#rdd_ops)
 - [Spark Submit](#spark_submit)
 
 # Dataset <a name='dataset'></a>
@@ -151,9 +152,7 @@ These commands are for reference only. DO NOT RUN these now.
 ```shell
 >>> mydata_filt.count()
 ```
-
 - Pair RDDs for Map Reduce Operations
-
   - You can pipe Spark operations one after another using the dot notation. 
   - Backslash \ stands for non-breaking new line.
 ```shell
@@ -172,9 +171,7 @@ These commands are for reference only. DO NOT RUN these now.
 .map(lambda line: line.split("\t")) \
 .map(lambda fields: (fields[0], (fields[1], fields[2])))
 ```
-
 # WordCount example <a name='wordcount_exp'></a>
-
 ```shell
 >>> counts = sc.textFile("/user/lab/shakespeare.txt") \
 .flatMap(lambda line: line.split() ) \
