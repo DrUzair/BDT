@@ -67,91 +67,88 @@ squares = nums.map(lambda x: x*x)
 ```shell
 even = squares.filter(lambda x: x % 2 == 0)
 ```
-####################
 # Basic Action (Numeric)
-####################
 
--- Retrieve RDD contents as a local collection
-
+- Retrieve RDD contents as a local collection
+```shell
 nums.collect()
 numrange.collect()
 squares.collect()
 even.collect()
-
--- Return first K elements
-
+```
+- Return first K elements
+```shell
 nums.take(2) 
-
+```
 -- Count number of elements
-
+```shell
 nums.count()
-
--- Merge elements with an associative function
-
+```
+- Merge elements with an associative function
+```shell
 nums.reduce(lambda x, y: x + y)
-
--- Write elements to a text file in HDFS
-
+```
+- Write elements to a text file in HDFS
+```shell
 nums.saveAsTextFile("numberfile.txt")
-
--- To save to local file system
-
+```
+- To save to local file system
+```shell
 X = nums.collect()
+```
+- Then save 'X' using standard Python write operations
 
--- Then save 'X' using standard Python write operations
-
-
-####################
 # Basic Transformation (Text)
-####################
 
--- Text transformation example
-
+- Text transformation example
+```shell
 text = sc.textFile("/user/root/shakespeare.txt")
-
--- Map each element to zero or more others and flatten into single large list
+```
+- Map each element to zero or more others and flatten into single large list
+```shell
 words = text.flatMap(lambda line: line.split())
-
--- Pass each element through a function
+```
+- Pass each element through a function
+```shell
 wordWithCount = words.map(lambda word: (word, 1))
+```
 
-####################
 # Basic Action (Text)
-####################
 
--- Return first K elements
-
+- Return first K elements
+```shell
 words.take(10)
-
--- Count number of elements
-
+```
+- Count number of elements
+```shell
 words.count()
+```
 
-
-####################
-#RDD Operations
-####################
-
--- Read in a text file
+# RDD Operations
+- Read in a text file
+```shell
 mydata = sc.textFile("/user/lab/shakespeare.txt")
-
--- Convert text to uppercase
+```
+- Convert text to uppercase
+```shell
 mydata_uc = mydata.map(lambda line: line.upper() )
-
--- Filter the lines that start with 'I'
+```
+- Filter the lines that start with 'I'
+```shell
 mydata_filt = mydata_uc.filter(lambda line: line.startswith('I') )
-
--- Count the number of filtered lines
+```
+- Count the number of filtered lines
+```shell
 mydata_filt.count()
+```
 
+- Pair RDDs for Map Reduce Operations
 
--- Pair RDDs for Map Reduce Operations
-
--- You can pipe Spark operations one after another using the dot notation. 
--- '\' stands for non-breaking new line.
-
+  - You can pipe Spark operations one after another using the dot notation. 
+  - '\' stands for non-breaking new line.
+```shell
 text = sc.textFile("/user/lab/full_text.txt") \
-
+```
 .map(lambda line: line.split("\t")) \
 
 .map(lambda fields: (fields[0], fields[1]))
