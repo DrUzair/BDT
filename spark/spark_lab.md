@@ -173,6 +173,9 @@ These commands are for reference only. DO NOT RUN these now.
 .map(lambda fields: (fields[0], (fields[1], fields[2])))
 ```
 # WordCount example <a name='wordcount_exp'></a>
+- **reduceByKey** operates on RDD of key value pairs
+- returns another RDD which might a part of sequence of operations in a DAG, 
+- Unline reduce, the reduceByKey is implemented as transformation.
 ```shell
 >>> counts = sc.textFile("/user/lab/shakespeare.txt") \
 .flatMap(lambda line: line.split() ) \
