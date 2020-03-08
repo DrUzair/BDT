@@ -35,28 +35,25 @@ hbase             ranger-hdfs-plugin   solr
 >>> quit()
 ```
 
-####################
+
 # PySpark Shell Commands
-#
-# These commands are for reference only. 
-# 
-#    *****  DO NOT RUN these now.
-####################
+These commands are for reference only. DO NOT RUN these now.
 
--- Turn a Python collection into an RDD and print to screen
-
+- Turn a Python collection into an RDD and print to screen
+```shell
 numtest = sc.parallelize([1, 2, 3])
-
--- Load text file from local FS
-
+```
+- Load text file from local FS
+```shell
 texttest1 = sc.textFile("file:///home/YourUser/lab/full_text.txt")
-
--- Load text file from HDFS
-
+```
+- Load text file from HDFS
+```shell
 texttest2 = sc.textFile("/user/lab/shakespeare.txt")
-
+```
+```shell
 texttest3 = sc.textFile("hdfs://sandbox.hortonworks.com:8020/user/lab/shakespeare.txt")
-
+```
 ####################
 # Basic Transformation (Numeric)
 ####################
