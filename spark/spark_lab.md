@@ -4,8 +4,8 @@ Topics <a name='top'></a>
 - [PySpark Shell Commands](#spark_cmds)
 - Transformations: [Numeric](#transformations_numeric), [Text](#transformations_text)
 - Actions: [Numeric](#actions_numeric), [Text](#actions_text)
-- [Wordcount Example](#wordcount_exp)
 - [RDD Operations](#rdd_ops)
+- [Wordcount Example](#wordcount_exp)
 - [Spark Submit](#spark_submit)
 
 # Dataset <a name='dataset'></a>
