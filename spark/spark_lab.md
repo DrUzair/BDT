@@ -1,9 +1,18 @@
-# Dataset
+Topics <a name='top'></a>
+- [Dataset](#dataset)
+- [Starting Spark Shell](#spark_shell)
+- [PySpark Shell Commands](#spark_cmds)
+- Transformations: [Numeric](#transformations_numeric), [Text](#transformations_text)
+- Actions: [Numeric](#actions_numeric), [Text](#actions_text)
+- [Wordcount Example](#wordcount_exp)
+- [Spark Submit](#spark_submit)
+
+# Dataset <a name='dataset'></a>
 Load datasets into HDFS
 1. Resources -> Other Datasets and Resources -> full_text.txt
 2. Resources -> Other Datasets and Resources -> shakespeare.txt
-
-# Starting Spark Shell
+[Top](#top)
+# Starting Spark Shell <a name='spark_shell'></a>
 - First check your Spark directory to see if it matches the one shown below... change hdp version according to your installation
 ```shell
 [root@sandbox ~]# cd /usr/hdp/2.4.0.0-169/
@@ -33,7 +42,8 @@ hbase             ranger-hdfs-plugin   solr
 ```shell
 >>> quit()
 ```
-# PySpark Shell Commands
+[Top](#top)
+# PySpark Shell Commands <a name='spark_cmds'></a>
 These commands are for reference only. DO NOT RUN these now.
 - Turn a Python collection into an RDD and print to screen
 ```shell
@@ -50,8 +60,8 @@ These commands are for reference only. DO NOT RUN these now.
 ```shell
 >>> texttest3 = sc.textFile("hdfs://sandbox.hortonworks.com:8020/user/lab/shakespeare.txt")
 ```
-# Basic Transformation (Numeric)
-
+[Top](#top)
+# Basic Transformation (Numeric) <a name='transformations_numeric'></a>
 - Numeric transformation example
 ```shell
 >>> nums = sc.parallelize([1, 2, 3])
@@ -68,7 +78,8 @@ These commands are for reference only. DO NOT RUN these now.
 ```shell
 >>> even = squares.filter(lambda x: x % 2 == 0)
 ```
-# Basic Action (Numeric)
+[Top](#top)
+# Basic Action (Numeric) <a name='actions_numeric'></a>
 
 - Retrieve RDD contents as a local collection
 ```shell
@@ -98,9 +109,8 @@ These commands are for reference only. DO NOT RUN these now.
 >>> X = nums.collect()
 ```
 - Then save 'X' using standard Python write operations
-
-# Basic Transformation (Text)
-
+[Top](#top)
+# Basic Transformation (Text) <a name='transformations_text'></a>
 - Text transformation example
 ```shell
 >>> text = sc.textFile("/user/root/shakespeare.txt")
@@ -113,9 +123,8 @@ These commands are for reference only. DO NOT RUN these now.
 ```shell
 >>> wordWithCount = words.map(lambda word: (word, 1))
 ```
-
-# Basic Action (Text)
-
+[Top](#top)
+# Basic Action (Text) <a name='actions_text'></a>
 - Return first K elements
 ```shell
 >>> words.take(10)
@@ -124,8 +133,8 @@ These commands are for reference only. DO NOT RUN these now.
 ```shell
 >>> words.count()
 ```
-
-# RDD Operations
+[Top](#top)
+# RDD Operations <a name='RDD_Ops'></a>
 - Read in a text file
 ```shell
 >>> mydata = sc.textFile("/user/lab/shakespeare.txt")
@@ -146,7 +155,7 @@ These commands are for reference only. DO NOT RUN these now.
 - Pair RDDs for Map Reduce Operations
 
   - You can pipe Spark operations one after another using the dot notation. 
-  - '\' stands for non-breaking new line.
+  - Backslash \ stands for non-breaking new line.
 ```shell
 >>> text = sc.textFile("/user/lab/full_text.txt") \
 .map(lambda line: line.split("\t")) \
@@ -164,7 +173,7 @@ These commands are for reference only. DO NOT RUN these now.
 .map(lambda fields: (fields[0], (fields[1], fields[2])))
 ```
 
-# WordCount example
+# WordCount example <a name='wordcount_exp'></a>
 
 ```shell
 >>> counts = sc.textFile("/user/lab/shakespeare.txt") \
@@ -174,15 +183,14 @@ These commands are for reference only. DO NOT RUN these now.
 
 >>> counts.take(10)
 ```
-####################
-# Using Spark Submit
-####################
+[Top](#top)
+# Using Spark Submit <a name='spark_submit'></a>
 - Submit a job (WordCount.py)  to the spark cluster without using the shell
   - First copy shakespeare.txt to /user/lab in HDFS
   - Copy WordCount.py into your Linux machine
 ```shell
 spark-submit --master yarn-client --executor-memory 512m --num-executors 3 --executor-cores 1 --driver-memory 512m wordCount.py
 ```
-
+[Top](#top)
 
 
