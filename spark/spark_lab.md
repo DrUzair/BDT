@@ -10,7 +10,7 @@ Topics <a name='top'></a>
 
 # Dataset <a name='dataset'></a>
 Load datasets into HDFS
-1. Resources -> Other Datasets and Resources -> full_text.txt
+1. Resources -> full_text.txt
 2. Resources -> Other Datasets and Resources -> shakespeare.txt
 
 [Top](#top)
@@ -185,9 +185,25 @@ These commands are for reference only. DO NOT RUN these now.
 # Using Spark Submit <a name='spark_submit'></a>
 - Submit a job (WordCount.py)  to the spark cluster without using the shell
   - First copy shakespeare.txt to /user/lab in HDFS
-  - Copy WordCount.py into your Linux machine
+  - Copy WordCount.py into your Linux machine (Resources -> Spark Resources -> wordcount.py)
 ```shell
 spark-submit --master yarn-client --executor-memory 512m --num-executors 3 --executor-cores 1 --driver-memory 512m wordCount.py
+```
+```py
+from pyspark import SparkConf, SparkContext
+def main(sc):
+    textFile = sc.textFile("/user/lab/shakespeare.txt")
+    wordList = textFile.flatMap(lambda line: line.split())
+    wordCount = wordList.map(lambda word: (word,1))
+    wordsWithTotalCount = wordCount.reduceByKey(lambda v1, v2: v1+v2)
+    wordsWithTotalCount.saveAsTextFile("/user/root/spark_word_count.txt")
+    topK = wordsWithTotalCount.collect()
+    print(topK)
+if __name__  == "__main__":
+    conf = SparkConf().setAppName("MyApp")
+    sc = SparkContext(conf = conf)
+    main(sc)
+    sc.stop()
 ```
 [Top](#top)
 
