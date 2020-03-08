@@ -181,6 +181,7 @@ These commands are for reference only. DO NOT RUN these now.
 
 >>> counts.take(10)
 ```
+
 [Top](#top)
 # Using Spark Submit <a name='spark_submit'></a>
 - Submit a job (WordCount.py)  to the spark cluster without using the shell
