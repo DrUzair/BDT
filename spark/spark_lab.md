@@ -12,6 +12,7 @@ Topics <a name='top'></a>
 Load datasets into HDFS
 1. Resources -> Other Datasets and Resources -> full_text.txt
 2. Resources -> Other Datasets and Resources -> shakespeare.txt
+
 [Top](#top)
 # Starting Spark Shell <a name='spark_shell'></a>
 - First check your Spark directory to see if it matches the one shown below... change hdp version according to your installation
