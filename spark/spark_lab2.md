@@ -30,6 +30,11 @@ pip install findspark
 >>> findspark.init()
 >>> import pyspark
 ```
+- install 
+```shell
+[root@sandbox data]# pip install python-dateutil
+```
+
 ## Dataset & Preparation
 1. Download [NASA_access_log_Aug95.gz](http://www.ftpstatus.com/file_properties.php?sname=ftp.cs.umass.edu&fid=66) .
 2. Copy it over into your Hadoop VM.
