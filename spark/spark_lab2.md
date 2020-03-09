@@ -47,7 +47,17 @@ drwxr-xr-x   - root hdfs          0 2020-03-09 15:39 /user/spark/NASA_log_404
 drwxr-xr-x   - root hdfs          0 2020-03-09 15:39 /user/spark/NASA_log_else
 ```
 14. Display contents of part-m-00000 to see the header line and the csv format.
-
+```shell
+[root@sandbox data]# hadoop fs -cat /user/spark/NASA_log_200/part-m-00000 | head -n 20
+host,method,status,bytes
+in24.inetnebr.com,GET,200,1839
+ix-esc-ca2-07.ix.netcom.com,GET,200,1713
+slppp6.intermind.net,GET,200,1687
+piweba4y.prodigy.com,GET,200,11853
+slppp6.intermind.net,GET,200,9202
+slppp6.intermind.net,GET,200,3635
+ix-esc-ca2-07.ix.netcom.com,GET,200,1173
+```
 15. Using vi, write lab10.sql.py and lab10.sql.sh scripts. Inspect lab10.sql.sh script and see how lab10.sql.py, the python, script is submitted. Also note that lab10.sql.sh script must have execute bit turned on.
 16. Note how pyspark_csv.py script is imported in line 3 and incorporated into SparkContext in line 10. 
 17. Read A Primer ... document for explanations on integration of Python with Spark.
