@@ -1,4 +1,8 @@
 # Transforming a Log File for Further Processing
+# Topics
+- Dataset 
+- PIG Scripts
+
 ## Dataset & Preparation
 1. Download [NASA_access_log_Aug95.gz](http://www.ftpstatus.com/file_properties.php?sname=ftp.cs.umass.edu&fid=66) .
 2. Copy it over into your Hadoop VM.
@@ -171,7 +175,11 @@ def evaluateType(rdd_sql, parseDate):
 7. ssh login to your HDP2.4 vm.
 8. Use vi editor to write the scripts ! ! !
 9. Have A Primer on Spark using Python document available for reference purposes. 
+# PIG Scripts
 10. Create lab10.split-log.pig script which splits the log file into 3 based on http status codes. Pay particular attention to how the log file is loaded as log file and stored in csv format.
+    - CSVExcelStorage](https://pig.apache.org/docs/latest/api/org/apache/pig/piggybank/storage/CSVExcelStorage.html): CSV loading and storing with support for multi-line fields, and escaping of delimiters and double quotes within fields; uses CSV conventions of Excel 2007. 
+    - [CommonLoagLoader](#https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/piggybank/storage/apachelog/CommonLogLoader.html): to load logs based on Apache's common log format, based on a format like LogFormat "%h %l %u %t \"%r\" %>s %b".
+    
 
 11. Display the contents of /user/a2 in HDFS to see that there's only the log file stored in it.
 12. Run the script. Note how the messages are avoided using stderr redirection.
