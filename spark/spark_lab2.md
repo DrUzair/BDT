@@ -1,12 +1,35 @@
 # Transforming a Log File for Further Processing
 # Topics
+- Pre-Requisites
 - Dataset 
 - Python Code for CSV
     - pyspark_csv
 - PIG Scripts
     - define, split, CSVExcelStorage, CommonLoagLoader
     - 
-
+## Prerequsites
+- In case you come across this error while importing pyspark 
+```py
+>>> import pyspark
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ImportError: No module named pyspark
+```
+- make sure SPARK_HOME Environment Variable is set to correct path (according to your system, following is just an example)
+```shell
+[root@sandbox spark]# export SPARK_HOME=/usr/hdp/2.4.0.0-169/spark
+[root@sandbox spark]# export PATH=$SPARK_HOME/bin:$PATH
+```
+- install find spark
+```shell
+pip install findspark
+```
+- import findspark
+```py
+>>> import findspark
+>>> findspark.init()
+>>> import pyspark
+```
 ## Dataset & Preparation
 1. Download [NASA_access_log_Aug95.gz](http://www.ftpstatus.com/file_properties.php?sname=ftp.cs.umass.edu&fid=66) .
 2. Copy it over into your Hadoop VM.
