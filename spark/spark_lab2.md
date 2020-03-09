@@ -2,6 +2,8 @@
 # Topics
 - Dataset 
 - PIG Scripts
+    - define, split, CSVExcelStorage, CommonLoagLoader
+    - 
 
 ## Dataset & Preparation
 1. Download [NASA_access_log_Aug95.gz](http://www.ftpstatus.com/file_properties.php?sname=ftp.cs.umass.edu&fid=66) .
@@ -176,12 +178,20 @@ def evaluateType(rdd_sql, parseDate):
 8. Use vi editor to write the scripts ! ! !
 9. Have A Primer on Spark using Python document available for reference purposes. 
 # PIG Scripts
-10. Create lab10.split-log.pig script which splits the log file into 3 based on http status codes. Pay particular attention to how the log file is loaded as log file and stored in csv format.
-    - CSVExcelStorage](https://pig.apache.org/docs/latest/api/org/apache/pig/piggybank/storage/CSVExcelStorage.html): CSV loading and storing with support for multi-line fields, and escaping of delimiters and double quotes within fields; uses CSV conventions of Excel 2007. 
-    - [CommonLoagLoader](#https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/piggybank/storage/apachelog/CommonLogLoader.html): to load logs based on Apache's common log format, based on a format like LogFormat "%h %l %u %t \"%r\" %>s %b".
-    
-
-11. Display the contents of /user/a2 in HDFS to see that there's only the log file stored in it.
+10. Create lab10.split-log.pig script which splits the log file into 3 based on http status codes. 
+    - ![log_script.png](log_script.png)
+    - Pay particular attention to how the log file is loaded as log file and stored in csv format.
+    - [CSVExcelStorage](https://pig.apache.org/docs/latest/api/org/apache/pig/piggybank/storage/CSVExcelStorage.html): CSV loading and storing with support for multi-line fields, and escaping of delimiters and double quotes within fields; uses CSV conventions of Excel 2007. 
+    - [CommonLoagLoader](https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/piggybank/storage/apachelog/CommonLogLoader.html): to load logs based on Apache's common log format, based on a format like LogFormat "%h %l %u %t \"%r\" %>s %b".
+11. Display the contents of /user/spark in HDFS to see that there's only the log file stored in it.
+```shell
+[root@sandbox data]# hadoop fs -ls /user/spark
+Found 4 items
+-rw-r--r--   3 root hdfs  167813770 2020-03-09 14:36 /user/spark/NASA_access_log_Aug95
+drwxr-xr-x   - root hdfs          0 2020-03-09 15:39 /user/spark/NASA_log_200
+drwxr-xr-x   - root hdfs          0 2020-03-09 15:39 /user/spark/NASA_log_404
+drwxr-xr-x   - root hdfs          0 2020-03-09 15:39 /user/spark/NASA_log_else
+```
 12. Run the script. Note how the messages are avoided using stderr redirection.
 13. Display the contents of /user/a2 in HDFS to see the additional files. Note that the split creates directories and data is partitioned in these directories. This is transparent when using HDFS. You don't need to make any reference to these partitions directly in your pig and/or pyspark scripts.
 14. Display contents of part-m-00000 to see the header line and the csv format.
