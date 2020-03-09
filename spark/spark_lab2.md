@@ -179,7 +179,7 @@ def evaluateType(rdd_sql, parseDate):
 9. Have A Primer on Spark using Python document available for reference purposes. 
 # PIG Scripts
 10. Create lab10.split-log.pig script which splits the log file into 3 based on http status codes. 
-    - ![log_script.png](log_script.png)
+    - ![log_split script](log_split.png)
     - Pay particular attention to how the log file is loaded as log file and stored in csv format.
     - [CSVExcelStorage](https://pig.apache.org/docs/latest/api/org/apache/pig/piggybank/storage/CSVExcelStorage.html): CSV loading and storing with support for multi-line fields, and escaping of delimiters and double quotes within fields; uses CSV conventions of Excel 2007. 
     - [CommonLoagLoader](https://pig.apache.org/docs/r0.17.0/api/org/apache/pig/piggybank/storage/apachelog/CommonLogLoader.html): to load logs based on Apache's common log format, based on a format like LogFormat "%h %l %u %t \"%r\" %>s %b".
