@@ -6,12 +6,15 @@
 ```shell
 [root@sandbox data]# gunzip -f NASA_access_log_Aug95.gz
 [root@sandbox data]# ls
-full_text.txt  NASA_access_log_Aug95  shakespeare.txt
-[root@sandbox data]#
+NASA_access_log_Aug95
+[root@sandbox data]# hadoop fs -put NASA_access_log_Aug95 /user/spark
+[root@sandbox data]# hadoop fs -ls /user/spark
+Found 1 item
+-rw-r--r--   3 root hdfs  167813770 2020-03-09 14:36 /user/spark/NASA_access_log_Aug95
 ```
 4. Download pyspark-csv-master
 5. Copy it over into your Hadoop VM.
-6. Unzip and move *.py and *.pyc files to /usr/lib/python2.6/site-packages. Note that the archive creates its own directory when extracted.
+6. Unzip and move *.py files to /usr/lib/python2.6/site-packages. Note that the archive creates its own directory when extracted.
 ```py
 import csv
 import sys
@@ -169,6 +172,7 @@ def evaluateType(rdd_sql, parseDate):
 8. Use vi editor to write the scripts ! ! !
 9. Have A Primer on Spark using Python document available for reference purposes. 
 10. Create lab10.split-log.pig script which splits the log file into 3 based on http status codes. Pay particular attention to how the log file is loaded as log file and stored in csv format.
+
 11. Display the contents of /user/a2 in HDFS to see that there's only the log file stored in it.
 12. Run the script. Note how the messages are avoided using stderr redirection.
 13. Display the contents of /user/a2 in HDFS to see the additional files. Note that the split creates directories and data is partitioned in these directories. This is transparent when using HDFS. You don't need to make any reference to these partitions directly in your pig and/or pyspark scripts.
