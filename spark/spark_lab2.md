@@ -1,6 +1,8 @@
 # Transforming a Log File for Further Processing
 # Topics
 - Dataset 
+- Python Code for CSV
+    - pyspark_csv
 - PIG Scripts
     - define, split, CSVExcelStorage, CommonLoagLoader
     - 
@@ -20,7 +22,12 @@ Found 1 item
 ```
 4. Download pyspark-csv-master
 5. Copy it over into your Hadoop VM.
-6. Unzip and move *.py files to /usr/lib/python2.6/site-packages. Note that the archive creates its own directory when extracted.
+6. Unzip and move pyspark_csv.py file to /usr/lib/python2.6/site-packages. Note that the archive creates its own directory when extracted.
+    - verify the pyspark_csv.py file is in place using find command.
+```shell
+[root@sandbox data]# find / -name "pyspark_csv.py" 2>/dev/null
+/usr/lib/python2.6/site-packages/pyspark_csv.py
+```
 7. ssh login to your HDP2.4 vm.
 8. Use vi editor to write the scripts ! ! !
 9. Have A Primer on Spark using Python document available for reference purposes. 
@@ -59,6 +66,7 @@ slppp6.intermind.net,GET,200,3635
 ix-esc-ca2-07.ix.netcom.com,GET,200,1173
 ```
 15. Using vi, write lab10.sql.py and lab10.sql.sh scripts. Inspect lab10.sql.sh script and see how lab10.sql.py, the python, script is submitted. Also note that lab10.sql.sh script must have execute bit turned on.
+
 16. Note how pyspark_csv.py script is imported in line 3 and incorporated into SparkContext in line 10. 
 17. Read A Primer ... document for explanations on integration of Python with Spark.
 18. Inspect the script source on the LHS with its output on the RHS. Note how pyspark_csv.py creates a dataframe directly from a csv file with header.
