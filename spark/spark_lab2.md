@@ -124,6 +124,7 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
     ```
     [Top](#top)
     - Execute **sql_script.sh** <a name='exec_sql_script.sh'></a>
+        - cd to the directory that contains **sql_script.sh** and **sql_script.py**
 ```shell
 [root@sandbox data]# ./sql_script.sh 2>/dev/null
 ===HTTP 200===
