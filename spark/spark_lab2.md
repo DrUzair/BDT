@@ -119,7 +119,7 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
     - Note how pyspark_csv.py creates a dataframe directly from a csv file with header. (Line 14, 15)
     
     [Top](#top)
-    - **sql_script.py** <a name='sql_script.sh'></a>
+    - **sql_script.sh** <a name='sql_script.sh'></a>
     - ![sql_script.sh](sql_script_sh.png)
     - Inspect sql_script.sh script and see how sql_script.py script is submitted.
     - Also note that sql_script.sh script must have execute bit turned on.
