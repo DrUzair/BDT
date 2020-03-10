@@ -43,22 +43,17 @@ pip install findspark
 ## Dataset & Preparation <a name='dataset'></a>
 1. Download [NASA_access_log_Aug95.gz](http://www.ftpstatus.com/file_properties.php?sname=ftp.cs.umass.edu&fid=66) .
 2. Copy it over into your Hadoop VM. [Filezilla sftp]
-3. Unzip and ingest it into Hadoop, that is, move it to HDFS.
+3. Unzip and have a look on first N rows.
 ```shell
 [root@sandbox data]# gunzip -f NASA_access_log_Aug95.gz
 [root@sandbox data]# ls
 NASA_access_log_Aug95
-[root@sandbox data]# cat NASA_access_log_Aug95 | head -n 10
+[root@sandbox data]# cat NASA_access_log_Aug95 | head -n 5
 in24.inetnebr.com - - [01/Aug/1995:00:00:01 -0400] "GET /shuttle/missions/sts-68/news/sts-68-mcc-05.txt HTTP/1.0" 200 1839
 uplherc.upl.com - - [01/Aug/1995:00:00:07 -0400] "GET / HTTP/1.0" 304 0
 uplherc.upl.com - - [01/Aug/1995:00:00:08 -0400] "GET /images/ksclogo-medium.gif HTTP/1.0" 304 0
 uplherc.upl.com - - [01/Aug/1995:00:00:08 -0400] "GET /images/MOSAIC-logosmall.gif HTTP/1.0" 304 0
 uplherc.upl.com - - [01/Aug/1995:00:00:08 -0400] "GET /images/USA-logosmall.gif HTTP/1.0" 304 0
-ix-esc-ca2-07.ix.netcom.com - - [01/Aug/1995:00:00:09 -0400] "GET /images/launch-logo.gif HTTP/1.0" 200 1713
-uplherc.upl.com - - [01/Aug/1995:00:00:10 -0400] "GET /images/WORLD-logosmall.gif HTTP/1.0" 304 0
-slppp6.intermind.net - - [01/Aug/1995:00:00:10 -0400] "GET /history/skylab/skylab.html HTTP/1.0" 200 1687
-piweba4y.prodigy.com - - [01/Aug/1995:00:00:10 -0400] "GET /images/launchmedium.gif HTTP/1.0" 200 11853
-slppp6.intermind.net - - [01/Aug/1995:00:00:11 -0400] "GET /history/skylab/skylab-small.gif HTTP/1.0" 200 9202
 ```
 - Ingest **NASA_access_log_Aug95** into Hadoop, that is, move it to HDFS. (**/user/spark** is arbitrary. make your own directory and use the path the you created.)
 ```shell
