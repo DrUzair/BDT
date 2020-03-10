@@ -93,8 +93,31 @@ slppp6.intermind.net,GET,200,9202
 slppp6.intermind.net,GET,200,3635
 ix-esc-ca2-07.ix.netcom.com,GET,200,1173
 ```
-15. Using vi, write lab10.sql.py and lab10.sql.sh scripts. Inspect lab10.sql.sh script and see how lab10.sql.py, the python, script is submitted. Also note that lab10.sql.sh script must have execute bit turned on.
+15. Using vi, write lab10.sql.py and lab10.sql.sh scripts. 
+    - Inspect lab10.sql.sh script and see how lab10.sql.py script is submitted.
+    - Also note that lab10.sql.sh script must have execute bit turned on.
+    ```shell
+    chmod 777 
+    ```
     - ![sql_script.py](sql_script_py.png)
+    - ```shell
+    +--------------------+------+---------+
+|                host|status| avgBytes|
++--------------------+------+---------+
+|kiosk-4-89.dial.i...|   200|1121554.0|
+|      199.185.209.13|   200|1121554.0|
+|   h97-125.ccnet.com|   200|1121554.0|
+|tty10g.netropolis...|   200|1082916.0|
+|      163.231.236.20|   200|1036266.0|
+|dialin12.stdrem.o...|   200| 966656.0|
+|dialup-1-3.gw.umn...|   200| 952257.0|
+|      163.231.236.29|   200| 946425.0|
+|dynam62.campusnet...|   200| 936810.0|
+|      163.231.236.27|   200| 925696.0|
++--------------------+------+---------+
+only showing top 10 rows
+
+      ```
 16. Note how pyspark_csv.py script is imported in line 3 and incorporated into SparkContext in line 10. 
 17. Read A Primer ... document for explanations on integration of Python with Spark.
 18. Inspect the script source on the LHS with its output on the RHS. Note how pyspark_csv.py creates a dataframe directly from a csv file with header.
