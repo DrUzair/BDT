@@ -100,8 +100,8 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
     chmod 777 
     ```
     - ![sql_script.py](sql_script_py.png)
-    - ```shell
-    +--------------------+------+---------+
+```shell
++--------------------+------+---------+
 |                host|status| avgBytes|
 +--------------------+------+---------+
 |kiosk-4-89.dial.i...|   200|1121554.0|
@@ -116,8 +116,7 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
 |      163.231.236.27|   200| 925696.0|
 +--------------------+------+---------+
 only showing top 10 rows
-
-      ```
+```
 16. Note how pyspark_csv.py script is imported in line 3 and incorporated into SparkContext in line 10. 
 17. Read A Primer ... document for explanations on integration of Python with Spark.
 18. Inspect the script source on the LHS with its output on the RHS. Note how pyspark_csv.py creates a dataframe directly from a csv file with header.
