@@ -6,6 +6,7 @@
     - [pyspark_csv](#pyspark_csv)
 - [PIG Scripts](#PIG)
     - define, split, CSVExcelStorage, CommonLoagLoader
+    - [execute split_log.pig](#exec_split_log)
 - [spark-submit](#spark_submit)
     - [sql_script.py](#sql_script.py), [sql_script.sh](#sql_script.sh)
     - [execute shell script](#exec_sql_script.sh)
@@ -80,7 +81,9 @@ Found 1 item
 Found 1 item
 -rw-r--r--   3 root hdfs  167813770 2020-03-09 14:36 /user/spark/NASA_access_log_Aug95
 ```
-12. Run the script. Note how the messages are avoided using stderr redirection.
+
+[Top](#top)
+12. Run the script. Note how the messages are avoided using stderr redirection. <a name='exec_split_log'></a>
 ```shell
 [root@sandbox data]# pig split_log.pig
 ```
