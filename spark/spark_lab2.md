@@ -1,12 +1,14 @@
 # Transforming a Log File for Further Processing
 # Topics <a name='top'></a>
 - [Pre-Requisites](#prereq)
-- Dataset 
+- [Dataset](#dataset) 
 - External PySpark Modules
     - [pyspark_csv](#pyspark_csv)
-- PIG Scripts(#PIG)
+- [PIG Scripts](#PIG)
     - define, split, CSVExcelStorage, CommonLoagLoader
-    - 
+- [spar-submit](#spark_submit)
+- [Hint](#hint)
+
 ## Prerequsites <a name='prereq'></a>
 - In case you come across this error while importing pyspark 
 ```py
@@ -138,7 +140,7 @@ only showing top 10 rows
 
 [Top](#top)
 
-##  Hints
+##  Hints <a name='hint'></a>
 1. The original dataset is available at http://ita.ee.lbl.gov/html/contrib/NASA-HTTP.html . Visit this Webpage for dataset description.
 2. Visit http://hadooptutorial.info/processing-logs-in-pig to learn how to load and process a log file in pig. Visit its homepage for other useful info.
 3. Visit https://pig.apache.org for Pig project homepage and http://pig.apache.org/docs/r0.17.0 for Pig documentation.
