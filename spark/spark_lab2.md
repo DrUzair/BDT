@@ -35,13 +35,13 @@ pip install findspark
 >>> findspark.init()
 >>> import pyspark
 ```
-- install 
+- install dateutil python library
 ```shell
 [root@sandbox data]# pip install python-dateutil
 ```
 [Top](#top)
 ## Dataset & Preparation <a name='dataset'></a>
-1. Download [NASA_access_log_Aug95.gz](http://www.ftpstatus.com/file_properties.php?sname=ftp.cs.umass.edu&fid=66) .
+1. Download NASA_access_log_Aug95.gz from [here](http://www.ftpstatus.com/file_properties.php?sname=ftp.cs.umass.edu&fid=66) or from course shell.
 2. Copy it over into your Hadoop VM. [Filezilla sftp]
 3. Unzip and have a look on first N rows.
 ```shell
