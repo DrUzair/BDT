@@ -7,8 +7,8 @@
 - [PIG Scripts](#PIG)
     - define, split, CSVExcelStorage, CommonLoagLoader
 - [spark-submit](#spark_submit)
-    - [python sql_script](#sql_script.py), [shell script](sql_script.sh)
-- [Hint](#hint)
+    - [sql_script.py](#sql_script.py), [sql_script.sh](#sql_script.sh)
+- [Readings](#hint)
 
 ## Prerequsites <a name='prereq'></a>
 - In case you come across this error while importing pyspark 
@@ -112,8 +112,12 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
     - ![sql_script.py](sql_script_py.png)   
     - Note how pyspark_csv.py script is imported on line 5 and incorporated into SparkContext in line 12. 
     - Note how pyspark_csv.py creates a dataframe directly from a csv file with header. (Line 14, 15)
+    
+    [Top](#top)
     - **sql_script.py** <a name='sql_script.sh'></a>
     - ![sql_script.sh](sql_script_sh.png)
+    
+    [Top](#top)
     - Inspect sql_script.sh script and see how sql_script.py script is submitted.
     - Also note that sql_script.sh script must have execute bit turned on.
     ```shell
