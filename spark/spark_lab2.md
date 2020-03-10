@@ -8,6 +8,7 @@
     - define, split, CSVExcelStorage, CommonLoagLoader
 - [spark-submit](#spark_submit)
     - [sql_script.py](#sql_script.py), [sql_script.sh](#sql_script.sh)
+    - [execute shell script](#exec_sql_script.sh)
 - [Readings](#hint)
 
 ## Prerequsites <a name='prereq'></a>
@@ -116,14 +117,13 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
     [Top](#top)
     - **sql_script.py** <a name='sql_script.sh'></a>
     - ![sql_script.sh](sql_script_sh.png)
-    
-    [Top](#top)
     - Inspect sql_script.sh script and see how sql_script.py script is submitted.
     - Also note that sql_script.sh script must have execute bit turned on.
     ```shell
     [root@sandbox data]# chmod 0700 sql_script.sh 
     ```
-    - Execute **sql_script.sh**
+    [Top](#top)
+    - Execute **sql_script.sh** <a name='exec_sql_script.sh'></a>
 ```shell
 [root@sandbox data]# ./sql_script.sh 2>/dev/null
 ===HTTP 200===
