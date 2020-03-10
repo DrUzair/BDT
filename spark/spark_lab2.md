@@ -109,6 +109,8 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
 15. Using vi, prepare scripts
     - **sql_script.py** 
     - ![sql_script.py](sql_script_py.png)   
+    - Note how pyspark_csv.py script is imported on line 5 and incorporated into SparkContext in line 12. 
+    - Note how pyspark_csv.py creates a dataframe directly from a csv file with header. (Line 14, 15)
     - **sql_script.py** 
     - ![sql_script.sh](sql_script_sh.png)
     - Inspect sql_script.sh script and see how sql_script.py script is submitted.
@@ -138,9 +140,6 @@ spark.yarn.driver.memoryOverhead is set but does not apply in client mode.
 +--------------------+------+---------+
 only showing top 10 rows
 ```
-16. Note how pyspark_csv.py script is imported in line 3 and incorporated into SparkContext in line 10. 
-17. Read A Primer ... document for explanations on integration of Python with Spark.
-18. Inspect the script source on the LHS with its output on the RHS. Note how pyspark_csv.py creates a dataframe directly from a csv file with header.
 
 [Top](#top)
 
