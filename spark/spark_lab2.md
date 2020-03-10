@@ -83,6 +83,7 @@ Found 1 item
 ```
 
 [Top](#top)
+
 12. Run the script. Note how the messages are avoided using stderr redirection. <a name='exec_split_log'></a>
 ```shell
 [root@sandbox data]# pig split_log.pig
