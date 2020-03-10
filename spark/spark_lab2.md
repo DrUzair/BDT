@@ -4,7 +4,7 @@
 - [Dataset](#dataset) 
 - External PySpark Modules
     - [pyspark_csv](#pyspark_csv)
-- [PIG Scripts](#PIG)
+- [Split the Log File using PIG](#PIG)
     - define, split, CSVExcelStorage, CommonLoagLoader
     - [execute split_log.pig](#exec_split_log)
 - [spark-submit](#spark_submit)
@@ -69,7 +69,7 @@ Found 1 item
 9. Have A Primer on Spark using Python document available for reference purposes. 
 
 [Top](#top)
-## PIG Scripts <a name='PIG'></a>
+## Split the Log File using PIG <a name='PIG'></a>
 10. Create **split_log.pig** script which splits the [log file](#dataset) into 3 based on http status codes. 
     - ![log_split script](log_split.png)
     - Pay particular attention to how the log file is loaded as log file and stored in csv format.
