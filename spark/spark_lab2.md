@@ -101,6 +101,10 @@ ix-esc-ca2-07.ix.netcom.com,GET,200,1173
     ```
     - ![sql_script.py](sql_script_py.png)
 ```shell
+[root@sandbox data]# ./sql_script.sh 2>/dev/null
+===HTTP 200===
+ok
+spark.yarn.driver.memoryOverhead is set but does not apply in client mode.
 +--------------------+------+---------+
 |                host|status| avgBytes|
 +--------------------+------+---------+
