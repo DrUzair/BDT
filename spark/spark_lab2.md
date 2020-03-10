@@ -94,7 +94,7 @@ slppp6.intermind.net,GET,200,3635
 ix-esc-ca2-07.ix.netcom.com,GET,200,1173
 ```
 15. Using vi, write lab10.sql.py and lab10.sql.sh scripts. Inspect lab10.sql.sh script and see how lab10.sql.py, the python, script is submitted. Also note that lab10.sql.sh script must have execute bit turned on.
-
+    - ![sql_script.py](sql_script_py.png)
 16. Note how pyspark_csv.py script is imported in line 3 and incorporated into SparkContext in line 10. 
 17. Read A Primer ... document for explanations on integration of Python with Spark.
 18. Inspect the script source on the LHS with its output on the RHS. Note how pyspark_csv.py creates a dataframe directly from a csv file with header.
