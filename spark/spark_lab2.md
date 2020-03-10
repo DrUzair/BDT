@@ -64,8 +64,12 @@ Found 1 item
 ```
 [Top](#top)
 ## External PySpark Modules <a name='pyspark_csv'></a>
-4. Download [pyspark-csv-master](https://github.com/seahboonsiew/pyspark-csv)
-5. Copy it over into your Hadoop VM.
+4. Download [pyspark-csv-master](https://github.com/seahboonsiew/pyspark-csv) or from course shell
+```shell
+[root@sandbox data]# wget https://github.com/seahboonsiew/pyspark-csv/archive/master.zip
+[root@sandbox data]# unzip master.zip
+```
+    - If downloaded from course shell, copy it over into your Hadoop VM.
 6. Unzip and move pyspark_csv.py file to /usr/lib/python2.6/site-packages. Note that the archive creates its own directory when extracted.
     - verify the pyspark_csv.py file is in place using find command.
 ```shell
