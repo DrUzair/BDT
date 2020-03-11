@@ -191,7 +191,12 @@ These commands are for reference only. DO NOT RUN these now.
   - First copy shakespeare.txt to /user/lab in HDFS
   - Copy WordCount.py into your Linux machine (Resources -> Spark Resources -> wordcount.py)
 ```shell
-spark-submit --master yarn-client --executor-memory 512m --num-executors 3 --executor-cores 1 --driver-memory 512m wordCount.py
+spark-submit  --master yarn-client \
+              --executor-memory 512m \
+              --num-executors 3 \
+              --executor-cores 1 \
+              --driver-memory 512m \
+              wordCount.py
 ```
 ```py
 from pyspark import SparkConf, SparkContext
