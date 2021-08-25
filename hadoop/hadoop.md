@@ -1,3 +1,28 @@
+## Installation on Ubuntu
+- Installing docker on ubunti
+	- sudo apt-get install gnupg
+	- https://docs.docker.com/engine/install/ubuntu/
+	sudo apt-get install gnupg
+
+- Install Hadoop
+	- sudo apt-get install openssh-server openssh-client
+	- ssh-keygen -t rsa -P ""
+	- cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+	- wget -q https://downloads.apache.org/hadoop/common/hadoop-3.3.0/hadoop-3.3.0.tar.gz
+	- tar xzf hadoop-3.3.0.tar.gz
+	- 
+```shell
+vi ~/.bashrc
+export HADOOP_HOME=$HOME/hadoop-3.3.0
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+```
+
 ## Installation Path
 ```shell
 ls /usr/hdp/
